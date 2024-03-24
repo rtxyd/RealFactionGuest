@@ -6,8 +6,7 @@ using Verse;
 
 namespace raceQuestPawn;
 
-[HarmonyPatch(typeof(PawnGenerator), "GeneratePawn")]
-[HarmonyPatch(new[] { typeof(PawnGenerationRequest) })]
+[HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", typeof(PawnGenerationRequest))]
 public class patch_PawnGenerator_GeneratePawn
 {
     private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
@@ -56,7 +55,7 @@ public class patch_PawnGenerator_GeneratePawn
                 combatPower = request.KindDef.combatPower;
                 p_make = null;
 
-                allPawnKinds = new List<PawnKindDef>();
+                allPawnKinds = [];
                 if (fd.pawnGroupMakers != null)
                 {
                     foreach (var pawnGroupMaker in fd.pawnGroupMakers)
@@ -105,7 +104,7 @@ public class patch_PawnGenerator_GeneratePawn
             combatPower = request.KindDef.combatPower;
 
             p_make = null;
-            allPawnKinds = new List<PawnKindDef>();
+            allPawnKinds = [];
             var tryCount = 0;
 
             while (allPawnKinds.Count <= 0 && tryCount <= 11)
@@ -113,7 +112,7 @@ public class patch_PawnGenerator_GeneratePawn
                 tryCount++;
                 fd = DefDatabase<FactionDef>.AllDefs.RandomElement();
 
-                if (fd is not { pawnGroupMakers: { }, modContentPack: { } })
+                if (fd is not { pawnGroupMakers: not null, modContentPack: not null })
                 {
                     continue;
                 }

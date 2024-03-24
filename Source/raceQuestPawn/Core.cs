@@ -20,7 +20,7 @@ public static class Core
 
         foreach (var f in from faction in DefDatabase<FactionDef>.AllDefs
                  where
-                     faction.modContentPack is { PackageId: { } }
+                     faction.modContentPack is { PackageId: not null }
                      && !faction.modContentPack.PackageId.Contains("ludeon")
                      && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
                      && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
