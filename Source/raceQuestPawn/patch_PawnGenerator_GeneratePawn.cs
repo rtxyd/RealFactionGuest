@@ -6,7 +6,7 @@ using Verse;
 
 namespace raceQuestPawn;
 
-[HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", typeof(PawnGenerationRequest))]
+[HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), typeof(PawnGenerationRequest))]
 public class patch_PawnGenerator_GeneratePawn
 {
     private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
@@ -36,6 +36,11 @@ public class patch_PawnGenerator_GeneratePawn
             }
 
             if (request.KindDef == PawnKindDefOf.WildMan)
+            {
+                return;
+            }
+
+            if (request.IsCreepJoiner)
             {
                 return;
             }

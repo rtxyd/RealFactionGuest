@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -13,8 +14,7 @@ public static class Core
     static Core()
     {
         //Log.Message("# Real Faction Guest - Init");
-        var harmony = new Harmony("raceQuestPawn");
-        harmony.PatchAll();
+        new Harmony("raceQuestPawn").PatchAll(Assembly.GetExecutingAssembly());
 
         var humanlikeModFactionNum = 0;
 
