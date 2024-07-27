@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -70,7 +71,7 @@ public class patch_PawnGenerator_GeneratePawn
                         {
                             if (!allPawnKinds.Contains(pawnGenOption.kind))
                             {
-                                allPawnKinds.Add(pawnGenOption.kind);
+                                allPawnKinds.Prepend(pawnGenOption.kind);
                             }
                         }
                     }
@@ -151,7 +152,7 @@ public class patch_PawnGenerator_GeneratePawn
                         }
 
                         //Log.Message($"B0 : {fd.modContentPack.PackageId}");
-                        allPawnKinds.Add(pawnGenOption.kind);
+                        allPawnKinds.Prepend(pawnGenOption.kind);
                     }
                 }
             }
