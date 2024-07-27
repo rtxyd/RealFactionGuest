@@ -65,8 +65,10 @@ public class patch_PawnGenerator_GeneratePawn
                 {
                     foreach (var pawnGroupMaker in fd.pawnGroupMakers)
                     {
-                        var options = pawnGroupMaker.options;
-                        foreach (var pawnGenOption in options)
+                        var optionsplus = pawnGroupMaker.options;
+                        //miss traders.
+                        optionsplus.AddRange(pawnGroupMaker.traders);
+                        foreach (var pawnGenOption in optionsplus)
                         {
                             if (!allPawnKinds.Contains(pawnGenOption.kind))
                             {
@@ -139,8 +141,10 @@ public class patch_PawnGenerator_GeneratePawn
 
                 foreach (var pawnGroupMaker in fd.pawnGroupMakers)
                 {
-                    var options = pawnGroupMaker.options;
-                    foreach (var pawnGenOption in options)
+                    var optionsplus = pawnGroupMaker.options;
+                    //miss traders.
+                    optionsplus.AddRange(pawnGroupMaker.traders);
+                    foreach (var pawnGenOption in optionsplus)
                     {
                         if (allPawnKinds.Contains(pawnGenOption.kind) ||
                             pawnGenOption.kind.RaceProps != null &&
