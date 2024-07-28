@@ -2,7 +2,7 @@
 <ModSyncNinjaData>
   <ID>55d77931-1943-4d5e-8c86-52946bf9d32f</ID>
   <ModName>Real Faction Guest (Continued)</ModName>
-  <Version>1.5.1</Version>
+  <Version>1.5.2</Version>
   <SaveBreaking>False</SaveBreaking>
   <Host name="Github">
     <Owner>emipa606</Owner>
@@ -12,3 +12,4 @@
     <Branch>master</Branch>
   </Host>
 </ModSyncNinjaData>
+

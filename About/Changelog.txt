@@ -1,5 +1,8 @@
 # Changelog for RealFactionGuest
 
+1.5.2 - Fix for caravan-issues
+
+
 1.5.1 - Should no longer cause errors with creepjoiners
 
 
