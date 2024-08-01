@@ -112,6 +112,7 @@ public class patch_PawnGenerator_GeneratePawn
                         p_make = ipawns1.RandomElement();
                     }
                     request.KindDef = p_make;
+                    //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
                     return;
                 }
             }
