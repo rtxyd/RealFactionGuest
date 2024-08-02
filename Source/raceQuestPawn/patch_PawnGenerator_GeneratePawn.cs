@@ -54,17 +54,15 @@ public class patch_PawnGenerator_GeneratePawn
             float combatPower;
             FactionDef fd;
             PawnKindDef p_make;
-            HashSet<PawnKindDef> allPawnKinds;
-
-            var stack = new StackTrace(0, true);
-            StackFrame frame = stack.GetFrame(3);
-            MethodBase method = frame.GetMethod();
-            Type declaringType = method.DeclaringType;
 
             if (request.Faction?.def.modContentPack != null &&
                 !request.Faction.def.modContentPack.PackageId.Contains("ludeon") &&
                 request.KindDef.modContentPack.PackageId.Contains("ludeon"))
             {
+                var stack = new StackTrace(0, true);
+                StackFrame frame = stack.GetFrame(3);
+                MethodBase method = frame.GetMethod();
+                Type declaringType = method.DeclaringType;
                 //check stack if it's vanilla caravan trader generation request and skip it to vanilla generation.
                 //in 1.5 frame 1 is this method, 2 is harmony patched generatePawn, and 3 is generate traders/carriers/guards
                 if (declaringType == typeof(RimWorld.PawnGroupKindWorker_Trader))
@@ -83,38 +81,16 @@ public class patch_PawnGenerator_GeneratePawn
                 fd = request.Faction.def;
                 combatPower = request.KindDef.combatPower;
                 p_make = null;
-                allPawnKinds = [];
                 if (fd.pawnGroupMakers != null)
                 {
-                    foreach (var pawnGroupMaker in fd.pawnGroupMakers)
-                    {
-                        var optionsplus = pawnGroupMaker.options;
-                        foreach (var pawnGenOption in optionsplus)
-                        {
-                                allPawnKinds.Add(pawnGenOption.kind);
-                        }
-                    }
+                    ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower);
                 }
-                //find all pawnkinds match the condition combatPower +- 30,or combatPower = request.combatPower.
-                var query1 = allPawnKinds.Where(p => Mathf.Abs(p.combatPower - combatPower) < 30f);
-                var query1e = query1.Where(p => p.combatPower == combatPower);
-                if (query1.Any())
+                if (p_make != null)
                 {
-                    // only one = request combatPower
-                    if (query1e.Count() == 1)
-                    {
-                        p_make = query1e.ToHashSet().First();
-                    }
-                    // other situations, get random one
-                    else
-                    {
-                        var ipawns1 = query1.ToHashSet();
-                        p_make = ipawns1.RandomElement();
-                    }
                     request.KindDef = p_make;
-                    //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
-                    return;
                 }
+                //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
+                return;
             }
 
 
@@ -133,14 +109,14 @@ public class patch_PawnGenerator_GeneratePawn
             combatPower = request.KindDef.combatPower;
 
             p_make = null;
-            allPawnKinds = [];
             var tryCount = 0;
 
-            while (allPawnKinds.Count <= 0 && tryCount <= 11)
+            IEnumerable<List<PawnGenOption>> options = [];
+            while (options.Any() && tryCount <= 11)
             {
                 tryCount++;
                 fd = DefDatabase<FactionDef>.AllDefs.RandomElement();
-
+                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
                 if (fd is not { pawnGroupMakers: not null, modContentPack: not null })
                 {
                     continue;
@@ -160,42 +136,22 @@ public class patch_PawnGenerator_GeneratePawn
                 {
                     continue;
                 }
-                foreach (var pawnGroupMaker in fd.pawnGroupMakers)
-                {
-                    var optionsplus = pawnGroupMaker.options;
-                    foreach (var pawnGenOption in optionsplus)
-                    {
-                        if (pawnGenOption.kind.RaceProps != null &&
-                            pawnGenOption.kind.RaceProps.intelligence != Intelligence.Humanlike &&
-                            !pawnGenOption.kind.RaceProps.Humanlike)
-                        {
-                            continue;
-                        }
-
-                        //Log.Message($"B0 : {fd.modContentPack.PackageId}");
-                        allPawnKinds.Add(pawnGenOption.kind);
-                    }
-                }
+                options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
             }
-            // the same with above
-            var query2 = allPawnKinds.Where(p => p.combatPower <= combatPower && Mathf.Abs(p.combatPower - combatPower) < 30f);
-            var query2e = query2.Where(p => p.combatPower == combatPower);
-            if (query2.Any())
+            if (options.Any())
             {
-                if (query2e.Count() == 1)
-                {
-                    p_make = query2e.ToHashSet().First();
-                }
-                else
-                {
-                    var ipawns2 = query2.ToHashSet();
-                    p_make = ipawns2.RandomElement();
-                }
-
+                p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower);
+            }
+            if (p_make != null)
+            {
                 request.KindDef = p_make;
+                //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
                 return;
             }
-            //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
+            else
+            {
+                return;
+            }
         }
         catch
         {
