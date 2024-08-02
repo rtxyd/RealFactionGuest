@@ -112,7 +112,7 @@ public class patch_PawnGenerator_GeneratePawn
             var tryCount = 0;
 
             IEnumerable<List<PawnGenOption>> options = [];
-            while (options.Any() && tryCount <= 11)
+            while (!options.Any() && tryCount <= 11)
             {
                 tryCount++;
                 fd = DefDatabase<FactionDef>.AllDefs.RandomElement();
