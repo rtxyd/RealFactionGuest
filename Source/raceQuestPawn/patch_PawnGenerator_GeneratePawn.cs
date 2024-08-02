@@ -137,9 +137,7 @@ public class patch_PawnGenerator_GeneratePawn
                     continue;
                 }
                 //Log.Message($"B0 : {fd.modContentPack.PackageId}");
-                options = fd.pawnGroupMakers.Where(t => (t.options.Where(t => t.kind.RaceProps != null &&
-                            t.kind.RaceProps.intelligence != Intelligence.Humanlike &&
-                            !t.kind.RaceProps.Humanlike).Any())
+                options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
             }
             if (options.Any())
             {

@@ -9,7 +9,7 @@ using Verse;
 
 namespace raceQuestPawn
 {
-    public static class ChoosePawn<T> where T : IEnumerable<PawnGenOption>, IEnumerable<PawnKindDef>, IEnumerable<List<PawnGenOption>>
+    public static class ChoosePawn
     {
         public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower)
         {
@@ -32,6 +32,7 @@ namespace raceQuestPawn
             }
             return p;
         }
+
         public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower)
         {
             foreach (var item in options)
@@ -58,6 +59,11 @@ namespace raceQuestPawn
                 }
             }
             return null;
+        }
+        //this is reserve for postfilter, not needed yet and not done yet
+        public static void PostFilterPawns (IEnumerable<PawnKindDef> pawnToChoose)
+        {
+            return;
         }
     }
 }

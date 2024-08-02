@@ -37,20 +37,20 @@ namespace EventController_rQP
             {
                 BindingFlags Instance = BindingFlags.NonPublic | BindingFlags.Instance;
                 //FieldInfo Info = ;
-                MethodInfo MeInfo = typeof(PawnGroupKindWorker_Trader).GetMethod("GenerateTrader", Instance);
+                MethodInfo MeInfo = typeof(PawnGroupKindWorker_Trader).GetMethod("GenerateGuards", Instance);
                 return MeInfo;
             }))();
 
-            var prefix_PawnGroupKindWorker_GeneratePawns = typeof(EventController_Work).GetMethod("Pre_PawnGroupKindWorker_GeneratePawns");
+            var prefix_PawnGroupKindWorker_GeneratePawns = typeof(EventController_Work).GetMethod("Prefix_PawnGroupKindWorker_GeneratePawns");
             var postfix_PawnGroupKindWorker_GeneratePawns = typeof(EventController_Work).GetMethod("Postfix_PawnGroupKindWorker_GeneratePawns");
 
-            var prefix_PawnGroupKindWorker_GenerateTrader = typeof(EventController_Work).GetMethod("Pre_PawnGroupKindWorker_GenerateTrader");
+            var prefix_PawnGroupKindWorker_GenerateTrader = typeof(EventController_Work).GetMethod("Prefix_PawnGroupKindWorker_GenerateTrader");
             var postfix_PawnGroupKindWorker_GenerateTrader = typeof(EventController_Work).GetMethod("Postfix_PawnGroupKindWorker_GenerateTrader");
 
-            var prefix_PawnGroupKindWorker_GenerateCarriers = typeof(EventController_Work).GetMethod("Pre_PawnGroupKindWorker_GenerateCarriers");
+            var prefix_PawnGroupKindWorker_GenerateCarriers = typeof(EventController_Work).GetMethod("Prefix_PawnGroupKindWorker_GenerateCarriers");
             var postfix_PawnGroupKindWorker_GenerateCarriers = typeof(EventController_Work).GetMethod("Postfix_PawnGroupKindWorker_GenerateCarriers");
 
-            var prefix_PawnGroupKindWorker_GenerateGuards = typeof(EventController_Work).GetMethod("Pre_PawnGroupKindWorker_GenerateGuards");
+            var prefix_PawnGroupKindWorker_GenerateGuards = typeof(EventController_Work).GetMethod("Prefix_PawnGroupKindWorker_GenerateGuards");
             var postfix_PawnGroupKindWorker_GenerateGuards = typeof(EventController_Work).GetMethod("Postfix_PawnGroupKindWorker_GenerateGuards");
 
             harmony.Patch(generate, new HarmonyMethod(prefix_PawnGroupKindWorker_GeneratePawns), new HarmonyMethod(postfix_PawnGroupKindWorker_GeneratePawns));

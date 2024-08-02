@@ -18,8 +18,6 @@ namespace EventController_rQP
         public static bool isGuard = false;
         public static bool isEnd = false;
         public static string ongoingEvent = null;
-
-        public static TSource source
         public static string GetOngoingEvent()
         {
             if (isTrader)
