@@ -116,7 +116,7 @@ public class patch_PawnGenerator_GeneratePawn
             {
                 tryCount++;
                 fd = DefDatabase<FactionDef>.AllDefs.RandomElement();
-                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
+
                 if (fd is not { pawnGroupMakers: not null, modContentPack: not null })
                 {
                     continue;
@@ -136,7 +136,10 @@ public class patch_PawnGenerator_GeneratePawn
                 {
                     continue;
                 }
-                options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
+                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
+                options = fd.pawnGroupMakers.Where(t => (t.options.Where(t => t.kind.RaceProps != null &&
+                            t.kind.RaceProps.intelligence != Intelligence.Humanlike &&
+                            !t.kind.RaceProps.Humanlike).Any())
             }
             if (options.Any())
             {

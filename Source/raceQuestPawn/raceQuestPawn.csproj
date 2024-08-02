@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputPath>..\..\1.5\Assemblies</OutputPath>
     <TargetFramework>net48</TargetFramework>
@@ -7,6 +7,7 @@
     <DebugType>None</DebugType>
     <LangVersion>latest</LangVersion>
     <FileVersion>1.5.2</FileVersion>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
@@ -24,5 +25,8 @@
       <Version>*</Version>
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EventController\EventController_rQP.csproj" />
   </ItemGroup>
 </Project>
