@@ -102,7 +102,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
         {
-            if (!isInternalGen && IsRefugeePodCrash())
+            if (IsRefugeePodCrash())
             { 
                 request.AllowDowned = true;
             }
