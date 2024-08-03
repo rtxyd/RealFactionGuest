@@ -1,5 +1,8 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.3 - Fix a issue of caravan generation, rewrite most code
+
+
 1.5.2 - Fix for caravan-issues
 
 
