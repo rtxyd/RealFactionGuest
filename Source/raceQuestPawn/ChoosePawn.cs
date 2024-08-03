@@ -1,7 +1,5 @@
 ﻿using EventController_rQP;
 using RimWorld;
-using RimWorld.BaseGen;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -60,8 +58,9 @@ namespace raceQuestPawn
             }
             return null;
         }
+
         //this is reserve for postfilter, not needed yet and not done yet
-        public static void PostFilterPawns (IEnumerable<PawnKindDef> pawnToChoose)
+        public static void PostFilterPawns(IEnumerable<PawnKindDef> pawnToChoose)
         {
             return;
         }

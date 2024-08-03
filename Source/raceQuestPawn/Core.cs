@@ -1,8 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
+using RimWorld;
 using System.Linq;
 using System.Reflection;
-using HarmonyLib;
-using RimWorld;
 using Verse;
 
 namespace raceQuestPawn;
@@ -21,12 +20,12 @@ public static class Core
         //TimeSpan a = new TimeSpan(DateTime.Now.Ticks);
         try
         {
-            humanlikeModFactionNum = DefDatabase<FactionDef>.AllDefs.Count(f => 
-            f.modContentPack is { PackageId: not null } 
-            && !f.modContentPack.PackageId.Contains("ludeon") 
+            humanlikeModFactionNum = DefDatabase<FactionDef>.AllDefs.Count(f =>
+            f.modContentPack is { PackageId: not null }
+            && !f.modContentPack.PackageId.Contains("ludeon")
             && !f.modContentPack.PackageId.Contains("ogliss.alienvspredator")
             && !f.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
-            && f.pawnGroupMakers != null 
+            && f.pawnGroupMakers != null
             && f.pawnGroupMakers.Any(t => t.options.Any(t => t.kind.RaceProps == null || t.kind.RaceProps.intelligence == Intelligence.Humanlike || t.kind.RaceProps.Humanlike)));
 
             //TimeSpan b = new TimeSpan(DateTime.Now.Ticks);

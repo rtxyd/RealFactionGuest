@@ -1,12 +1,10 @@
-﻿using HarmonyLib;
-using RimWorld;
+﻿using Microsoft.SqlServer.Server;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
+using static UnityEngine.GraphicsBuffer;
 
 namespace EventController_rQP
 {
@@ -17,7 +15,24 @@ namespace EventController_rQP
         public static bool isCarrier = false;
         public static bool isGuard = false;
         public static bool isEnd = false;
+        public static bool isRefugeePodCrash = false;
+        public static bool isInternalGen = false;
         public static string ongoingEvent = null;
+
+        public static bool IsRefugeePodCrash()
+        {
+            var stack = new StackTrace(0, true);
+            var frame = stack.GetFrame(8);
+            if (frame.GetMethod().DeclaringType == typeof(RimWorld.QuestGen.QuestNode_Root_RefugeePodCrash))
+            {
+                isRefugeePodCrash = true;
+            }
+            else
+            {
+                isRefugeePodCrash = false;
+            }
+            return isRefugeePodCrash;
+        }
         public static string GetOngoingEvent()
         {
             if (isTrader)
@@ -31,6 +46,14 @@ namespace EventController_rQP
             else if (isGuard)
             {
                 ongoingEvent = "guards";
+            }
+            else if (isRefugeePodCrash)
+            {
+                ongoingEvent = "RefugeePodCrash";
+            }
+            else if (isInternalGen)
+            {
+                ongoingEvent = "GenerateNewPawnInternal";
             }
             else
             {
@@ -77,5 +100,27 @@ namespace EventController_rQP
         {
             isEnd = true;
         }
+        public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
+        {
+            if (IsRefugeePodCrash())
+            { 
+                request.AllowDowned = true;
+            }
+            isInternalGen = true;
+        }
+
+        public static void Postfix_GenerateNewPawnInternal()
+        {
+            isInternalGen = false;
+        }
+        //public static void Prefix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
+        //{
+        //    isRefugeePodCrash = true;
+        //}
+
+        //public static void Postfix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
+        //{
+        //    isRefugeePodCrash = false;
+        //}
     }
 }

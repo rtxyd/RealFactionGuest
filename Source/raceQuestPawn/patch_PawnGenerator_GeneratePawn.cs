@@ -1,11 +1,10 @@
-﻿using System;
+﻿using HarmonyLib;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using HarmonyLib;
-using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace raceQuestPawn;
@@ -149,6 +148,7 @@ public class patch_PawnGenerator_GeneratePawn
             if (p_make != null)
             {
                 request.KindDef = p_make;
+                RefugeePotCrash_PawnValidator.PostProcessRequest(request);
                 //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
                 return;
             }
