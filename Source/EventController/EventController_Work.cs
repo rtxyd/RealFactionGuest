@@ -70,12 +70,12 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GeneratePawns()
         {
-            isEnd = true;
+            isEnd = false;
         }
 
         public static void Postfix_PawnGroupKindWorker_GeneratePawns()
         {
-            isEnd = false;
+            isEnd = true;
         }
     }
 }

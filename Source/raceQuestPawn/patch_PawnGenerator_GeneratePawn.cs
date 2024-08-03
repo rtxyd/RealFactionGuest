@@ -64,14 +64,16 @@ public class patch_PawnGenerator_GeneratePawn
                 MethodBase method = frame.GetMethod();
                 Type declaringType = method.DeclaringType;
                 //check stack if it's vanilla caravan trader generation request and skip it to vanilla generation.
-                //in 1.5 frame 1 is this method, 2 is harmony patched generatePawn, and 3 is generate traders/carriers/guards
+                //It should be safe to skip that, because it's using vanilla method to generate vanilla pawnkind.
+                //in 1.5, frame 1 is this method, 2 is harmony patched generatePawn, and 3 is generate traders/carriers/guards.
+                //the method only executes in particular situations, such as remove the "if" right below.
                 if (declaringType == typeof(RimWorld.PawnGroupKindWorker_Trader))
                 {
                     return;
                 }
                 else
                 {
-                    var target = stack.GetFrames().Where(f => f.GetMethod().DeclaringType == typeof(RimWorld.PawnGroupKindWorker_Trader)).Any();
+                    var target = stack.GetFrames().Any(f => f.GetMethod().DeclaringType == typeof(RimWorld.PawnGroupKindWorker_Trader));
                     if (target)
                     {
                         return;
@@ -137,6 +139,7 @@ public class patch_PawnGenerator_GeneratePawn
                     continue;
                 }
                 //Log.Message($"B0 : {fd.modContentPack.PackageId}");
+                //there may need a filter of animal pawns and wildman.
                 options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
             }
             if (options.Any())
