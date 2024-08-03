@@ -1,5 +1,9 @@
+This is a forked version of real faction guest, I rewrite most of it's code comparing to Mlie's continued version. So I forked it, you don't need use this version unless you want, since they have same function.
+
+
 # [Real Faction Guest (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2886929245)
-
+
+
 ![Image](https://i.imgur.com/buuPQel.png)
 
 Update of YAYOs mod
