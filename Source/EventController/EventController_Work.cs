@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Server;
+using RimWorld;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -17,11 +18,30 @@ namespace EventController_rQP
         public static bool isEnd = false;
         public static bool isRefugeePodCrash = false;
         public static bool isInternalGen = false;
+        public static bool isCreepJoiner = false;
+
         public static string ongoingEvent = null;
+
+        public static bool IsCreepJoiner(ref PawnGenerationRequest request)
+        {
+            if (request.KindDef.RaceProps.IsAnomalyEntity)
+            {
+                isCreepJoiner = true;
+            }
+            else
+            {
+                isCreepJoiner = false;
+            }
+            return isCreepJoiner;
+        }
 
         public static bool IsRefugeePodCrash()
         {
             var stack = new StackTrace(0, true);
+            if (stack.FrameCount < 18)
+            {
+                return isRefugeePodCrash = false;
+            }
             var frame = stack.GetFrame(8);
             if (frame.GetMethod().DeclaringType == typeof(RimWorld.QuestGen.QuestNode_Root_RefugeePodCrash))
             {
@@ -54,6 +74,10 @@ namespace EventController_rQP
             else if (isInternalGen)
             {
                 ongoingEvent = "GenerateNewPawnInternal";
+            }
+            else if (isCreepJoiner)
+            {
+                ongoingEvent = "CreepJoiner";
             }
             else
             {
@@ -106,6 +130,11 @@ namespace EventController_rQP
             { 
                 request.AllowDowned = true;
             }
+            //need test
+            //if (IsCreepJoiner(ref request))
+            //{
+            //    request.IsCreepJoiner = true;
+            //}
             isInternalGen = true;
         }
 

@@ -34,60 +34,7 @@ Mod original author YAYOs mod is here
 https://steamcommunity.com/sharedfiles/filedetails/?id=2263021260
 
 --------------------Mlie's original description--------------------
-
-[img]https://i.imgur.com/buuPQel.png[/img]
-Update of YAYOs mod
-https://steamcommunity.com/sharedfiles/filedetails/?id=2263021260
-
-[img]https://i.imgur.com/pufA0kM.png[/img]
-
-[table]
-    [tr]
-        [td][url=https://dsc.gg/mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
-        [td][url=https://github.com/emipa606/RealFactionGuest][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
-    [/tr]
-    [tr]
-        [td][img]https://i.imgur.com/WjDSfUn.png[/img][/td]
-        [td][img]https://i.imgur.com/h5VwTNL.png[/img][/td]
-    [/tr]
-[/table]
-	
-[img]https://i.imgur.com/Z4GOv8H.png[/img]
-[h1]Preview[/h1]
-In rimworld, There is an issue where pawns that come in event or quests are forcibly changed to vanilla pawns type even though they are mod factions.
-
-* This mod solves event / quest pawn issues for 
-all of mod human/non-human factions, vanilla expended faction, races added as human alien races, and races added as garam races.
-
-* So you can meet real faction pawns added as mods in various situations.
-
-
-
-[h1]Compatible[/h1]
-- Saved Game Compatible (Only new Event or Quest)
-
-
-
-[h1]Incompatible[/h1]
-- Empire mod
-
-
-
-[b]Please take this mod and modify it. The source code is included.
-I'd love to see variations come out with various ideas.
-I'm a game designer, and I haven't implemented many ideas yet due to lack of time.
-If you are proficient in C# and are interested, please contact me on the rimworld discord.[/b]
-[img]https://i.imgur.com/PwoNOj4.png[/img]
-[list]
-[*] See if the the error persists if you just have this mod and its requirements active.
-[*] If not, try adding your other mods until it happens again.
-[*] Post your error-log using [url=https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] or the standalone [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404]Uploader[/url] and command Ctrl+F12
-[*] For best support, please use the Discord-channel for error-reporting.
-[*] Do not report errors by making a discussion-thread, I get no notification of that.
-[*] If you have the solution for a problem, please post it to the GitHub repository.
-[*] Use [url=https://github.com/RimSort/RimSort/releases/latest]RimSort[/url] to sort your mods
-[/list]
-
-[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2886929245][img]https://img.shields.io/github/v/release/emipa606/RealFactionGuest?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url]</description>
-  <modVersion IgnoreIfNoMatchingField="True">1.5.3</modVersion>
+See url above.
+  </description>
+  <modVersion IgnoreIfNoMatchingField="True">1.5.4</modVersion>
 </ModMetaData>

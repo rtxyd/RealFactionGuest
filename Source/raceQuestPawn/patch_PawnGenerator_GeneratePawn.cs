@@ -84,7 +84,7 @@ public class patch_PawnGenerator_GeneratePawn
                 p_make = null;
                 if (fd.pawnGroupMakers != null)
                 {
-                    ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower);
+                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower);
                 }
                 if (p_make != null)
                 {
@@ -106,7 +106,14 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-
+            if (PawnValidator_CrossWork.IsRefugeePodCrash())
+            {
+                request.AllowDowned = true;
+            }
+            else
+            {
+                return;
+            }
             combatPower = request.KindDef.combatPower;
 
             p_make = null;
@@ -148,7 +155,6 @@ public class patch_PawnGenerator_GeneratePawn
             if (p_make != null)
             {
                 request.KindDef = p_make;
-                RefugeePotCrash_PawnValidator.PostProcessRequest(request);
                 //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
                 return;
             }

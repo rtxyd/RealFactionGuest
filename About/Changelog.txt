@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.4 - Fix a issue about trigger of getting stacktrace frame, add some wip code
+
 Forked 1.5.3 - Fix a issue of caravan generation, rewrite most code
 
 
