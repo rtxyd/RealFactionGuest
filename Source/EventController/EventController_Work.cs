@@ -1,6 +1,7 @@
 ﻿using Microsoft.SqlServer.Server;
 using RimWorld;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -19,8 +20,28 @@ namespace EventController_rQP
         public static bool isRefugeePodCrash = false;
         public static bool isInternalGen = false;
         public static bool isCreepJoiner = false;
+        public static bool isFactionFix = false;
+        //public static bool isListBackstory = false;
+        //public static bool isGenBackstory = false;
 
         public static string ongoingEvent = null;
+
+        public static float GetHumanlikeModFactionNum()
+        {
+            return FactionFilter_Init.humanlikeModFactionNum;
+        }
+        public static Dictionary<FactionDef, HashSet<PawnKindDef>> GetFactionPawnKinds()
+        {
+            return FactionFilter_Init.factionPawnKinds;
+        }
+        public static Dictionary<FactionDef, HashSet<ThingDef>> GetFactionPawnRaces()
+        {
+            return FactionFilter_Init.factionPawnRaces;
+        }
+        public static Dictionary<FactionDef, HashSet<BodyDef>> GetFactionPawnBodies()
+        {
+            return FactionFilter_Init.factionPawnBodies;
+        }
 
         public static bool IsCreepJoiner(ref PawnGenerationRequest request)
         {
@@ -79,6 +100,18 @@ namespace EventController_rQP
             {
                 ongoingEvent = "CreepJoiner";
             }
+            else if (isFactionFix)
+            {
+                ongoingEvent = "isFactionFix";
+            }
+            //else if (isGenBackstory)
+            //{
+            //    ongoingEvent = "GenBackstory";
+            //}
+            //else if (isListBackstory)
+            //{
+            //    ongoingEvent = "ListBackstory";
+            //}
             else
             {
                 ongoingEvent = "options or unknown";
@@ -127,7 +160,7 @@ namespace EventController_rQP
         public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
         {
             if (IsRefugeePodCrash())
-            { 
+            {
                 request.AllowDowned = true;
             }
             //need test
@@ -142,6 +175,50 @@ namespace EventController_rQP
         {
             isInternalGen = false;
         }
+
+        public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
+        {
+            FactionFilter_Work.FactionFilter(ref pawn,ref factionType );
+            isFactionFix = true;
+        }
+
+        public static void Postfix_GiveAppropriateBioAndNameTo()
+        {
+            isFactionFix = false;
+        }
+
+        //public static void Prefix_GiveShuffledBioTo(ref Pawn pawn, ref FactionDef factionType, ref List<BackstoryCategoryFilter> backstoryCategories)
+        //{
+        //    isGenBackstory = true;
+        //}
+
+        //public static void Postfix_GiveShuffledBioTo(ref Pawn pawn, ref FactionDef factionType, ref List<BackstoryCategoryFilter> backstoryCategories)
+        //{
+        //    isGenBackstory = true;
+        //}
+
+        //public static void Prefix_GetBackstoryCategoryFiltersFor(ref Pawn pawn, ref FactionDef faction)
+        //{
+        //    isListBackstory = true;
+        //}
+
+        //public static void Postfix_GetBackstoryCategoryFiltersFor(ref Pawn pawn, ref FactionDef faction, List<BackstoryCategoryFilter> __result)
+        //{
+        //    isListBackstory = false;
+        //}
+
+        //public static void Prefix_ChangeKind(ref PawnKindDef newKindDef)
+        //{
+
+        //}
+        //public static void Postfix_ChangeKind(ref PawnKindDef newKindDef)
+        //{
+
+        //}
+        //public static void Prefix_RedressPawn(ref Pawn pawn, ref PawnGenerationRequest request)
+        //{
+
+        //}
         //public static void Prefix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
         //{
         //    isRefugeePodCrash = true;
