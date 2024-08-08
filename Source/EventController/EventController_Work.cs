@@ -1,12 +1,7 @@
-﻿using Microsoft.SqlServer.Server;
-using RimWorld;
-using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using Verse;
-using static UnityEngine.GraphicsBuffer;
 
 namespace EventController_rQP
 {
@@ -21,8 +16,6 @@ namespace EventController_rQP
         public static bool isInternalGen = false;
         public static bool isCreepJoiner = false;
         public static bool isFactionFix = false;
-        //public static bool isListBackstory = false;
-        //public static bool isGenBackstory = false;
 
         public static string ongoingEvent = null;
 
@@ -104,14 +97,6 @@ namespace EventController_rQP
             {
                 ongoingEvent = "isFactionFix";
             }
-            //else if (isGenBackstory)
-            //{
-            //    ongoingEvent = "GenBackstory";
-            //}
-            //else if (isListBackstory)
-            //{
-            //    ongoingEvent = "ListBackstory";
-            //}
             else
             {
                 ongoingEvent = "options or unknown";
@@ -163,11 +148,6 @@ namespace EventController_rQP
             {
                 request.AllowDowned = true;
             }
-            //need test
-            //if (IsCreepJoiner(ref request))
-            //{
-            //    request.IsCreepJoiner = true;
-            //}
             isInternalGen = true;
         }
 
@@ -178,7 +158,7 @@ namespace EventController_rQP
 
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
-            FactionFilter_Work.FactionFilter(ref pawn,ref factionType );
+            FactionFilter_Work.FactionFilter(ref pawn, ref factionType);
             isFactionFix = true;
         }
 
@@ -186,47 +166,5 @@ namespace EventController_rQP
         {
             isFactionFix = false;
         }
-
-        //public static void Prefix_GiveShuffledBioTo(ref Pawn pawn, ref FactionDef factionType, ref List<BackstoryCategoryFilter> backstoryCategories)
-        //{
-        //    isGenBackstory = true;
-        //}
-
-        //public static void Postfix_GiveShuffledBioTo(ref Pawn pawn, ref FactionDef factionType, ref List<BackstoryCategoryFilter> backstoryCategories)
-        //{
-        //    isGenBackstory = true;
-        //}
-
-        //public static void Prefix_GetBackstoryCategoryFiltersFor(ref Pawn pawn, ref FactionDef faction)
-        //{
-        //    isListBackstory = true;
-        //}
-
-        //public static void Postfix_GetBackstoryCategoryFiltersFor(ref Pawn pawn, ref FactionDef faction, List<BackstoryCategoryFilter> __result)
-        //{
-        //    isListBackstory = false;
-        //}
-
-        //public static void Prefix_ChangeKind(ref PawnKindDef newKindDef)
-        //{
-
-        //}
-        //public static void Postfix_ChangeKind(ref PawnKindDef newKindDef)
-        //{
-
-        //}
-        //public static void Prefix_RedressPawn(ref Pawn pawn, ref PawnGenerationRequest request)
-        //{
-
-        //}
-        //public static void Prefix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
-        //{
-        //    isRefugeePodCrash = true;
-        //}
-
-        //public static void Postfix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
-        //{
-        //    isRefugeePodCrash = false;
-        //}
     }
 }

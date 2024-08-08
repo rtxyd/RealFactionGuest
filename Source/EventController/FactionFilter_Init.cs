@@ -1,10 +1,6 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace EventController_rQP
@@ -28,7 +24,7 @@ namespace EventController_rQP
                     && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
                     && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
                 select faction;
-            //AllFactions.Where((Faction x) => !x.IsPlayer && !x.Hidden && x.def.humanlikeFaction && (allowDefeated || !x.defeated) && (allowTemporary || !x.temporary) && (minTechLevel == TechLevel.Undefined || (int)x.def.techLevel >= (int)minTechLevel));
+
             foreach (var f in factions)
                 try
                 {
@@ -37,9 +33,9 @@ namespace EventController_rQP
                     {
                         continue;
                     }
-                    HashSet<PawnKindDef> pawnKindDefs = new ();
-                    HashSet<ThingDef> thingDefs = new ();
-                    HashSet<BodyDef> bodyDefs = new ();
+                    HashSet<PawnKindDef> pawnKindDefs = new();
+                    HashSet<ThingDef> thingDefs = new();
+                    HashSet<BodyDef> bodyDefs = new();
 
                     foreach (var pawnGroupMaker in f.pawnGroupMakers)
                     {

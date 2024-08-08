@@ -1,17 +1,12 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Verse.MathEvaluatorCustomFunctions;
 using Verse;
-using RimWorld;
 
 namespace EventController_rQP
 {
     internal class FactionFilter_Work
     {
-        public static void FactionFilter(ref Pawn pawn,ref FactionDef factionType)
+        public static void FactionFilter(ref Pawn pawn, ref FactionDef factionType)
         {
             if (pawn.Faction != null)
             {
@@ -36,7 +31,6 @@ namespace EventController_rQP
                 else
                 {
                     var factionKinds = EventController_Work.GetFactionPawnKinds();
-                    var kinds = factionKinds.TryGetValue(factionType);
                     List<FactionDef> factions = new();
                     foreach (var faction in factionKinds.Keys)
                     {
@@ -49,7 +43,10 @@ namespace EventController_rQP
                             }
                         }
                     }
-                    factionType = factions.RandomElement();
+                    if (factions.Any())
+                    {
+                        factionType = factions.RandomElement();
+                    }
                 }
             }
         }
