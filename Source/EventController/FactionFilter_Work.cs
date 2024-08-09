@@ -102,7 +102,7 @@ namespace EventController_rQP
         }
         public static void BackstoryFilterInner(out HashSet<string> categories)
         {
-            var factionCategories = EventController_Work.GetFactionBackstoryCategories();
+            var factionpawnkind = EventController_Work.GetFactionPawnKinds()
             categories = new();
 
             if (validFactions != null)
