@@ -13,6 +13,7 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly Dictionary<FactionDef, HashSet<string>> factionBackstoryCategories = new();
+        public static readonly HashSet<FactionDef> vanillaFactions = new();
         static FactionFilter_Init()
         {
             //Log.Message("# Real Faction Guest - Faction Filter Init");
@@ -31,6 +32,7 @@ namespace EventController_rQP
                 {
                     var isHumanlike = false;
                     var flag = !f.hidden;
+                    var flag2 = f.modContentPack.IsOfficialMod;
                     if (f.pawnGroupMakers == null)
                     {
                         continue;
@@ -66,7 +68,13 @@ namespace EventController_rQP
                             }
 
                             //var backsotryFiltersOverride = pawnGenOption.kind.backstoryFiltersOverride;
-                            if (!f.modContentPack.PackageId.Contains("ludeon")
+
+                            if (flag && flag2)
+                            {
+                                vanillaFactions.Add(f);
+
+                            }
+                            if( !flag2
                                 || pawnGenOption.kind.RaceProps == null
                                 || pawnGenOption.kind.RaceProps.intelligence == Intelligence.Humanlike
                                 || pawnGenOption.kind.RaceProps.Humanlike)

@@ -179,41 +179,7 @@ namespace EventController_rQP
         }
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
         {
-            if (pawn.kindDef.backstoryFiltersOverride == null)
-            {
-                for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
-                {
-                    if (backstoryCategories[i].categories != null)
-                    {
-                        continue;
-                    }
-                    if (backstoryCategories[i].categoriesChildhood == null && backstoryCategories[i].categoriesAdulthood != null)
-                    {
-                        HashSet<string> childhood = [];
-                        var factionPawnKinds = EventController_Work.GetFactionPawnKinds();
-                        foreach (var faction in FactionFilter_Work.validFactions)
-                        {
-                            var filterKinds = factionPawnKinds[faction].Where(f => !f.backstoryFiltersOverride.Any());
-                            foreach (var kind in filterKinds)
-                            {
-                                foreach (var bkfo in kind.backstoryFiltersOverride)
-                                {
-                                    childhood.Union(bkfo.categories);
-                                }
-                            }
-                        }
-                        if (childhood.Any())
-                        {
-                            backstoryCategories[i].categoriesChildhood.Union(childhood);
-                        }
-                        else
-                        {
-                            backstoryCategories[i].categoriesChildhood = new List<string> { "Civil" };
-                        }
-                    }
-                }
-            }
-            FactionFilter_Work.BackstoryFilter(ref pawn, ref backstoryCategories, ref factionType);
+            FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
             isBackstoryFix = true;
         }
 

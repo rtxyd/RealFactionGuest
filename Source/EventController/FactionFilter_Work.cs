@@ -45,14 +45,6 @@ namespace EventController_rQP
                 }
             }
         }
-        public static void FactionFilterInner(List<FactionDef> factions, ref FactionDef factionType)
-        {
-            if (factions.Any())
-            {
-                factionType = factions.RandomElement();
-            }
-            return;
-        }
 
         public static List<FactionDef> GetValidFactions(ThingDef race, BodyDef body)
         {
