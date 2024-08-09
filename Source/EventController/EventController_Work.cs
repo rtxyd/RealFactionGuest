@@ -18,11 +18,6 @@ namespace EventController_rQP
         public static bool isCreepJoiner = false;
         public static bool isFactionFix = false;
         public static bool isBackstoryFix = false;
-        private static readonly BackstoryCategoryFilter FallbackCategoryGroup = new BackstoryCategoryFilter
-        {
-            categories = new List<string> { "Civil" },
-            commonality = 1f
-        };
 
         public static string ongoingEvent = null;
 
@@ -30,9 +25,13 @@ namespace EventController_rQP
         {
             return FactionFilter_Init.humanlikeModFactionNum;
         }
-        public static Dictionary<FactionDef, HashSet<string>> GetFactionBackstoryCategories()
+        public static HashSet<string> GetFallbackBackstroy()
         {
-            return FactionFilter_Init.factionBackstoryCategories;
+            return FactionFilter_Init.fallbackBackstory;
+        }
+        public static HashSet<FactionDef> GetVanillaFactions()
+        {
+            return FactionFilter_Init.vanillaFactions;
         }
         public static Dictionary<FactionDef, HashSet<PawnKindDef>> GetFactionPawnKinds()
         {
@@ -107,6 +106,10 @@ namespace EventController_rQP
             else if (isFactionFix)
             {
                 ongoingEvent = "isFactionFix";
+            }
+            else if (isBackstoryFix)
+            {
+                ongoingEvent = "isBackstoryFix";
             }
             else
             {

@@ -12,8 +12,8 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<PawnKindDef>> factionPawnKinds = new();
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
-        public static readonly Dictionary<FactionDef, HashSet<string>> factionBackstoryCategories = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
+        public static readonly HashSet<string> fallbackBackstory = new();
         static FactionFilter_Init()
         {
             //Log.Message("# Real Faction Guest - Faction Filter Init");
@@ -40,18 +40,6 @@ namespace EventController_rQP
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();
                     HashSet<BodyDef> bodyDefs = new();
-                    HashSet<string> backstoryCategories = new();
-
-                    if (flag)
-                    {
-                        foreach (var item in f.backstoryFilters)
-                        {
-                            foreach (var item1 in item.categories)
-                            {
-                                backstoryCategories.Add(item1);
-                            }
-                        }
-                    }
                     foreach (var pawnGroupMaker in f.pawnGroupMakers)
                     {
                         var options = pawnGroupMaker.options;
@@ -89,7 +77,6 @@ namespace EventController_rQP
                         factionPawnKinds.Add(f, pawnKindDefs);
                         factionPawnRaces.Add(f, thingDefs);
                         factionPawnBodies.Add(f, bodyDefs);
-                        factionBackstoryCategories.Add(f, backstoryCategories);
                     }
 
                     if (!isHumanlike)
@@ -103,6 +90,13 @@ namespace EventController_rQP
                 {
                     // ignored
                 }
+            foreach (var f2 in vanillaFactions)
+            {
+                foreach (var item in f2.backstoryFilters)
+                {
+                    fallbackBackstory.UnionWith(item.categories);
+                }
+            }
             Log.Message("# Real Faction Guest - Faction Filter Init Complete");
         }
     }

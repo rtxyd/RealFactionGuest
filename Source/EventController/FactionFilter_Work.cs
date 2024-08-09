@@ -67,6 +67,7 @@ namespace EventController_rQP
         {
             if (backstoryCategories.Where(f => f.categories == null).Where(f => f.categoriesChildhood == null || f.categoriesAdulthood == null).Any())
             {
+                var fallback = EventController_Work.GetFallbackBackstroy();
                 for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
                 {
                     if (backstoryCategories[i].categories != null)
@@ -78,11 +79,11 @@ namespace EventController_rQP
                         var childhood = IncludeStoryCategoriesInner(pawn);
                         if (childhood.Any())
                         {
-                            backstoryCategories[i].categoriesChildhood.Union(childhood);
+                            backstoryCategories[i].categoriesChildhood = childhood.ToList();
                         }
                         else
                         {
-                            backstoryCategories[i].categoriesChildhood = new List<string> { "Child" };
+                            backstoryCategories[i].categoriesChildhood = fallback.ToList();
                         }
                     }
                     if (slot == BackstorySlot.Adulthood && backstoryCategories[i].categoriesAdulthood == null)
@@ -90,11 +91,11 @@ namespace EventController_rQP
                         var adulthood = IncludeStoryCategoriesInner(pawn);
                         if (adulthood.Any())
                         {
-                            backstoryCategories[i].categoriesAdulthood.Union(adulthood);
+                            backstoryCategories[i].categoriesAdulthood = adulthood.ToList();
                         }
                         else
                         {
-                            backstoryCategories[i].categoriesAdulthood = new List<string> { "Civil" };
+                            backstoryCategories[i].categoriesAdulthood = fallback.ToList();
                         }
                     }
                 }
@@ -111,13 +112,13 @@ namespace EventController_rQP
                 {
                     if (kind.backstoryCategories != null)
                     {
-                        categories.Union(kind.backstoryCategories);
+                        categories.UnionWith(kind.backstoryCategories);
                     }
                     if (kind.backstoryFilters != null)
                     {
                         foreach (var filter in kind.backstoryFilters)
                         {
-                            categories.Union(filter.categories);
+                            categories.UnionWith(filter.categories);
                         }
                     }
                 }
