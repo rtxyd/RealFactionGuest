@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Verse;
 
 namespace EventController_rQP
@@ -16,12 +17,22 @@ namespace EventController_rQP
         public static bool isInternalGen = false;
         public static bool isCreepJoiner = false;
         public static bool isFactionFix = false;
+        public static bool isBackstoryFix = false;
+        private static readonly BackstoryCategoryFilter FallbackCategoryGroup = new BackstoryCategoryFilter
+        {
+            categories = new List<string> { "Civil" },
+            commonality = 1f
+        };
 
         public static string ongoingEvent = null;
 
         public static float GetHumanlikeModFactionNum()
         {
             return FactionFilter_Init.humanlikeModFactionNum;
+        }
+        public static Dictionary<FactionDef, HashSet<string>> GetFactionBackstoryCategories()
+        {
+            return FactionFilter_Init.factionBackstoryCategories;
         }
         public static Dictionary<FactionDef, HashSet<PawnKindDef>> GetFactionPawnKinds()
         {
@@ -165,6 +176,51 @@ namespace EventController_rQP
         public static void Postfix_GiveAppropriateBioAndNameTo()
         {
             isFactionFix = false;
+        }
+        public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
+        {
+            if (pawn.kindDef.backstoryFiltersOverride == null)
+            {
+                for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
+                {
+                    if (backstoryCategories[i].categories != null)
+                    {
+                        continue;
+                    }
+                    if (backstoryCategories[i].categoriesChildhood == null && backstoryCategories[i].categoriesAdulthood != null)
+                    {
+                        HashSet<string> childhood = [];
+                        var factionPawnKinds = EventController_Work.GetFactionPawnKinds();
+                        foreach (var faction in FactionFilter_Work.validFactions)
+                        {
+                            var filterKinds = factionPawnKinds[faction].Where(f => !f.backstoryFiltersOverride.Any());
+                            foreach (var kind in filterKinds)
+                            {
+                                foreach (var bkfo in kind.backstoryFiltersOverride)
+                                {
+                                    childhood.Union(bkfo.categories);
+                                }
+                            }
+                        }
+                        if (childhood.Any())
+                        {
+                            backstoryCategories[i].categoriesChildhood.Union(childhood);
+                        }
+                        else
+                        {
+                            backstoryCategories[i].categoriesChildhood = new List<string> { "Civil" };
+                        }
+                    }
+                }
+            }
+            FactionFilter_Work.BackstoryFilter(ref pawn, ref backstoryCategories, ref factionType);
+            isBackstoryFix = true;
+        }
+
+        public static void Postfix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
+        {
+            isBackstoryFix = false;
+            return;
         }
     }
 }

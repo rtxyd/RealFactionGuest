@@ -12,6 +12,7 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<PawnKindDef>> factionPawnKinds = new();
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
+        public static readonly Dictionary<FactionDef, HashSet<string>> factionBackstoryCategories = new();
         static FactionFilter_Init()
         {
             //Log.Message("# Real Faction Guest - Faction Filter Init");
@@ -29,6 +30,7 @@ namespace EventController_rQP
                 try
                 {
                     var isHumanlike = false;
+                    var flag = !f.hidden;
                     if (f.pawnGroupMakers == null)
                     {
                         continue;
@@ -36,21 +38,34 @@ namespace EventController_rQP
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();
                     HashSet<BodyDef> bodyDefs = new();
+                    HashSet<string> backstoryCategories = new();
 
+                    if (flag)
+                    {
+                        foreach (var item in f.backstoryFilters)
+                        {
+                            foreach (var item1 in item.categories)
+                            {
+                                backstoryCategories.Add(item1);
+                            }
+                        }
+                    }
                     foreach (var pawnGroupMaker in f.pawnGroupMakers)
                     {
                         var options = pawnGroupMaker.options;
                         foreach (var pawnGenOption in options)
                         {
-                            var race = pawnGenOption.kind.race;
-                            var kind = pawnGenOption.kind;
-                            var body = pawnGenOption.kind.RaceProps.body;
+                            if (flag)
+                            {
+                                var race = pawnGenOption.kind.race;
+                                var kind = pawnGenOption.kind;
+                                var body = pawnGenOption.kind.RaceProps.body;
+                                pawnKindDefs.Add(kind);
+                                thingDefs.Add(race);
+                                bodyDefs.Add(body);
+                            }
 
-                            pawnKindDefs.Add(kind);
-                            thingDefs.Add(race);
-                            bodyDefs.Add(body);
-
-                            var backsotryFiltersOverride = pawnGenOption.kind.backstoryFiltersOverride;
+                            //var backsotryFiltersOverride = pawnGenOption.kind.backstoryFiltersOverride;
                             if (!f.modContentPack.PackageId.Contains("ludeon")
                                 || pawnGenOption.kind.RaceProps == null
                                 || pawnGenOption.kind.RaceProps.intelligence == Intelligence.Humanlike
@@ -60,10 +75,14 @@ namespace EventController_rQP
                             }
                         }
                     }
-                    //create faction -> pawn reflection
-                    factionPawnKinds.Add(f, pawnKindDefs);
-                    factionPawnRaces.Add(f, thingDefs);
-                    factionPawnBodies.Add(f, bodyDefs);
+                    if (flag)
+                    {
+                        //create faction -> pawn reflection
+                        factionPawnKinds.Add(f, pawnKindDefs);
+                        factionPawnRaces.Add(f, thingDefs);
+                        factionPawnBodies.Add(f, bodyDefs);
+                        factionBackstoryCategories.Add(f, backstoryCategories);
+                    }
 
                     if (!isHumanlike)
                     {
