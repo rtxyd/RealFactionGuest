@@ -14,21 +14,20 @@ namespace EventController_rQP
 
         public static void FactionFilter(ref Pawn pawn, ref FactionDef factionType)
         {
-
+            var race = pawn.kindDef.race;
+            var body = pawn.kindDef.RaceProps.body;
             if (pawn.Faction != null)
             {
-                if (!pawn.Faction.def.isPlayer && (pawn.Faction.def == factionType || factionType.modContentPack.IsOfficialMod))
+                if (!pawn.Faction.IsPlayer && pawn.Faction.def == factionType || factionType.modContentPack.IsOfficialMod)
                 {
                     return;
                 }
-                if (pawn.Faction.def.isPlayer)
+                if (pawn.Faction.IsPlayer)
                 {
-                    FactionFilterInner(validFactions, ref factionType);
+                    factionType = GetValidFactions(race, body).RandomElement();
                     return;
                 }
             }
-            var race = pawn.kindDef.race;
-            var body = pawn.kindDef.RaceProps.body;
             var factionRaces = EventController_Work.GetFactionPawnRaces();
             var races = factionRaces.TryGetValue(factionType);
             var factionBodies = EventController_Work.GetFactionPawnBodies();
@@ -42,7 +41,7 @@ namespace EventController_rQP
                 }
                 else
                 {
-                    FactionFilterInner(validFactions, ref factionType);
+                    factionType = GetValidFactions(race, body).RandomElement();
                 }
             }
         }
