@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.6 - Refine the filter, should be less mismatched backstoies.
+
 Forked 1.5.5 - Implement a backstory filter to make every pawn get right backstories
 
 Forked 1.5.4 - Fix a issue about trigger of getting stacktrace frame, add some wip code

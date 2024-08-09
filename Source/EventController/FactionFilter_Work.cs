@@ -24,7 +24,11 @@ namespace EventController_rQP
                 }
                 if (pawn.Faction.IsPlayer)
                 {
-                    factionType = GetValidFactions(race, body).RandomElement();
+                    var factions = GetValidFactions(race, body);
+                    if (!factions.Empty())
+                    {
+                        factionType = factions.RandomElement();
+                    }
                     return;
                 }
             }
@@ -32,16 +36,19 @@ namespace EventController_rQP
             var races = factionRaces.TryGetValue(factionType);
             var factionBodies = EventController_Work.GetFactionPawnBodies();
             var bodies = factionBodies.TryGetValue(factionType);
-
             if (races != null && bodies != null)
             {
-                if (!pawn.Faction.def.isPlayer && races.Contains(race) && bodies.Contains(body))
+                if (races.Contains(race) && bodies.Contains(body))
                 {
                     return;
                 }
                 else
                 {
-                    factionType = GetValidFactions(race, body).RandomElement();
+                    var factions = GetValidFactions(race, body);
+                    if (!factions.Empty())
+                    {
+                        factionType = factions.RandomElement();
+                    }
                 }
             }
         }

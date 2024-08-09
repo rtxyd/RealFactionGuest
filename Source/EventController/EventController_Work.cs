@@ -158,7 +158,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
         {
-            if (IsRefugeePodCrash())
+            if (IsRefugeePodCrash() || request.KindDef.defName == "Mincho_SpaceRefugee")
             {
                 request.AllowDowned = true;
             }
