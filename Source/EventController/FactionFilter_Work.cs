@@ -11,13 +11,10 @@ namespace EventController_rQP
 {
     internal class FactionFilter_Work
     {
-        public static List<FactionDef> validFactions;
 
         public static void FactionFilter(ref Pawn pawn, ref FactionDef factionType)
         {
-            var race = pawn.kindDef.race;
-            var body = pawn.kindDef.RaceProps.body;
-            validFactions = GetValidFactions(race, body);
+
             if (pawn.Faction != null)
             {
                 if (!pawn.Faction.def.isPlayer && (pawn.Faction.def == factionType || factionType.modContentPack.IsOfficialMod))
@@ -30,7 +27,8 @@ namespace EventController_rQP
                     return;
                 }
             }
-
+            var race = pawn.kindDef.race;
+            var body = pawn.kindDef.RaceProps.body;
             var factionRaces = EventController_Work.GetFactionPawnRaces();
             var races = factionRaces.TryGetValue(factionType);
             var factionBodies = EventController_Work.GetFactionPawnBodies();
@@ -74,44 +72,66 @@ namespace EventController_rQP
             }
             return factions;
         }
-        public static void BackstoryFilter(ref Pawn pawn, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
+        public static void IncludeStoryCategories(Pawn pawn, BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories)
         {
-            if (pawn.Faction != null)
+            if (backstoryCategories.Where(f => f.categories == null).Where(f => f.categoriesChildhood == null || f.categoriesAdulthood == null).Any())
             {
-                if (!pawn.Faction.def.isPlayer && (pawn.Faction.def == factionType))
+                for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
                 {
-                    return;
-                }
-            }
-            var flag = !backstoryCategories.Where(f => f.categories == null).Any();
-            if (flag)
-            {
-                return;
-            }
-            BackstoryFilterInner(out HashSet<string> categories);
-
-            for (int i = 0; i < backstoryCategories.Count; i++)
-            {
-                var category = backstoryCategories[i];
-                if (category.categories == null)
-                {
-                    backstoryCategories[i].categories = [];
-                    backstoryCategories[i].categories.AddRange(categories);
+                    if (backstoryCategories[i].categories != null)
+                    {
+                        continue;
+                    }
+                    if (slot == BackstorySlot.Childhood && backstoryCategories[i].categoriesChildhood == null)
+                    {
+                        var childhood = IncludeStoryCategoriesInner(pawn);
+                        if (childhood.Any())
+                        {
+                            backstoryCategories[i].categoriesChildhood.Union(childhood);
+                        }
+                        else
+                        {
+                            backstoryCategories[i].categoriesChildhood = new List<string> { "Child" };
+                        }
+                    }
+                    if (slot == BackstorySlot.Adulthood && backstoryCategories[i].categoriesAdulthood == null)
+                    {
+                        var adulthood = IncludeStoryCategoriesInner(pawn);
+                        if (adulthood.Any())
+                        {
+                            backstoryCategories[i].categoriesAdulthood.Union(adulthood);
+                        }
+                        else
+                        {
+                            backstoryCategories[i].categoriesAdulthood = new List<string> { "Civil" };
+                        }
+                    }
                 }
             }
         }
-        public static void BackstoryFilterInner(out HashSet<string> categories)
+        public static HashSet<string> IncludeStoryCategoriesInner(Pawn pawn)
         {
-            var factionpawnkind = EventController_Work.GetFactionPawnKinds()
-            categories = new();
-
-            if (validFactions != null)
+            HashSet<string> categories = [];
+            var validFactions = GetValidFactions(pawn.kindDef.race, pawn.RaceProps.body);
+            var factionpawnkinds = EventController_Work.GetFactionPawnKinds();
+            foreach (var faction in validFactions)
             {
-                foreach (var faction in validFactions)
+                foreach (var kind in factionpawnkinds[faction])
                 {
-                    categories.UnionWith(factionCategories[faction]);
+                    if (kind.backstoryCategories != null)
+                    {
+                        categories.Union(kind.backstoryCategories);
+                    }
+                    if (kind.backstoryFilters != null)
+                    {
+                        foreach (var filter in kind.backstoryFilters)
+                        {
+                            categories.Union(filter.categories);
+                        }
+                    }
                 }
             }
+            return categories;
         }
     }
 }
