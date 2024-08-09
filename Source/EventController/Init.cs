@@ -83,6 +83,12 @@ namespace EventController_rQP
             var postfix_GiveAppropriateBioAndNameTo = eventWorker.GetMethod("Postfix_GiveAppropriateBioAndNameTo");
             harmony.Patch(giveAppropriateBioAndNameTo, new HarmonyMethod(prefix_GiveAppropriateBioAndNameTo), new HarmonyMethod(postfix_GiveAppropriateBioAndNameTo));
 
+            var fillBackstorySlotShuffled = AccessTools.Method(typeof(PawnBioAndNameGenerator), nameof(PawnBioAndNameGenerator.FillBackstorySlotShuffled));
+            var prefix_FillBackstorySlotShuffled = eventWorker.GetMethod("Prefix_FillBackstorySlotShuffled");
+            var postfix_FillBackstorySlotShuffled = eventWorker.GetMethod("Postfix_FillBackstorySlotShuffled");
+            harmony.Patch(fillBackstorySlotShuffled, new HarmonyMethod(prefix_FillBackstorySlotShuffled), new HarmonyMethod(postfix_FillBackstorySlotShuffled));
+            
+
             Log.Message("# Real Faction Guest Event Controller - Init Complete");
         }
     }

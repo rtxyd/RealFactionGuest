@@ -12,6 +12,8 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<PawnKindDef>> factionPawnKinds = new();
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
+        public static readonly HashSet<FactionDef> vanillaFactions = new();
+        public static readonly HashSet<string> fallbackBackstory = new();
         static FactionFilter_Init()
         {
             //Log.Message("# Real Faction Guest - Faction Filter Init");
@@ -29,6 +31,8 @@ namespace EventController_rQP
                 try
                 {
                     var isHumanlike = false;
+                    var flag = !f.hidden;
+                    var flag2 = f.modContentPack.IsOfficialMod;
                     if (f.pawnGroupMakers == null)
                     {
                         continue;
@@ -36,22 +40,29 @@ namespace EventController_rQP
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();
                     HashSet<BodyDef> bodyDefs = new();
-
                     foreach (var pawnGroupMaker in f.pawnGroupMakers)
                     {
                         var options = pawnGroupMaker.options;
                         foreach (var pawnGenOption in options)
                         {
-                            var race = pawnGenOption.kind.race;
-                            var kind = pawnGenOption.kind;
-                            var body = pawnGenOption.kind.RaceProps.body;
+                            if (flag)
+                            {
+                                var race = pawnGenOption.kind.race;
+                                var kind = pawnGenOption.kind;
+                                var body = pawnGenOption.kind.RaceProps.body;
+                                pawnKindDefs.Add(kind);
+                                thingDefs.Add(race);
+                                bodyDefs.Add(body);
+                            }
 
-                            pawnKindDefs.Add(kind);
-                            thingDefs.Add(race);
-                            bodyDefs.Add(body);
+                            //var backsotryFiltersOverride = pawnGenOption.kind.backstoryFiltersOverride;
 
-                            var backsotryFiltersOverride = pawnGenOption.kind.backstoryFiltersOverride;
-                            if (!f.modContentPack.PackageId.Contains("ludeon")
+                            if (flag && flag2)
+                            {
+                                vanillaFactions.Add(f);
+
+                            }
+                            if( !flag2
                                 || pawnGenOption.kind.RaceProps == null
                                 || pawnGenOption.kind.RaceProps.intelligence == Intelligence.Humanlike
                                 || pawnGenOption.kind.RaceProps.Humanlike)
@@ -60,10 +71,13 @@ namespace EventController_rQP
                             }
                         }
                     }
-                    //create faction -> pawn reflection
-                    factionPawnKinds.Add(f, pawnKindDefs);
-                    factionPawnRaces.Add(f, thingDefs);
-                    factionPawnBodies.Add(f, bodyDefs);
+                    if (flag)
+                    {
+                        //create faction -> pawn reflection
+                        factionPawnKinds.Add(f, pawnKindDefs);
+                        factionPawnRaces.Add(f, thingDefs);
+                        factionPawnBodies.Add(f, bodyDefs);
+                    }
 
                     if (!isHumanlike)
                     {
@@ -76,6 +90,13 @@ namespace EventController_rQP
                 {
                     // ignored
                 }
+            foreach (var f2 in vanillaFactions)
+            {
+                foreach (var item in f2.backstoryFilters)
+                {
+                    fallbackBackstory.UnionWith(item.categories);
+                }
+            }
             Log.Message("# Real Faction Guest - Faction Filter Init Complete");
         }
     }

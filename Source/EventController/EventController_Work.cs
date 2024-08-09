@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Verse;
 
 namespace EventController_rQP
@@ -16,12 +17,21 @@ namespace EventController_rQP
         public static bool isInternalGen = false;
         public static bool isCreepJoiner = false;
         public static bool isFactionFix = false;
+        public static bool isBackstoryFix = false;
 
         public static string ongoingEvent = null;
 
         public static float GetHumanlikeModFactionNum()
         {
             return FactionFilter_Init.humanlikeModFactionNum;
+        }
+        public static HashSet<string> GetFallbackBackstroy()
+        {
+            return FactionFilter_Init.fallbackBackstory;
+        }
+        public static HashSet<FactionDef> GetVanillaFactions()
+        {
+            return FactionFilter_Init.vanillaFactions;
         }
         public static Dictionary<FactionDef, HashSet<PawnKindDef>> GetFactionPawnKinds()
         {
@@ -97,6 +107,10 @@ namespace EventController_rQP
             {
                 ongoingEvent = "isFactionFix";
             }
+            else if (isBackstoryFix)
+            {
+                ongoingEvent = "isBackstoryFix";
+            }
             else
             {
                 ongoingEvent = "options or unknown";
@@ -144,7 +158,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
         {
-            if (IsRefugeePodCrash())
+            if (IsRefugeePodCrash() || request.KindDef.defName == "Mincho_SpaceRefugee")
             {
                 request.AllowDowned = true;
             }
@@ -165,6 +179,17 @@ namespace EventController_rQP
         public static void Postfix_GiveAppropriateBioAndNameTo()
         {
             isFactionFix = false;
+        }
+        public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
+        {
+            FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
+            isBackstoryFix = true;
+        }
+
+        public static void Postfix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
+        {
+            isBackstoryFix = false;
+            return;
         }
     }
 }
