@@ -1,5 +1,7 @@
-This is a forked version of real faction guest, I rewrite most of it's code comparing to Mlie's continued version. So I forked it, you don't need use this version unless you want, since they have same function.
-
+This is a forked version of real faction guest, I rewrite most of it's code. So I forked it.
+What's new:
+1. this version makes human don't get wrong alien backstory, and alien will not get wrong backstory (They can all get vanilla backstories)
+2. hmmmm, maybe less issues.
 
 # [Real Faction Guest (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2886929245)
 
