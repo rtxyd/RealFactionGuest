@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-  <name>Real Faction Guest (Continued) (Forked)</name>
+  <name>Real Faction Guest (Forked)</name>
   <packageId>rtxyd.RealFactionGuest</packageId>
   <author>YAYO</author>
   <url>https://github.com/rtxyd/RealFactionGuest</url>
@@ -22,7 +22,20 @@
     <li>brrainz.harmony</li>
   </loadAfter>
   <description>
-This is a forked version of real faction guest (Continued), I rewrite most of it's code comparing to Mlie's continued version. So I forked it (packageID is different, you don't need to unsubscribe Mlie's version, and don't load both of them), you don't need use this version since they have same function, unless you get issue with Mlie's version or just you want to.
+This is a forked version of [1.5] Real Faction Guest (Continued) , I rewrite almost all of its code and expand the features. So I forked it (packageID is different, you don't need to unsubscribe Mlie's version, and don't load both of them).
+
+New Features
+This version implement a filter to make every pawn get right backstory.
+So human will not get random alien backstories, and aliens will not get mismatched backstories. Trying to make them be "real" faction guest.
+
+Something you need to know (not issues):
+* alien can get vanilla backstories sometimes, and will not get backstories of other alien races.
+
+* (fixed) randomized pawn will not trigger the filter, I will look into this later.
+
+Mlie's version is still active
+
+DON'T USE THEM THE SAME TIME
 
 Source code is here or for reporting issues
 github: https://github.com/rtxyd/RealFactionGuest
@@ -36,5 +49,5 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2263021260
 --------------------Mlie's original description--------------------
 See url above.
   </description>
-  <modVersion IgnoreIfNoMatchingField="True">1.5.6</modVersion>
+  <modVersion IgnoreIfNoMatchingField="True">1.5.6a</modVersion>
 </ModMetaData>
