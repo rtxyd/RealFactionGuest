@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using EventController_rQP;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.QuestGen;
 using System;
@@ -53,7 +54,7 @@ public class patch_PawnGenerator_GeneratePawn
             float combatPower;
             FactionDef fd;
             PawnKindDef p_make;
-
+            bool isRefugeePodCrash = false;
             if (request.Faction?.def.modContentPack != null &&
                 !request.Faction.def.modContentPack.PackageId.Contains("ludeon") &&
                 request.KindDef.modContentPack.PackageId.Contains("ludeon"))
@@ -83,7 +84,8 @@ public class patch_PawnGenerator_GeneratePawn
                 if (declaringType2 == typeof(QuestNode_Root_RefugeePodCrash))
                 {
                     request.AllowDowned = true;
-                    flag = false;
+                    isRefugeePodCrash = true;
+                    //flag = false;
                 }
                 // 팩션이 있을때
                 fd = request.Faction.def;
@@ -98,6 +100,59 @@ public class patch_PawnGenerator_GeneratePawn
                     request.KindDef = p_make;
                 }
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
+                return;
+
+            }
+            if (!RealFactionGuestSettings.strictRace)
+            {
+                return;
+            }
+
+            if (request.Faction == null)
+            {
+                return;
+            }
+
+            // 팩션이 없거나 조난자 일때
+            if (Rand.Value <= Core.vanillaRatio)
+            {
+                return;
+            }
+
+            if (PawnValidator_CrossWork.IsRefugeePodCrash(7))
+            {
+                request.AllowDowned = true;
+            }
+            else
+            {
+                return;
+            }
+            combatPower = request.KindDef.combatPower;
+
+            p_make = null;
+            var tryCount = 0;
+            IEnumerable<List<PawnGenOption>> options = [];
+            var validFactions = PawnValidator_CrossWork.GetValidFactions_RPC();
+            while (!options.Any() && tryCount <= 11)
+            {
+                tryCount++;
+                fd = validFactions.RandomElement();
+                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
+                //there may need a filter of animal pawns and wildman.
+                options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
+                if (options.Any())
+                {
+                    p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower);
+                }
+            }
+            if (p_make != null)
+            {
+                request.KindDef = p_make;
+                //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
+                return;
+            }
+            else
+            {
                 return;
             }
         }

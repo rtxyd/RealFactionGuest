@@ -72,7 +72,7 @@ namespace raceQuestPawn
             var nearpower = combatPowerArray.MinBy(a => Mathf.Abs(a - combatPower));
             pawnEquals =
                 from p in pawnKinds
-                where (p.combatPower - nearpower) < 30f
+                where Mathf.Abs(p.combatPower - nearpower) < 40f
                 select p;
             if (pawnEquals.Any())
             {

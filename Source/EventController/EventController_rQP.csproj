@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RealFactionGuest.cs" />
+    <Compile Include="RealFactionGuestSettings.cs" />
     <Compile Include="FactionFilter_Work.cs" />
     <Compile Include="Init.cs" />
     <Compile Include="EventController_Work.cs" />

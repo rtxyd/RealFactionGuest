@@ -9,6 +9,7 @@ namespace raceQuestPawn;
 public static class Core
 {
     public static readonly float vanillaRatio;
+    public static readonly bool strictRace = new RealFactionGuestSettings().strictRace;
     static Core()
     {
         //Log.Message("# Real Faction Guest - Init");
