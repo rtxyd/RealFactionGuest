@@ -47,6 +47,7 @@
     <Compile Include="Init.cs" />
     <Compile Include="EventController_Work.cs" />
     <Compile Include="FactionFilter_Init.cs" />
+    <Compile Include="PawnValidator_CrossWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

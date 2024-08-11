@@ -87,7 +87,7 @@ namespace EventController_rQP
             var prefix_FillBackstorySlotShuffled = eventWorker.GetMethod("Prefix_FillBackstorySlotShuffled");
             var postfix_FillBackstorySlotShuffled = eventWorker.GetMethod("Postfix_FillBackstorySlotShuffled");
             harmony.Patch(fillBackstorySlotShuffled, new HarmonyMethod(prefix_FillBackstorySlotShuffled), new HarmonyMethod(postfix_FillBackstorySlotShuffled));
-            
+
 
             Log.Message("# Real Faction Guest Event Controller - Init Complete");
         }

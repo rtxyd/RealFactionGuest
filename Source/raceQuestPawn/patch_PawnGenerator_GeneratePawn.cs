@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RimWorld.QuestGen;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Verse;
 
 namespace raceQuestPawn;
@@ -60,8 +60,9 @@ public class patch_PawnGenerator_GeneratePawn
             {
                 var stack = new StackTrace(0, true);
                 StackFrame frame = stack.GetFrame(3);
-                MethodBase method = frame.GetMethod();
-                Type declaringType = method.DeclaringType;
+                StackFrame frame2 = stack.GetFrame(5);
+                Type declaringType = frame.GetMethod().DeclaringType;
+                Type declaringType2 = frame2.GetMethod().DeclaringType;
                 //check stack if it's vanilla caravan trader generation request and skip it to vanilla generation.
                 //It should be safe to skip that, because it's using vanilla method to generate vanilla pawnkind.
                 //in 1.5, frame 1 is this method, 2 is harmony patched generatePawn, and 3 is generate traders/carriers/guards.
@@ -78,88 +79,25 @@ public class patch_PawnGenerator_GeneratePawn
                         return;
                     }
                 }
+                bool flag = true;
+                if (declaringType2 == typeof(QuestNode_Root_RefugeePodCrash))
+                {
+                    request.AllowDowned = true;
+                    flag = false;
+                }
                 // 팩션이 있을때
                 fd = request.Faction.def;
                 combatPower = request.KindDef.combatPower;
                 p_make = null;
                 if (fd.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower);
+                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower, flag);
                 }
                 if (p_make != null)
                 {
                     request.KindDef = p_make;
                 }
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
-                return;
-            }
-
-
-            if (request.Faction != null && !request.KindDef.defName.ToLower().Contains("refugee"))
-            {
-                return;
-            }
-
-            // 팩션이 없거나 조난자 일때
-            if (Rand.Value <= Core.vanillaRatio)
-            {
-                return;
-            }
-
-            if (PawnValidator_CrossWork.IsRefugeePodCrash())
-            {
-                request.AllowDowned = true;
-            }
-            else
-            {
-                return;
-            }
-            combatPower = request.KindDef.combatPower;
-
-            p_make = null;
-            var tryCount = 0;
-
-            IEnumerable<List<PawnGenOption>> options = [];
-            while (!options.Any() && tryCount <= 11)
-            {
-                tryCount++;
-                fd = DefDatabase<FactionDef>.AllDefs.RandomElement();
-
-                if (fd is not { pawnGroupMakers: not null, modContentPack: not null })
-                {
-                    continue;
-                }
-
-                if (fd.modContentPack.PackageId.Contains("ludeon"))
-                {
-                    continue;
-                }
-
-                if (fd.modContentPack.PackageId.Contains("ogliss.alienvspredator"))
-                {
-                    continue;
-                }
-
-                if (fd.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad"))
-                {
-                    continue;
-                }
-                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
-                //there may need a filter of animal pawns and wildman.
-                options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
-            }
-            if (options.Any())
-            {
-                p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower);
-            }
-            if (p_make != null)
-            {
-                request.KindDef = p_make;
-                //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
-                return;
-            }
-            else
-            {
                 return;
             }
         }
