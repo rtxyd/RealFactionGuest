@@ -1,4 +1,6 @@
 ﻿using EventController_rQP;
+using RimWorld;
+using System.Collections.Generic;
 using Verse;
 
 namespace raceQuestPawn
@@ -14,11 +16,13 @@ namespace raceQuestPawn
             }
             return request;
         }
-        public static bool IsRefugeePodCrash()
+        public static bool IsRefugeePodCrash(int f = 8)
         {
-            return EventController_Work.IsRefugeePodCrash();
+            return EventController_Work.IsRefugeePodCrash(f);
         }
-        //wip for backstory filter
-        //this is a space for a method
+        public static HashSet<FactionDef> GetValidFactions_RPC()
+        {
+            return EventController_Work.GetValidFactions_RPC();
+        }
     }
 }

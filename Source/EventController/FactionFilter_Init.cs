@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using RimWorld;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -22,12 +21,12 @@ namespace EventController_rQP
             humanlikeModFactionNum = 0;
 
             var factions = DefDatabase<FactionDef>.AllDefs;
-                var a = (from faction in factions
-                where
-                    faction.modContentPack is { PackageId: not null }
-                    && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
-                    && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
-                select faction);
+            var a = (from faction in factions
+                     where
+                         faction.modContentPack is { PackageId: not null }
+                         && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
+                         && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
+                     select faction);
 
             foreach (var f in factions)
                 try

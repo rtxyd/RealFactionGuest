@@ -1,7 +1,6 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Verse;
 
 namespace EventController_rQP
@@ -24,6 +23,10 @@ namespace EventController_rQP
         public static float GetHumanlikeModFactionNum()
         {
             return FactionFilter_Init.humanlikeModFactionNum;
+        }
+        public static HashSet<FactionDef> GetValidFactions_RPC()
+        {
+            return FactionFilter_Init.validFactions_RPC;
         }
         public static HashSet<string> GetFallbackBackstroy()
         {
@@ -59,14 +62,14 @@ namespace EventController_rQP
             return isCreepJoiner;
         }
 
-        public static bool IsRefugeePodCrash()
+        public static bool IsRefugeePodCrash(int f = 8)
         {
             var stack = new StackTrace(0, true);
             if (stack.FrameCount < 18)
             {
                 return isRefugeePodCrash = false;
             }
-            var frame = stack.GetFrame(8);
+            var frame = stack.GetFrame(f);
             if (frame.GetMethod().DeclaringType == typeof(RimWorld.QuestGen.QuestNode_Root_RefugeePodCrash))
             {
                 isRefugeePodCrash = true;
@@ -180,13 +183,13 @@ namespace EventController_rQP
         {
             isFactionFix = false;
         }
-        public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
+        public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
             isBackstoryFix = true;
         }
 
-        public static void Postfix_FillBackstorySlotShuffled(ref Pawn pawn,ref BackstorySlot slot,ref List<BackstoryCategoryFilter> backstoryCategories,ref FactionDef factionType)
+        public static void Postfix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             isBackstoryFix = false;
             return;

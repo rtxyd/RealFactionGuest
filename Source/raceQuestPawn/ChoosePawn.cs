@@ -9,28 +9,28 @@ namespace raceQuestPawn
 {
     public static class ChoosePawn
     {
-        public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower, FactionDef faction)
+        public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower)
         {
             var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
             var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
             PawnKindDef p = null;
             if (EventController_Work.isTrader && traders.Any())
             {
-                p = ChoosePawnKindInner(traders, combatPower, faction);
+                p = ChoosePawnKindInner(traders, combatPower);
             }
             //carrier is skipped.
             else if (EventController_Work.isGuard && guards.Any())
             {
-                p = ChoosePawnKindInner(guards, combatPower, faction);
+                p = ChoosePawnKindInner(guards, combatPower);
             }
             if (p == null)
             {
                 var options = plans.Where(t => t.options != null).Select(t => t.options);
-                p = ChoosePawnKindInner(options, combatPower, faction);
+                p = ChoosePawnKindInner(options, combatPower);
             }
             return p;
         }
-        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, FactionDef faction)
+        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower)
         {
             var pawnKinds =
                 from p in options
@@ -59,15 +59,15 @@ namespace raceQuestPawn
             }
             else
             {
-                return ChoosePawnKindInner_A(pawnKinds, combatPower, faction);
+                return ChoosePawnKindInner_A(pawnKinds, combatPower);
             }
         }
-        public static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower, FactionDef faction)
+        public static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower)
         {
             IEnumerable<PawnKindDef> pawnEquals = [];
             var combatPowerArray =
                 (from p in pawnKinds
-                select p.combatPower).ToArray();
+                 select p.combatPower).ToArray();
             var maxCombatPower = combatPowerArray.Max();
             var minCombatPower = combatPowerArray.Min();
             if (combatPower > maxCombatPower)

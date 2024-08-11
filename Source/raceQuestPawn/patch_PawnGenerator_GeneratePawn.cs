@@ -1,5 +1,4 @@
-﻿using EventController_rQP;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -85,7 +84,7 @@ public class patch_PawnGenerator_GeneratePawn
                 p_make = null;
                 if (fd.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower, fd);
+                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower);
                 }
                 if (p_make != null)
                 {
@@ -107,7 +106,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (PawnValidator_CrossWork.IsRefugeePodCrash())
+            if (PawnValidator_CrossWork.IsRefugeePodCrash(7))
             {
                 request.AllowDowned = true;
             }
@@ -120,36 +119,17 @@ public class patch_PawnGenerator_GeneratePawn
             p_make = null;
             var tryCount = 0;
             IEnumerable<List<PawnGenOption>> options = [];
+            var validFactions = PawnValidator_CrossWork.GetValidFactions_RPC();
             while (!options.Any() && tryCount <= 11)
             {
                 tryCount++;
-                fd = validFactions_RPC.RandomElement();
+                fd = validFactions.RandomElement();
                 //Log.Message($"B0 : {fd.modContentPack.PackageId}");
-
-                if (fd is not { pawnGroupMakers: not null, modContentPack: not null })
-                {
-                    continue;
-                }
-
-                if (fd.modContentPack.PackageId.Contains("ludeon"))
-                {
-                    continue;
-                }
-
-                if (fd.modContentPack.PackageId.Contains("ogliss.alienvspredator"))
-                {
-                    continue;
-                }
-
-                if (fd.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad"))
-                {
-                    continue;
-                }
                 //there may need a filter of animal pawns and wildman.
                 options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
                 if (options.Any())
                 {
-                    p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower, fd);
+                    p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower);
                 }
             }
             if (p_make != null)
