@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Verse;
 
 namespace raceQuestPawn;
@@ -63,7 +62,7 @@ public class patch_PawnGenerator_GeneratePawn
                 StackFrame frame = stack.GetFrame(3);
                 StackFrame frame2 = stack.GetFrame(5);
                 Type declaringType = frame.GetMethod().DeclaringType;
-                Type declaringType2 =  frame2.GetMethod().DeclaringType;
+                Type declaringType2 = frame2.GetMethod().DeclaringType;
                 //check stack if it's vanilla caravan trader generation request and skip it to vanilla generation.
                 //It should be safe to skip that, because it's using vanilla method to generate vanilla pawnkind.
                 //in 1.5, frame 1 is this method, 2 is harmony patched generatePawn, and 3 is generate traders/carriers/guards.
