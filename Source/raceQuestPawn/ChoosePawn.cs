@@ -9,60 +9,86 @@ namespace raceQuestPawn
 {
     public static class ChoosePawn
     {
-        public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower)
+        public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower, FactionDef faction)
         {
             var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
             var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
             PawnKindDef p = null;
             if (EventController_Work.isTrader && traders.Any())
             {
-                p = ChoosePawnKindInner(traders, combatPower);
+                p = ChoosePawnKindInner(traders, combatPower, faction);
             }
             //carrier is skipped.
             else if (EventController_Work.isGuard && guards.Any())
             {
-                p = ChoosePawnKindInner(guards, combatPower);
+                p = ChoosePawnKindInner(guards, combatPower, faction);
             }
             if (p == null)
             {
                 var options = plans.Where(t => t.options != null).Select(t => t.options);
-                p = ChoosePawnKindInner(options, combatPower);
+                p = ChoosePawnKindInner(options, combatPower, faction);
             }
             return p;
         }
-
-        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower)
+        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, FactionDef faction)
         {
-            foreach (var item in options)
+            var pawnKinds =
+                from p in options
+                from t in p
+                select t.kind;
+            var pawnToChoose =
+                from p in pawnKinds
+                where Mathf.Abs(p.combatPower - combatPower) < 30f
+                select p;
+            var pawnEquals =
+                from p in pawnToChoose
+                where p.combatPower == combatPower
+                select p;
+            if (pawnToChoose.Any())
             {
-                //find all pawnkinds match the condition combatPower +- 30,or combatPower = request.combatPower.
-
-                var pawnToChoose = item.Where(t => Mathf.Abs(t.kind.combatPower - combatPower) < 30f).Select(t => t.kind);
-                var pawnEquals = pawnToChoose.Where(t => t.combatPower == combatPower);
-                if (pawnToChoose.Any())
+                // only one = request combatPower
+                if (pawnEquals.Any())
                 {
-                    // only one = request combatPower
-                    if (pawnEquals.Count() == 1)
-                    {
-                        foreach (var item1 in pawnToChoose)
-                        {
-                            return item1;
-                        }
-                    }
-                    // other situations, get random one
-                    else
-                    {
-                        return pawnToChoose.ToHashSet().RandomElement();
-                    }
+                    return pawnEquals.ToHashSet().RandomElement();
+                }
+                // other situations, get random one
+                else
+                {
+                    return pawnToChoose.ToHashSet().RandomElement();
                 }
             }
-            return null;
+            else
+            {
+                return ChoosePawnKindInner_A(pawnKinds, combatPower, faction);
+            }
         }
-
-        //this is reserve for postfilter, not needed yet and not done yet
-        public static void PostFilterPawns(IEnumerable<PawnKindDef> pawnToChoose)
+        public static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower, FactionDef faction)
         {
-            return;
+            IEnumerable<PawnKindDef> pawnEquals = [];
+            var combatPowerArray =
+                (from p in pawnKinds
+                select p.combatPower).ToArray();
+            var maxCombatPower = combatPowerArray.Max();
+            var minCombatPower = combatPowerArray.Min();
+            if (combatPower > maxCombatPower)
+            {
+                pawnEquals =
+                    from p in pawnKinds
+                    where p.combatPower == maxCombatPower
+                    select p;
+            }
+            else
+            {
+                pawnEquals =
+                    from p in pawnKinds
+                    where p.combatPower == minCombatPower
+                    select p;
+            }
+            if (pawnEquals.Any())
+            {
+                return pawnEquals.ToHashSet().RandomElement();
+            }
+            return null;
         }
     }
 }

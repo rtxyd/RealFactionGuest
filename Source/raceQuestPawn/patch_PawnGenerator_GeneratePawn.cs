@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using EventController_rQP;
+using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -84,7 +85,7 @@ public class patch_PawnGenerator_GeneratePawn
                 p_make = null;
                 if (fd.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower);
+                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower, fd);
                 }
                 if (p_make != null)
                 {
@@ -118,12 +119,12 @@ public class patch_PawnGenerator_GeneratePawn
 
             p_make = null;
             var tryCount = 0;
-
             IEnumerable<List<PawnGenOption>> options = [];
             while (!options.Any() && tryCount <= 11)
             {
                 tryCount++;
-                fd = DefDatabase<FactionDef>.AllDefs.RandomElement();
+                fd = validFactions_RPC.RandomElement();
+                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
 
                 if (fd is not { pawnGroupMakers: not null, modContentPack: not null })
                 {
@@ -144,13 +145,12 @@ public class patch_PawnGenerator_GeneratePawn
                 {
                     continue;
                 }
-                //Log.Message($"B0 : {fd.modContentPack.PackageId}");
                 //there may need a filter of animal pawns and wildman.
                 options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
-            }
-            if (options.Any())
-            {
-                p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower);
+                if (options.Any())
+                {
+                    p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower, fd);
+                }
             }
             if (p_make != null)
             {

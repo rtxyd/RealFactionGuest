@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using HarmonyLib;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -13,29 +14,41 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
+        public static readonly HashSet<FactionDef> validFactions_RPC = new();
         public static readonly HashSet<string> fallbackBackstory = new();
         static FactionFilter_Init()
         {
             //Log.Message("# Real Faction Guest - Faction Filter Init");
             humanlikeModFactionNum = 0;
 
-            var factions =
-                from faction in DefDatabase<FactionDef>.AllDefs
+            var factions = DefDatabase<FactionDef>.AllDefs;
+                var a = (from faction in factions
                 where
                     faction.modContentPack is { PackageId: not null }
                     && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
                     && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
-                select faction;
+                select faction);
 
             foreach (var f in factions)
                 try
                 {
                     var isHumanlike = false;
                     var flag = !f.hidden;
-                    var flag2 = f.modContentPack.IsOfficialMod;
+                    var flag2 = f.modContentPack.PackageId.Contains("ludeon");
                     if (f.pawnGroupMakers == null)
                     {
                         continue;
+                    }
+                    if (flag2)
+                    {
+                        if (flag)
+                        {
+                            vanillaFactions.Add(f);
+                        }
+                    }
+                    else
+                    {
+                        validFactions_RPC.Add(f);
                     }
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();
@@ -54,15 +67,7 @@ namespace EventController_rQP
                                 thingDefs.Add(race);
                                 bodyDefs.Add(body);
                             }
-
-                            //var backsotryFiltersOverride = pawnGenOption.kind.backstoryFiltersOverride;
-
-                            if (flag && flag2)
-                            {
-                                vanillaFactions.Add(f);
-
-                            }
-                            if( !flag2
+                            if (!flag2
                                 || pawnGenOption.kind.RaceProps == null
                                 || pawnGenOption.kind.RaceProps.intelligence == Intelligence.Humanlike
                                 || pawnGenOption.kind.RaceProps.Humanlike)
@@ -78,7 +83,6 @@ namespace EventController_rQP
                         factionPawnRaces.Add(f, thingDefs);
                         factionPawnBodies.Add(f, bodyDefs);
                     }
-
                     if (!isHumanlike)
                     {
                         continue;
