@@ -19,14 +19,13 @@ namespace EventController_rQP
         {
             //Log.Message("# Real Faction Guest - Faction Filter Init");
             humanlikeModFactionNum = 0;
-
-            var factions = DefDatabase<FactionDef>.AllDefs;
-            var a = (from faction in factions
-                     where
-                         faction.modContentPack is { PackageId: not null }
-                         && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
-                         && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
-                     select faction);
+            var factions =
+                from faction in DefDatabase<FactionDef>.AllDefs
+                where
+                    faction.modContentPack is { PackageId: not null }
+                    && !faction.modContentPack.PackageId.Contains("ogliss.alienvspredator")
+                    && !faction.modContentPack.PackageId.Contains("Kompadt.Warhammer.Dryad")
+                select faction;
 
             foreach (var f in factions)
                 try
