@@ -38,16 +38,16 @@ namespace EventController_rQP
                     {
                         continue;
                     }
-                    if (flag2)
+                    if (flag)
                     {
-                        if (flag)
+                        if (flag2)
                         {
                             vanillaFactions.Add(f);
                         }
-                    }
-                    else
-                    {
-                        validFactions_RPC.Add(f);
+                        else
+                        {
+                            validFactions_RPC.Add(f);
+                        }
                     }
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();

@@ -9,28 +9,28 @@ namespace raceQuestPawn
 {
     public static class ChoosePawn
     {
-        public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower)
+        public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower, bool flag = true)
         {
             var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
             var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
             PawnKindDef p = null;
             if (EventController_Work.isTrader && traders.Any())
             {
-                p = ChoosePawnKindInner(traders, combatPower);
+                p = ChoosePawnKindInner(traders, combatPower, flag);
             }
             //carrier is skipped.
             else if (EventController_Work.isGuard && guards.Any())
             {
-                p = ChoosePawnKindInner(guards, combatPower);
+                p = ChoosePawnKindInner(guards, combatPower, flag);
             }
             if (p == null)
             {
                 var options = plans.Where(t => t.options != null).Select(t => t.options);
-                p = ChoosePawnKindInner(options, combatPower);
+                p = ChoosePawnKindInner(options, combatPower, flag);
             }
             return p;
         }
-        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower)
+        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, bool flag = true)
         {
             var pawnKinds =
                 from p in options
@@ -57,10 +57,11 @@ namespace raceQuestPawn
                     return pawnToChoose.ToHashSet().RandomElement();
                 }
             }
-            else
+            else if (flag)
             {
                 return ChoosePawnKindInner_A(pawnKinds, combatPower);
             }
+            return null;
         }
         public static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower)
         {
@@ -68,22 +69,11 @@ namespace raceQuestPawn
             var combatPowerArray =
                 (from p in pawnKinds
                  select p.combatPower).ToArray();
-            var maxCombatPower = combatPowerArray.Max();
-            var minCombatPower = combatPowerArray.Min();
-            if (combatPower > maxCombatPower)
-            {
-                pawnEquals =
-                    from p in pawnKinds
-                    where p.combatPower == maxCombatPower
-                    select p;
-            }
-            else
-            {
-                pawnEquals =
-                    from p in pawnKinds
-                    where p.combatPower == minCombatPower
-                    select p;
-            }
+            var nearpower = combatPowerArray.MinBy(a => Mathf.Abs(a - combatPower));
+            pawnEquals = 
+                from p in pawnKinds
+                where (p.combatPower - nearpower) < 30f
+                select p;
             if (pawnEquals.Any())
             {
                 return pawnEquals.ToHashSet().RandomElement();

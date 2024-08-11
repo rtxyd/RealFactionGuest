@@ -1,12 +1,11 @@
-﻿using EventController_rQP;
-using RimWorld;
+﻿using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-namespace raceQuestPawn
+namespace EventController_rQP
 {
     //working in process maybe?
-    internal class PawnValidator_CrossWork
+    public class PawnValidator_CrossWork
     {
         public static PawnGenerationRequest PostProcessRequest(PawnGenerationRequest request)
         {
@@ -23,6 +22,19 @@ namespace raceQuestPawn
         public static HashSet<FactionDef> GetValidFactions_RPC()
         {
             return EventController_Work.GetValidFactions_RPC();
+        }
+        public static void RequestValidator(ref PawnGenerationRequest request)
+        {
+            if (IsRefugeePodCrash()
+                || request.KindDef.defName == "Mincho_SpaceRefugee"
+                || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
+            {
+                request.AllowDowned = true;
+            }
+            if (request.KindDef.defName == "RatkinPriest")
+            {
+                request.MustBeCapableOfViolence = false;
+            }
         }
     }
 }
