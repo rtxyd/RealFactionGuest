@@ -35,6 +35,10 @@ namespace EventController_rQP
             {
                 request.MustBeCapableOfViolence = false;
             }
+            if (request.KindDef is CreepJoinerFormKindDef)
+            {
+                request.IsCreepJoiner = true;
+            }
         }
     }
 }

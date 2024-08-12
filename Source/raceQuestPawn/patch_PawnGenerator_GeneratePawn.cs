@@ -1,11 +1,7 @@
 ﻿using EventController_rQP;
 using HarmonyLib;
 using RimWorld;
-using RimWorld.QuestGen;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Verse;
 
 namespace raceQuestPawn;
@@ -19,6 +15,7 @@ public class patch_PawnGenerator_GeneratePawn
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
+        PawnValidator_CrossWork.RequestValidator(ref request);
         try
         {
             if (Current.ProgramState != ProgramState.Playing)
@@ -60,54 +57,17 @@ public class patch_PawnGenerator_GeneratePawn
             FactionDef fd;
             PawnKindDef p_make;
 
-            var stack = new StackTrace(0, true);
-            StackFrame frame = stack.GetFrame(3);
-            StackFrame frame2 = stack.GetFrame(5);
-            StackFrame frame3 = stack.GetFrame(2);
-            Type declaringType = frame.GetMethod().DeclaringType;
-            Type declaringType2 = frame2.GetMethod().DeclaringType;
-            Type declaringType3 = frame3.GetMethod().DeclaringType;
-
-            if (request.Faction == null)
-            {
-                if (declaringType3 == typeof(QuestNode_GetPawn))
-                {
-                    EventController_Work.isQuestGetPawn = true;
-                    request.AllowDowned = true;
-
-                }
-                else
-                {
-                    return;
-                }
-            }
-
             bool flag = true;
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
             bool strict = chance && request.Faction.def.modContentPack.PackageId != request.KindDef.modContentPack.PackageId;
-
-            if (declaringType2 == typeof(QuestNode_Root_RefugeePodCrash))
-            {
-                request.AllowDowned = true;
-                EventController_Work.isRefugeePodCrash = true;
-                //flag = false;
-            }
 
             if (request.Faction?.def.modContentPack != null
                 && !request.Faction.def.modContentPack.PackageId.Contains("ludeon")
                 && strict)
             {
-                if (declaringType == typeof(RimWorld.PawnGroupKindWorker_Trader))
+                if (EventController_Work.isTraderGroup)
                 {
                     return;
-                }
-                else
-                {
-                    var target = stack.GetFrames().Any(f => f.GetMethod().DeclaringType == typeof(RimWorld.PawnGroupKindWorker_Trader));
-                    if (target)
-                    {
-                        return;
-                    }
                 }
 
                 // 팩션이 있을때

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using RimWorld.Planet;
+using RimWorld.QuestGen;
 using System;
 using System.Reflection;
 using Verse;
@@ -14,6 +14,14 @@ namespace EventController_rQP
         {
             var harmony = new Harmony("EventController_rQP");
             var generate = AccessTools.Method(typeof(PawnGroupKindWorker), nameof(PawnGroupKindWorker.GeneratePawns), new Type[] { typeof(PawnGroupMakerParms), typeof(PawnGroupMaker), typeof(bool) });
+
+            var traderGroup = ((Func<MethodInfo>)(() =>
+            {
+                BindingFlags Instance = BindingFlags.NonPublic | BindingFlags.Instance;
+                MethodInfo MeInfo = typeof(PawnGroupKindWorker_Trader).GetMethod("GeneratePawns", Instance);
+                return MeInfo;
+            }))();
+
             var trader = ((Func<MethodInfo>)(() =>
             {
                 BindingFlags Instance = BindingFlags.NonPublic | BindingFlags.Instance;
@@ -60,6 +68,9 @@ namespace EventController_rQP
             var prefix_PawnGroupKindWorker_GeneratePawns = eventWorker.GetMethod("Prefix_PawnGroupKindWorker_GeneratePawns");
             var postfix_PawnGroupKindWorker_GeneratePawns = eventWorker.GetMethod("Postfix_PawnGroupKindWorker_GeneratePawns");
 
+            var prefix_PawnGroupKindWorker_Trader_GeneratePawns = eventWorker.GetMethod("Prefix_PawnGroupKindWorker_Trader_GeneratePawns");
+            var postfix_PawnGroupKindWorker_Trader_GeneratePawns = eventWorker.GetMethod("Postfix_PawnGroupKindWorker_Trader_GeneratePawns");
+
             var prefix_PawnGroupKindWorker_GenerateTrader = eventWorker.GetMethod("Prefix_PawnGroupKindWorker_GenerateTrader");
             var postfix_PawnGroupKindWorker_GenerateTrader = eventWorker.GetMethod("Postfix_PawnGroupKindWorker_GenerateTrader");
 
@@ -73,6 +84,7 @@ namespace EventController_rQP
             var postfix_GenerateNewPawnInternal = eventWorker.GetMethod("Postfix_GenerateNewPawnInternal");
 
             harmony.Patch(generate, new HarmonyMethod(prefix_PawnGroupKindWorker_GeneratePawns), new HarmonyMethod(postfix_PawnGroupKindWorker_GeneratePawns));
+            harmony.Patch(traderGroup, new HarmonyMethod(prefix_PawnGroupKindWorker_Trader_GeneratePawns), new HarmonyMethod(postfix_PawnGroupKindWorker_Trader_GeneratePawns));
             harmony.Patch(trader, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateTrader), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateTrader));
             harmony.Patch(carriers, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateCarriers), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateCarriers));
             harmony.Patch(guards, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateGuards), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateGuards));
@@ -89,10 +101,11 @@ namespace EventController_rQP
             var postfix_FillBackstorySlotShuffled = eventWorker.GetMethod("Postfix_FillBackstorySlotShuffled");
             harmony.Patch(fillBackstorySlotShuffled, new HarmonyMethod(prefix_FillBackstorySlotShuffled), new HarmonyMethod(postfix_FillBackstorySlotShuffled));
 
-            var passToWorld = AccessTools.Method(typeof(WorldPawns), nameof(WorldPawns.PassToWorld));
-            var prefix_PassToWorld = eventWorker.GetMethod("Prefix_PassToWorld");
-            var postfix_PassToWorld = eventWorker.GetMethod("Postfix_PassToWorld");
-            harmony.Patch(passToWorld, new HarmonyMethod(prefix_PassToWorld), new HarmonyMethod(postfix_PassToWorld));
+            var questNode_Root_RefugeePodCrash_GeneratePawn = AccessTools.Method(typeof(QuestNode_Root_RefugeePodCrash), nameof(QuestNode_Root_RefugeePodCrash.GeneratePawn));
+            var prefix_RefugeePodCrash_GeneratePawn = eventWorker.GetMethod("Prefix_RefugeePodCrash_GeneratePawn");
+            var postfix_RefugeePodCrash_GeneratePawn = eventWorker.GetMethod("Postfix_RefugeePodCrash_GeneratePawn");
+            harmony.Patch(questNode_Root_RefugeePodCrash_GeneratePawn, new HarmonyMethod(prefix_RefugeePodCrash_GeneratePawn), new HarmonyMethod(postfix_RefugeePodCrash_GeneratePawn));
+
             Log.Message("# Real Faction Guest Event Controller - Init Complete");
         }
     }

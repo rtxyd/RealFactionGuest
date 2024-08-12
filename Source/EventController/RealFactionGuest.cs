@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace EventController_rQP
@@ -34,8 +29,8 @@ namespace EventController_rQP
             listingStandard.Begin(inRect);
             listingStandard.Gap();
             listingStandard.GapLine();
-            listingStandard.CheckboxLabeled("[Beta]Strict pawn generation".Translate(), ref RealFactionGuestSettings.strictQuestGuest, "Will generate the very pawn race of its faction as much as possible.(not xenotype, only main race concerned), if turn off this, quest pawnkind may generate random sometimes".Translate());
-            listingStandard.Label("[Beta]Toggle how often the pawn will trigger the faction-bounded generation: ".Translate() + $"{RealFactionGuestSettings.strictChance}", -1, "Main function, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)".Translate());
+            listingStandard.CheckboxLabeled("[Beta]Strict quest guest (Deafault: True)".Translate(), ref RealFactionGuestSettings.strictQuestGuest, "Quest guest will generate the very pawn race of its faction as much as possible.(not xenotype, only main race concerned)".Translate());
+            listingStandard.Label("[Beta]Toggle how often the pawn will trigger the faction-bounded generation (Default: 1.0): ".Translate() + $"{RealFactionGuestSettings.strictChance}", -1, "Main function, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)".Translate());
             listingStandard.Gap();
             RealFactionGuestSettings.strictChance = Mathf.RoundToInt(listingStandard.Slider(RealFactionGuestSettings.strictChance, 0.0f, 1.0f) * 100f) / 100f;
             listingStandard.End();
