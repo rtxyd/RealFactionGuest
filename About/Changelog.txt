@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.8 Add mod settings, refine code.
+
 Forked 1.5.7 Fix an issue of quest pawn generation about combat power.
 
 Forked 1.5.6a Update mod name, description.
