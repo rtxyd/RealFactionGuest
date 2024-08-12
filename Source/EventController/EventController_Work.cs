@@ -167,6 +167,7 @@ namespace EventController_rQP
 
         public static void Postfix_GenerateNewPawnInternal()
         {
+            isRefugeePodCrash = false;
             isInternalGen = false;
         }
 

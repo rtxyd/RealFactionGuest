@@ -9,7 +9,7 @@ namespace EventController_rQP
     {
         public static PawnGenerationRequest PostProcessRequest(PawnGenerationRequest request)
         {
-            if (IsRefugeePodCrash())
+            if (EventController_Work.isRefugeePodCrash)
             {
                 request.AllowDowned = true;
             }
@@ -25,7 +25,7 @@ namespace EventController_rQP
         }
         public static void RequestValidator(ref PawnGenerationRequest request)
         {
-            if (IsRefugeePodCrash()
+            if (EventController_Work.isRefugeePodCrash
                 || request.KindDef.defName == "Mincho_SpaceRefugee"
                 || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
             {
