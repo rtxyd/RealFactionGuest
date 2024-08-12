@@ -57,7 +57,7 @@ namespace raceQuestPawn
                     return pawnToChoose.ToHashSet().RandomElement();
                 }
             }
-            else if (flag)
+            else if (RealFactionGuestSettings.strictQuestGuest && flag)
             {
                 return ChoosePawnKindInner_A(pawnKinds, combatPower);
             }
@@ -72,7 +72,7 @@ namespace raceQuestPawn
             var nearpower = combatPowerArray.MinBy(a => Mathf.Abs(a - combatPower));
             pawnEquals =
                 from p in pawnKinds
-                where Mathf.Abs(p.combatPower - nearpower) < 40f
+                where p.combatPower == nearpower
                 select p;
             if (pawnEquals.Any())
             {

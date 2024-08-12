@@ -32,8 +32,11 @@ namespace EventController_rQP
         {
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
-            listingStandard.CheckboxLabeled("[Beta]Strict faction-bounded pawn race", ref RealFactionGuestSettings.strictRace, "Main function, must generate the very pawn race of the faction (not xenotype, only main race concerned)");
-            listingStandard.CheckboxLabeled("[Beta]Refugee pod crash need have a faction", ref RealFactionGuestSettings.hasFaction, "Refugee pod crash has more chance to generate pawn with a faction");
+            listingStandard.CheckboxLabeled("[Beta]Real faction quest guest", ref RealFactionGuestSettings.strictQuestGuest, "Quest guest will generate the very pawn race of the faction as much as possible.(not xenotype, only main race concerned)");
+            listingStandard.CheckboxLabeled("[Beta]Strict faction-bounded pawn race", ref RealFactionGuestSettings.strictRace, "Main function, must generate the very pawn race of the faction.(not xenotype, only main race concerned)");
+            listingStandard.CheckboxLabeled("[Beta]Refugee pod crash need have a faction", ref RealFactionGuestSettings.hasFaction, "Refugee pod crash will generate pawn with a faction as much as possible");
+            listingStandard.Label("[Beta]Toggle the chance of how often the pawn will trigger the 'Strict faction-bounded pawn race'");
+            RealFactionGuestSettings.strictChance = listingStandard.Slider(RealFactionGuestSettings.strictChance, 0f, 1f);
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
         }

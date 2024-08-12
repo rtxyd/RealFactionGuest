@@ -61,17 +61,17 @@ public class patch_PawnGenerator_GeneratePawn
             float combatPower;
             FactionDef fd;
             PawnKindDef p_make;
+
             var stack = new StackTrace(0, true);
-            //trader
             StackFrame frame = stack.GetFrame(3);
-            //refugee
             StackFrame frame2 = stack.GetFrame(5);
-            //quest pawn
-            //none yet
             Type declaringType = frame.GetMethod().DeclaringType;
             Type declaringType2 = frame2.GetMethod().DeclaringType;
+
             bool flag = true;
-            bool strict = RealFactionGuestSettings.strictRace && request.Faction.def.modContentPack.PackageId != request.KindDef.modContentPack.PackageId;
+            bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
+            bool strict =  chance && request.Faction.def.modContentPack.PackageId != request.KindDef.modContentPack.PackageId;
+
             if (declaringType2 == typeof(QuestNode_Root_RefugeePodCrash))
             {
                 request.AllowDowned = true;
@@ -109,7 +109,7 @@ public class patch_PawnGenerator_GeneratePawn
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
                 return;
             }
-            if (RealFactionGuestSettings.hasFaction)
+            if (request.Faction == null && RealFactionGuestSettings.hasFaction)
             {
                 // 팩션이 없거나 조난자 일때
                 if (Rand.Value <= Core.vanillaRatio)
