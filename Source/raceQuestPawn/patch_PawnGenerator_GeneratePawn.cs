@@ -2,6 +2,7 @@
 using HarmonyLib;
 using RimWorld;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace raceQuestPawn;
@@ -53,17 +54,27 @@ public class patch_PawnGenerator_GeneratePawn
 
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
-            float combatPower;
-            FactionDef fd;
-            PawnKindDef p_make;
-
             bool flag = true;
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
-            bool strict = chance && request.Faction.def.modContentPack.PackageId != request.KindDef.modContentPack.PackageId;
+            var faction = request.Faction.def;
+            var kinddef = request.KindDef;
 
-            if (request.Faction?.def.modContentPack != null
-                && !request.Faction.def.modContentPack.PackageId.Contains("ludeon")
-                && strict)
+            bool default_filter = faction.modContentPack.PackageId != kinddef.modContentPack.PackageId;
+            if (RealFactionGuestSettings.alternativeFaction && default_filter)
+            {
+                var factionpawnraces = EventController_Work.GetFactionPawnRaces();
+
+                if (factionpawnraces.Keys.Contains(faction))
+                {
+                    default_filter = factionpawnraces[faction].Contains(kinddef.race);
+                }
+            }
+            bool strict = chance && default_filter;
+            if (strict
+                && (request.Faction?.def.modContentPack != null
+                && (!request.Faction.def.modContentPack.PackageId.Contains("ludeon")
+                || request.Faction.def.modContentPack.PackageId.Contains("rimworld.biotech")))
+               )
             {
                 if (EventController_Work.isTraderGroup)
                 {
@@ -71,13 +82,12 @@ public class patch_PawnGenerator_GeneratePawn
                 }
 
                 // 팩션이 있을때
-                fd = request.Faction.def;
-                combatPower = request.KindDef.combatPower;
-                p_make = null;
+                float combatPower = kinddef.combatPower;
+                PawnKindDef p_make = null;
 
-                if (fd.pawnGroupMakers != null)
+                if (faction.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower, flag);
+                    p_make = ChoosePawn.ChoosePawnKind(faction.pawnGroupMakers, combatPower, flag);
                 }
 
                 if (p_make != null)
