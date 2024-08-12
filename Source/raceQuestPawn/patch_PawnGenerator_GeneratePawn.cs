@@ -63,8 +63,24 @@ public class patch_PawnGenerator_GeneratePawn
             var stack = new StackTrace(0, true);
             StackFrame frame = stack.GetFrame(3);
             StackFrame frame2 = stack.GetFrame(5);
+            StackFrame frame3 = stack.GetFrame(2);
             Type declaringType = frame.GetMethod().DeclaringType;
             Type declaringType2 = frame2.GetMethod().DeclaringType;
+            Type declaringType3 = frame3.GetMethod().DeclaringType;
+
+            if (request.Faction == null)
+            {
+                if (declaringType3 == typeof(QuestNode_GetPawn))
+                {
+                    EventController_Work.isQuestGetPawn = true;
+                    request.AllowDowned = true;
+
+                }
+                else
+                {
+                    return;
+                }
+            }
 
             bool flag = true;
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);

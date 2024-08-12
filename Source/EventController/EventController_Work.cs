@@ -17,6 +17,9 @@ namespace EventController_rQP
         public static bool isCreepJoiner = false;
         public static bool isFactionFix = false;
         public static bool isBackstoryFix = false;
+        public static bool isQuestGetPawn = false
+        public static Faction tempfaction;
+        public static PawnGenerationRequest tempRequest;
 
         public static string ongoingEvent = null;
 
@@ -161,6 +164,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
         {
+            tempRequest = request;
             PawnValidator_CrossWork.RequestValidator(ref request);
             isInternalGen = true;
         }
@@ -191,6 +195,21 @@ namespace EventController_rQP
         {
             isBackstoryFix = false;
             return;
+        }
+        public static void Prefix_PassToWorld(ref Pawn pawn)
+        {
+            if (pawn.Faction == null)
+            {
+                pawn.;
+            }
+            else
+            {
+                tempfaction = pawn.Faction;
+            }
+            return;
+        }
+        public static void Postfix_PassToWorld(ref Pawn pawn)
+        {
         }
     }
 }

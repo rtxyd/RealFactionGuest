@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Reflection;
 using Verse;
@@ -88,7 +89,10 @@ namespace EventController_rQP
             var postfix_FillBackstorySlotShuffled = eventWorker.GetMethod("Postfix_FillBackstorySlotShuffled");
             harmony.Patch(fillBackstorySlotShuffled, new HarmonyMethod(prefix_FillBackstorySlotShuffled), new HarmonyMethod(postfix_FillBackstorySlotShuffled));
 
-
+            var passToWorld = AccessTools.Method(typeof(WorldPawns), nameof(WorldPawns.PassToWorld));
+            var prefix_PassToWorld = eventWorker.GetMethod("Prefix_PassToWorld");
+            var postfix_PassToWorld = eventWorker.GetMethod("Postfix_PassToWorld");
+            harmony.Patch(passToWorld, new HarmonyMethod(prefix_PassToWorld), new HarmonyMethod(postfix_PassToWorld));
             Log.Message("# Real Faction Guest Event Controller - Init Complete");
         }
     }
