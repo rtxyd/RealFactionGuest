@@ -28,10 +28,7 @@ public class patch_PawnGenerator_GeneratePawn
 
             if (request.Faction == null)
             {
-                if (!RealFactionGuestSettings.hasFaction)
-                {
-                    return;
-                }
+                return;
             }
 
             if (request.KindDef.RaceProps != null && (
@@ -56,6 +53,7 @@ public class patch_PawnGenerator_GeneratePawn
             {
                 return;
             }
+
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             float combatPower;
@@ -70,7 +68,7 @@ public class patch_PawnGenerator_GeneratePawn
 
             bool flag = true;
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
-            bool strict =  chance && request.Faction.def.modContentPack.PackageId != request.KindDef.modContentPack.PackageId;
+            bool strict = chance && request.Faction.def.modContentPack.PackageId != request.KindDef.modContentPack.PackageId;
 
             if (declaringType2 == typeof(QuestNode_Root_RefugeePodCrash))
             {
@@ -78,6 +76,7 @@ public class patch_PawnGenerator_GeneratePawn
                 EventController_Work.isRefugeePodCrash = true;
                 //flag = false;
             }
+
             if (request.Faction?.def.modContentPack != null
                 && !request.Faction.def.modContentPack.PackageId.Contains("ludeon")
                 && strict)
@@ -94,65 +93,25 @@ public class patch_PawnGenerator_GeneratePawn
                         return;
                     }
                 }
+
                 // 팩션이 있을때
                 fd = request.Faction.def;
                 combatPower = request.KindDef.combatPower;
                 p_make = null;
+
                 if (fd.pawnGroupMakers != null)
                 {
                     p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower, flag);
                 }
+
                 if (p_make != null)
                 {
                     request.KindDef = p_make;
                 }
+
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
+
                 return;
-            }
-            if (request.Faction == null && RealFactionGuestSettings.hasFaction)
-            {
-                // 팩션이 없거나 조난자 일때
-                if (Rand.Value <= Core.vanillaRatio)
-                {
-                    return;
-                }
-
-                if (EventController_Work.isRefugeePodCrash)
-                {
-                    request.AllowDowned = true;
-                }
-                else
-                {
-                    return;
-                }
-                combatPower = request.KindDef.combatPower;
-
-                p_make = null;
-                var tryCount = 0;
-                IEnumerable<List<PawnGenOption>> options = [];
-                var validFactions = PawnValidator_CrossWork.GetValidFactions_RPC();
-                while (!options.Any() && tryCount <= 11)
-                {
-                    tryCount++;
-                    fd = validFactions.RandomElement();
-                    //Log.Message($"B0 : {fd.modContentPack.PackageId}");
-                    //there may need a filter of animal pawns and wildman.
-                    options = fd.pawnGroupMakers.Where(t => t.options != null).Select(t => t.options);
-                    if (options.Any())
-                    {
-                        p_make = ChoosePawn.ChoosePawnKindInner(options, combatPower, false);
-                    }
-                }
-                if (p_make != null)
-                {
-                    request.KindDef = p_make;
-                    //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
-                    return;
-                }
-                else
-                {
-                    return;
-                }
             }
         }
         catch

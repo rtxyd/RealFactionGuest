@@ -32,12 +32,15 @@ namespace EventController_rQP
         {
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
-            listingStandard.CheckboxLabeled("[Beta]Real faction quest guest", ref RealFactionGuestSettings.strictQuestGuest, "Quest guest will generate the very pawn race of the faction as much as possible.(not xenotype, only main race concerned)");
-            listingStandard.CheckboxLabeled("[Beta]Strict faction-bounded pawn race", ref RealFactionGuestSettings.strictRace, "Main function, must generate the very pawn race of the faction.(not xenotype, only main race concerned)");
-            listingStandard.CheckboxLabeled("[Beta]Refugee pod crash need have a faction", ref RealFactionGuestSettings.hasFaction, "Refugee pod crash will generate pawn with a faction as much as possible");
-            listingStandard.Label("[Beta]Toggle the chance of how often the pawn will trigger the 'Strict faction-bounded pawn race'");
-            RealFactionGuestSettings.strictChance = listingStandard.Slider(RealFactionGuestSettings.strictChance, 0f, 1f);
+            listingStandard.Gap();
+            listingStandard.GapLine();
+            listingStandard.CheckboxLabeled("[Beta]Real faction quest guest".Translate(), ref RealFactionGuestSettings.strictQuestGuest, "Quest guest will generate the very pawn race of its faction as much as possible.(not xenotype, only main race concerned)".Translate());
+            listingStandard.Label("[Beta]Toggle how often the pawn will trigger the faction-bounded generation: ".Translate() + $"{RealFactionGuestSettings.strictChance}", -1, "Main function, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)".Translate());
+            listingStandard.Gap();
+            RealFactionGuestSettings.strictChance = Mathf.RoundToInt(listingStandard.Slider(RealFactionGuestSettings.strictChance, 0.0f, 1.0f) * 100f) / 100f;
             listingStandard.End();
+            inRect.y += Mathf.Round((inRect.height + 10f) / 2f);
+            inRect.y += 5f;
             base.DoSettingsWindowContents(inRect);
         }
 
