@@ -16,7 +16,7 @@ namespace EventController_rQP
         public override void ExposeData()
         {
             Scribe_Values.Look(ref strictQuestGuest, "strictQuestGuest", true);
-            Scribe_Values.Look(ref alternativeFaction, "alternativeFaction", true);
+            Scribe_Values.Look(ref alternativeFaction, "alternativeFaction", false);
             Scribe_Values.Look(ref strictChance, "guestChance", 1.0f);
             base.ExposeData();
         }

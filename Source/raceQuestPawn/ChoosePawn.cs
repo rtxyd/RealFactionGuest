@@ -35,6 +35,9 @@ namespace raceQuestPawn
             var pawnKinds =
                 from p in options
                 from t in p
+                where t.kind.RaceProps != null
+                && t.kind.RaceProps.Humanlike 
+                && t.kind.RaceProps.intelligence >= Intelligence.Humanlike
                 select t.kind;
             var pawnToChoose =
                 from p in pawnKinds
