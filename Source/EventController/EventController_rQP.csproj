@@ -51,6 +51,7 @@
     <Compile Include="FactionFilter_Init.cs" />
     <Compile Include="PawnValidator_CrossWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">

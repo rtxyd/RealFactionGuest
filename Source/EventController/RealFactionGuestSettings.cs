@@ -20,7 +20,11 @@ namespace EventController_rQP
             Scribe_Values.Look(ref strictChance, "guestChance", 1.0f);
             base.ExposeData();
         }
+        public static void ResetToDefault()
+        {
+            strictQuestGuest = true;
+            alternativeFaction = false;
+            strictChance = 1f;
+        }
     }
-
-
 }
