@@ -206,9 +206,13 @@ namespace EventController_rQP
             isBackstoryFix = true;
         }
 
-        public static void Postfix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
+        public static void Postfix_FillBackstorySlotShuffled()
         {
             isBackstoryFix = false;
+        }
+        public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
+        {
+            PawnValidator_CrossWork.RequestValidator(ref request);
         }
     }
 }

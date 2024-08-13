@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
   <RFGSetting_StrictQuestGuest>严格化任务访客生成</RFGSetting_StrictQuestGuest>
-  <RFGSetting_StrictQuestGuest_Tips>任务访客将尽量生成相应派系的种族（异种类型不会被考虑，只考虑主种族）</RFGSetting_StrictQuestGuest_Tips>
+  <RFGSetting_StrictQuestGuest_Tips>任务访客将尽量生成相应派系的种族，关闭该选项后任务将有一定概率生成非任务派系种族的小人.（异种类型不会被考虑，只考虑主种族）</RFGSetting_StrictQuestGuest_Tips>
 
   <RFGSetting_AlternateFactions>拥有相同种族的派系间可交替生成</RFGSetting_AlternateFactions>
   <RFGSetting_AlternateFactions_Tips>拥有相同种族的派系在生成小人时将会被同时计算（异种类型不会被考虑，只考虑主种族）</RFGSetting_AlternateFactions_Tips>
 
   <RFGSetting_ToggleFrequency>调整触发与派系绑定的生成的频率：</RFGSetting_ToggleFrequency>
-  <RFGSetting_ToggleFrequency_Tips>主要功能，如果你希望同一派系偶尔生成不同种类的小人可以调低这个值，调到1.0代表尽量会生成与派系绑定的小人种类，不代表100%按照派系生成的小人，如果触发错误或生成特殊小人，游戏本身将不会考虑派系（异种类型不会被考虑，只考虑主种族）</RFGSetting_ToggleFrequency_Tips>
+  <RFGSetting_ToggleFrequency_Tips>主要功能，如果你希望同一派系偶尔生成其他派系种类的小人可以调低这个值，调到1.0代表尽量会生成与派系绑定的小人种类，不代表100%按照派系生成的小人，如果触发错误或生成特殊小人，游戏本身将不会考虑派系（异种类型不会被考虑，只考虑主种族）</RFGSetting_ToggleFrequency_Tips>
 </LanguageData>

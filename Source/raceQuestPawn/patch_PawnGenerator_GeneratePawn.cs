@@ -16,7 +16,6 @@ public class patch_PawnGenerator_GeneratePawn
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
-        PawnValidator_CrossWork.RequestValidator(ref request);
         try
         {
             if (Current.ProgramState != ProgramState.Playing)
