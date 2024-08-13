@@ -7,6 +7,7 @@ Forked 1.5.9
 3. Fix error when generating "Mincho_SpaceRefugee", "RatkinPriest".
 4. Add 3 optional function.
 5. Add options to modsetting. Now you can tweak some features yourself. 
+6. Strict pawn generation.
 }
 
 Forked 1.5.8 Add mod settings, refine code.
