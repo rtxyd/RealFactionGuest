@@ -95,6 +95,8 @@ public class patch_PawnGenerator_GeneratePawn
                 }
 
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
+
+                return;
             }
         }
         catch
