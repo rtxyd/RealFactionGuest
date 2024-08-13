@@ -1,5 +1,18 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.9 
+{
+1. Fix quest pawn sometimes get error.
+2. Fix creepjoiner generation error.
+3. Fix error when generating "Mincho_SpaceRefugee", "RatkinPriest".
+4. Add 3 optional function.
+5. Add options to modsetting. Now you can tweak some features yourself. 
+6. Strict pawn generation.
+7. Localization modsetting.
+}
+
+Forked 1.5.8 Add mod settings, refine code.
+
 Forked 1.5.7 Fix an issue of quest pawn generation about combat power.
 
 Forked 1.5.6a Update mod name, description.

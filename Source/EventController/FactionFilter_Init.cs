@@ -43,10 +43,7 @@ namespace EventController_rQP
                         {
                             vanillaFactions.Add(f);
                         }
-                        else
-                        {
-                            validFactions_RPC.Add(f);
-                        }
+                        validFactions_RPC.Add(f);
                     }
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();

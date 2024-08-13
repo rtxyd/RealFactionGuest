@@ -1,9 +1,7 @@
-﻿using HarmonyLib;
+﻿using EventController_rQP;
+using HarmonyLib;
 using RimWorld;
-using RimWorld.QuestGen;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Verse;
 
@@ -18,9 +16,15 @@ public class patch_PawnGenerator_GeneratePawn
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
+        PawnValidator_CrossWork.RequestValidator(ref request);
         try
         {
             if (Current.ProgramState != ProgramState.Playing)
+            {
+                return;
+            }
+
+            if (request.Faction == null)
             {
                 return;
             }
@@ -50,54 +54,49 @@ public class patch_PawnGenerator_GeneratePawn
 
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
-            float combatPower;
-            FactionDef fd;
-            PawnKindDef p_make;
+            bool flag = true;
+            bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
+            var faction = request.Faction.def;
+            var kinddef = request.KindDef;
 
-            if (request.Faction?.def.modContentPack != null &&
-                !request.Faction.def.modContentPack.PackageId.Contains("ludeon") &&
-                request.KindDef.modContentPack.PackageId.Contains("ludeon"))
+            bool default_filter = faction.modContentPack.PackageId != kinddef.modContentPack.PackageId;
+            if (RealFactionGuestSettings.alternativeFaction && default_filter)
             {
-                var stack = new StackTrace(0, true);
-                StackFrame frame = stack.GetFrame(3);
-                StackFrame frame2 = stack.GetFrame(5);
-                Type declaringType = frame.GetMethod().DeclaringType;
-                Type declaringType2 = frame2.GetMethod().DeclaringType;
-                //check stack if it's vanilla caravan trader generation request and skip it to vanilla generation.
-                //It should be safe to skip that, because it's using vanilla method to generate vanilla pawnkind.
-                //in 1.5, frame 1 is this method, 2 is harmony patched generatePawn, and 3 is generate traders/carriers/guards.
-                //the method only executes in particular situations, such as remove the "if" right below.
-                if (declaringType == typeof(RimWorld.PawnGroupKindWorker_Trader))
+                var factionpawnraces = EventController_Work.GetFactionPawnRaces();
+
+                if (factionpawnraces.Keys.Contains(faction))
+                {
+                    default_filter = factionpawnraces[faction].Contains(kinddef.race);
+                }
+            }
+            bool strict = chance && default_filter;
+            if (strict
+                && (request.Faction?.def.modContentPack != null
+                && (!request.Faction.def.modContentPack.PackageId.Contains("ludeon")
+                || request.Faction.def.modContentPack.PackageId.Contains("rimworld.biotech")))
+               )
+            {
+                if (EventController_Work.isTraderGroup)
                 {
                     return;
                 }
-                else
-                {
-                    var target = stack.GetFrames().Any(f => f.GetMethod().DeclaringType == typeof(RimWorld.PawnGroupKindWorker_Trader));
-                    if (target)
-                    {
-                        return;
-                    }
-                }
-                bool flag = true;
-                if (declaringType2 == typeof(QuestNode_Root_RefugeePodCrash))
-                {
-                    request.AllowDowned = true;
-                    flag = false;
-                }
+
                 // 팩션이 있을때
-                fd = request.Faction.def;
-                combatPower = request.KindDef.combatPower;
-                p_make = null;
-                if (fd.pawnGroupMakers != null)
+                float combatPower = kinddef.combatPower;
+                PawnKindDef p_make = null;
+
+                if (faction.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(fd.pawnGroupMakers, combatPower, flag);
+                    p_make = ChoosePawn.ChoosePawnKind(faction.pawnGroupMakers, combatPower, flag);
                 }
+
                 if (p_make != null)
                 {
                     request.KindDef = p_make;
                 }
+
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
+
                 return;
             }
         }

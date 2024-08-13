@@ -35,6 +35,9 @@ namespace raceQuestPawn
             var pawnKinds =
                 from p in options
                 from t in p
+                where t.kind.RaceProps != null
+                && t.kind.RaceProps.Humanlike
+                && t.kind.RaceProps.intelligence == Intelligence.Humanlike
                 select t.kind;
             var pawnToChoose =
                 from p in pawnKinds
@@ -57,7 +60,7 @@ namespace raceQuestPawn
                     return pawnToChoose.ToHashSet().RandomElement();
                 }
             }
-            else if (flag)
+            else if (RealFactionGuestSettings.strictQuestGuest && flag)
             {
                 return ChoosePawnKindInner_A(pawnKinds, combatPower);
             }
@@ -72,7 +75,7 @@ namespace raceQuestPawn
             var nearpower = combatPowerArray.MinBy(a => Mathf.Abs(a - combatPower));
             pawnEquals =
                 from p in pawnKinds
-                where (p.combatPower - nearpower) < 30f
+                where p.combatPower == nearpower
                 select p;
             if (pawnEquals.Any())
             {

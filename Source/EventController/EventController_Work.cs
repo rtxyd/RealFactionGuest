@@ -12,11 +12,13 @@ namespace EventController_rQP
         public static bool isCarrier = false;
         public static bool isGuard = false;
         public static bool isEnd = false;
+        public static bool isTraderGroup = false;
         public static bool isRefugeePodCrash = false;
         public static bool isInternalGen = false;
         public static bool isCreepJoiner = false;
         public static bool isFactionFix = false;
         public static bool isBackstoryFix = false;
+        public static bool isQuestGetPawn = false;
 
         public static string ongoingEvent = null;
 
@@ -51,7 +53,7 @@ namespace EventController_rQP
 
         public static bool IsCreepJoiner(ref PawnGenerationRequest request)
         {
-            if (request.KindDef.RaceProps.IsAnomalyEntity)
+            if (request.KindDef is CreepJoinerFormKindDef)
             {
                 isCreepJoiner = true;
             }
@@ -159,9 +161,27 @@ namespace EventController_rQP
         {
             isEnd = true;
         }
+        public static void Prefix_PawnGroupKindWorker_Trader_GeneratePawns()
+        {
+            isTraderGroup = true;
+        }
+
+        public static void Postfix_PawnGroupKindWorker_Trader_GeneratePawns()
+        {
+            isTraderGroup = false;
+        }
+        public static void Prefix_RefugeePodCrash_GeneratePawn()
+        {
+            isRefugeePodCrash = true;
+        }
+
+        public static void Postfix_RefugeePodCrash_GeneratePawn()
+        {
+            isRefugeePodCrash = false;
+        }
+
         public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
         {
-            PawnValidator_CrossWork.RequestValidator(ref request);
             isInternalGen = true;
         }
 
@@ -189,7 +209,6 @@ namespace EventController_rQP
         public static void Postfix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             isBackstoryFix = false;
-            return;
         }
     }
 }
