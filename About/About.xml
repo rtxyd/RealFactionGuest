@@ -25,7 +25,8 @@
 This is a forked version of [1.5] Real Faction Guest (Continued) , I rewrite almost all of its code and expand the features. So I forked it (packageID is different, you don't need to unsubscribe Mlie's version, and don't load both of them).
 
 New Features
-This version implement a filter to make every pawn get right backstory.
+1. Add modsetting now!
+2. This version implement a filter to make every pawn get right backstory.
 So human will not get random alien backstories, and aliens will not get mismatched backstories. Trying to make them be "real" faction guest.
 
 Something you need to know (not issues):
@@ -49,5 +50,5 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2263021260
 --------------------Mlie's original description--------------------
 See url above.
   </description>
-  <modVersion IgnoreIfNoMatchingField="True">1.5.9</modVersion>
+  <modVersion IgnoreIfNoMatchingField="True">1.5.9a</modVersion>
 </ModMetaData>

@@ -64,6 +64,14 @@ namespace EventController_rQP
                 return MeInfo;
             }))();
 
+            var GenerateOrRedressPawnInternal = ((Func<MethodInfo>)(() =>
+            {
+                BindingFlags Instance = BindingFlags.NonPublic | BindingFlags.Static;
+                MethodInfo MeInfo = typeof(PawnGenerator).GetMethod("GenerateOrRedressPawnInternal", Instance);
+                return MeInfo;
+            }))();
+
+
             Type eventWorker = typeof(EventController_Work);
             var prefix_PawnGroupKindWorker_GeneratePawns = eventWorker.GetMethod("Prefix_PawnGroupKindWorker_GeneratePawns");
             var postfix_PawnGroupKindWorker_GeneratePawns = eventWorker.GetMethod("Postfix_PawnGroupKindWorker_GeneratePawns");
@@ -83,12 +91,16 @@ namespace EventController_rQP
             var prefix_GenerateNewPawnInternal = eventWorker.GetMethod("Prefix_GenerateNewPawnInternal");
             var postfix_GenerateNewPawnInternal = eventWorker.GetMethod("Postfix_GenerateNewPawnInternal");
 
+            var prefix_GenerateOrRedressPawnInternal = eventWorker.GetMethod("Prefix_GenerateOrRedressPawnInternal");
+            //var postfix_GenerateOrRedressPawnInternal = eventWorker.GetMethod("Postfix_GenerateOrRedressPawnInternal");
+
             harmony.Patch(generate, new HarmonyMethod(prefix_PawnGroupKindWorker_GeneratePawns), new HarmonyMethod(postfix_PawnGroupKindWorker_GeneratePawns));
             harmony.Patch(traderGroup, new HarmonyMethod(prefix_PawnGroupKindWorker_Trader_GeneratePawns), new HarmonyMethod(postfix_PawnGroupKindWorker_Trader_GeneratePawns));
             harmony.Patch(trader, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateTrader), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateTrader));
             harmony.Patch(carriers, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateCarriers), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateCarriers));
             harmony.Patch(guards, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateGuards), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateGuards));
             harmony.Patch(generateNewPawnInternal, new HarmonyMethod(prefix_GenerateNewPawnInternal), new HarmonyMethod(postfix_GenerateNewPawnInternal));
+            harmony.Patch(GenerateOrRedressPawnInternal, new HarmonyMethod(prefix_GenerateOrRedressPawnInternal));
 
             //backstoryfixer
             var giveAppropriateBioAndNameTo = AccessTools.Method(typeof(PawnBioAndNameGenerator), nameof(PawnBioAndNameGenerator.GiveAppropriateBioAndNameTo));
