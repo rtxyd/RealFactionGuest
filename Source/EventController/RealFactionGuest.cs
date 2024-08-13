@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace EventController_rQP
@@ -52,11 +51,11 @@ namespace EventController_rQP
                 RealFactionGuestSettings.ResetToDefault();
             }
             listingStandard.Gap(Text.LineHeight + 10);
-            listingStandard.CheckboxLabeled("Strict quest guest".Translate(), ref RealFactionGuestSettings.strictQuestGuest, "Quest guest will generate the very pawn race of its faction as much as possible.(not xenotype, only main race concerned)".Translate());
-            listingStandard.CheckboxLabeled("Alternate factions which has same pawn race".Translate(), ref RealFactionGuestSettings.alternativeFaction, "Factions with same pawn race will be alternative when generate pawns.(not xenotype, only main race concerned)".Translate());
+            listingStandard.CheckboxLabeled("RFGSetting_StrictQuestGuest".Translate(), ref RealFactionGuestSettings.strictQuestGuest, "RFGSetting_StrictQuestGuest_Tips".Translate());
+            listingStandard.CheckboxLabeled("RFGSetting_AlternateFactions".Translate(), ref RealFactionGuestSettings.alternativeFaction, "RFGSetting_AlternateFactions_Tips".Translate());
 
             //Rect rectb = new Rect(listingStandard.ColumnWidth - 225, Text.LineHeight + 30, 450, Text.LineHeight + 10);
-            listingStandard.Label("Toggle how often the pawn will trigger the faction-bounded generation: ".Translate() + $"{RealFactionGuestSettings.strictChance}", -1, "Main function, if you want sometimes different pawnkinds generate in different factions, you can lower this value, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)".Translate());
+            listingStandard.Label("RFGSetting_ToggleFrequency".Translate() + $"{RealFactionGuestSettings.strictChance}", -1, "RFGSetting_ToggleFrequency_Tips".Translate());
             RealFactionGuestSettings.strictChance = Mathf.RoundToInt(listingStandard.Slider(RealFactionGuestSettings.strictChance, 0f, 1f) * 100f) / 100f;
             listingStandard.End();
             //Widgets.EndScrollView();
