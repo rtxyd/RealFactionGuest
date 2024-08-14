@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.10 Fix issue with modded pawn generator like Character Editor.
+
 Forked 1.5.9a Fix a problem when refugee pod crash
 
 Forked 1.5.9 

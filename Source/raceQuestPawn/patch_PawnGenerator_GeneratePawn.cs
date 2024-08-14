@@ -51,6 +51,16 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
+            if (EventController_Work.isTraderGroup)
+            {
+                return;
+            }
+
+            if (!PawnValidator_CrossWork.IsFromVanilla())
+            {
+                return;
+            }
+
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             bool flag = true;
@@ -75,11 +85,6 @@ public class patch_PawnGenerator_GeneratePawn
                 || request.Faction.def.modContentPack.PackageId.Contains("rimworld.biotech")))
                )
             {
-                if (EventController_Work.isTraderGroup)
-                {
-                    return;
-                }
-
                 // 팩션이 있을때
                 float combatPower = kinddef.combatPower;
                 PawnKindDef p_make = null;

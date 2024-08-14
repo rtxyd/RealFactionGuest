@@ -11,17 +11,24 @@ namespace raceQuestPawn
     {
         public static PawnKindDef ChoosePawnKind(List<PawnGroupMaker> plans, float combatPower, bool flag = true)
         {
-            var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
-            var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
+
             PawnKindDef p = null;
-            if (EventController_Work.isTrader && traders.Any())
+            if (EventController_Work.isTrader)
             {
-                p = ChoosePawnKindInner(traders, combatPower, flag);
+                var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
+                if (traders.Any() )
+                {
+                    p = ChoosePawnKindInner(traders, combatPower, flag);
+                }
             }
             //carrier is skipped.
-            else if (EventController_Work.isGuard && guards.Any())
+            else if (EventController_Work.isGuard)
             {
-                p = ChoosePawnKindInner(guards, combatPower, flag);
+                var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
+                if (guards.Any() )
+                {
+                    p = ChoosePawnKindInner(guards, combatPower, flag);
+                }
             }
             if (p == null)
             {

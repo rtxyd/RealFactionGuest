@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Verse;
 
 namespace EventController_rQP
@@ -39,6 +40,22 @@ namespace EventController_rQP
             {
                 request.IsCreepJoiner = true;
             }
+        }
+        public static bool IsFromVanilla()
+        {
+            var stack = new StackTrace(0, true);
+            var frame = stack.GetFrame(3);
+            var ns = frame.GetMethod().DeclaringType.Namespace;
+            var flag = true;
+            if (ns == "Verse" || ns == "RimWorld")
+            {
+                 flag = true;
+            }
+            else
+            {
+                 flag = false;
+            }
+            return flag;
         }
     }
 }
