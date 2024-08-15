@@ -91,9 +91,15 @@ namespace EventController_rQP
                 }
             foreach (var f2 in vanillaFactions)
             {
-                foreach (var item in f2.backstoryFilters)
+                if (f2.backstoryFilters != null)
                 {
-                    fallbackBackstory.UnionWith(item.categories);
+                    foreach (var item in f2.backstoryFilters)
+                    {
+                        if (item.categories != null)
+                        {
+                            fallbackBackstory.UnionWith(item.categories);
+                        }
+                    }
                 }
             }
             Log.Message("# Real Faction Guest - Faction Filter Init Complete");
