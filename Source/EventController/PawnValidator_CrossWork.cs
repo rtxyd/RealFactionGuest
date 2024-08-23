@@ -1,6 +1,8 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Verse;
 
 namespace EventController_rQP
@@ -47,7 +49,7 @@ namespace EventController_rQP
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
             var flag = true;
-            if (ns == "Verse" || ns == "RimWorld")
+            if (ns == "Verse" || ns == "RimWorld" || stack.GetFrames().Any(t => t.GetMethod().DeclaringType == typeof(IncidentWorker)))
             {
                  flag = true;
             }
