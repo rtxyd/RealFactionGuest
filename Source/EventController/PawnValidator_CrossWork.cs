@@ -1,5 +1,4 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -49,13 +48,13 @@ namespace EventController_rQP
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
             var flag = true;
-            if (ns == "Verse" || ns == "RimWorld" || stack.GetFrames().Any(t => t.GetMethod().DeclaringType == typeof(IncidentWorker)))
+            if (ns == "Verse" || ns == "RimWorld" || EventController_Work.isRefugeePodCrash || stack.GetFrames().Any(t => t.GetMethod().DeclaringType == typeof(IncidentWorker)))
             {
-                 flag = true;
+                flag = true;
             }
             else
             {
-                 flag = false;
+                flag = false;
             }
             return flag;
         }

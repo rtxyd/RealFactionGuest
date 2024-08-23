@@ -16,7 +16,7 @@ namespace raceQuestPawn
             if (EventController_Work.isTrader)
             {
                 var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
-                if (traders.Any() )
+                if (traders.Any())
                 {
                     p = ChoosePawnKindInner(traders, combatPower, flag);
                 }
@@ -25,7 +25,7 @@ namespace raceQuestPawn
             else if (EventController_Work.isGuard)
             {
                 var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
-                if (guards.Any() )
+                if (guards.Any())
                 {
                     p = ChoosePawnKindInner(guards, combatPower, flag);
                 }
