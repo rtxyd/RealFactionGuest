@@ -124,7 +124,7 @@ namespace EventController_rQP
         }
         public static void Prefix_PawnGroupKindWorker_GenerateTrader()
         {
-            isTrader = true;
+            isTrader = isTrader ? false : true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateTrader()
@@ -134,7 +134,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GenerateCarriers()
         {
-            isCarrier = true;
+            isCarrier = isCarrier ? false : true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateCarriers()
@@ -144,7 +144,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GenerateGuards()
         {
-            isGuard = true;
+            isGuard = isGuard ? false : true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateGuards()
@@ -154,7 +154,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GeneratePawns()
         {
-            isEnd = false;
+            isEnd = isEnd ? false : true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GeneratePawns()
@@ -163,7 +163,7 @@ namespace EventController_rQP
         }
         public static void Prefix_PawnGroupKindWorker_Trader_GeneratePawns()
         {
-            isTraderGroup = true;
+            isTraderGroup = isTraderGroup ? false : true;
         }
 
         public static void Postfix_PawnGroupKindWorker_Trader_GeneratePawns()
@@ -172,7 +172,7 @@ namespace EventController_rQP
         }
         public static void Prefix_RefugeePodCrash_GeneratePawn()
         {
-            isRefugeePodCrash = true;
+            isRefugeePodCrash = isRefugeePodCrash ? false : true;
         }
 
         public static void Postfix_RefugeePodCrash_GeneratePawn()
@@ -180,20 +180,20 @@ namespace EventController_rQP
             isRefugeePodCrash = false;
         }
 
-        public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
-        {
-            isInternalGen = true;
-        }
+        //public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
+        //{
+        //    isInternalGen = true;
+        //}
 
-        public static void Postfix_GenerateNewPawnInternal()
-        {
-            isInternalGen = false;
-        }
+        //public static void Postfix_GenerateNewPawnInternal()
+        //{
+        //    isInternalGen = false;
+        //}
 
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
             FactionFilter_Work.FactionFilter(ref pawn, ref factionType);
-            isFactionFix = true;
+            isFactionFix = isFactionFix ? false : true;
         }
 
         public static void Postfix_GiveAppropriateBioAndNameTo()
@@ -203,7 +203,7 @@ namespace EventController_rQP
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
-            isBackstoryFix = true;
+            isBackstoryFix = isBackstoryFix ? false : true;
         }
 
         public static void Postfix_FillBackstorySlotShuffled()
@@ -213,6 +213,14 @@ namespace EventController_rQP
         public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
             PawnValidator_CrossWork.RequestValidator(ref request);
+        }
+        public static bool Prefix_PreApplyDamage(ref bool absorbed)
+        {
+            return PawnValidator_CrossWork.IsNotBypassShield(ref absorbed);
+        }
+        public static bool Prefix_PreApplyDamageThing(ref bool absorbed)
+        {
+            return PawnValidator_CrossWork.IsNotBypassShield(ref absorbed);
         }
     }
 }

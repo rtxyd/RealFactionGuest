@@ -43,12 +43,12 @@ namespace EventController_rQP
                 return MeInfo;
             }))();
 
-            var generateNewPawnInternal = ((Func<MethodInfo>)(() =>
-            {
-                BindingFlags Instance = BindingFlags.NonPublic | BindingFlags.Static;
-                MethodInfo MeInfo = typeof(PawnGenerator).GetMethod("GenerateNewPawnInternal", Instance);
-                return MeInfo;
-            }))();
+            //var generateNewPawnInternal = ((Func<MethodInfo>)(() =>
+            //{
+            //    BindingFlags Instance = BindingFlags.NonPublic | BindingFlags.Static;
+            //    MethodInfo MeInfo = typeof(PawnGenerator).GetMethod("GenerateNewPawnInternal", Instance);
+            //    return MeInfo;
+            //}))();
 
             var giveShuffledBioTo = ((Func<MethodInfo>)(() =>
             {
@@ -88,8 +88,8 @@ namespace EventController_rQP
             var prefix_PawnGroupKindWorker_GenerateGuards = eventWorker.GetMethod("Prefix_PawnGroupKindWorker_GenerateGuards");
             var postfix_PawnGroupKindWorker_GenerateGuards = eventWorker.GetMethod("Postfix_PawnGroupKindWorker_GenerateGuards");
 
-            var prefix_GenerateNewPawnInternal = eventWorker.GetMethod("Prefix_GenerateNewPawnInternal");
-            var postfix_GenerateNewPawnInternal = eventWorker.GetMethod("Postfix_GenerateNewPawnInternal");
+            //var prefix_GenerateNewPawnInternal = eventWorker.GetMethod("Prefix_GenerateNewPawnInternal");
+            //var postfix_GenerateNewPawnInternal = eventWorker.GetMethod("Postfix_GenerateNewPawnInternal");
 
             var prefix_GenerateOrRedressPawnInternal = eventWorker.GetMethod("Prefix_GenerateOrRedressPawnInternal");
             //var postfix_GenerateOrRedressPawnInternal = eventWorker.GetMethod("Postfix_GenerateOrRedressPawnInternal");
@@ -99,7 +99,7 @@ namespace EventController_rQP
             harmony.Patch(trader, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateTrader), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateTrader));
             harmony.Patch(carriers, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateCarriers), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateCarriers));
             harmony.Patch(guards, new HarmonyMethod(prefix_PawnGroupKindWorker_GenerateGuards), new HarmonyMethod(postfix_PawnGroupKindWorker_GenerateGuards));
-            harmony.Patch(generateNewPawnInternal, new HarmonyMethod(prefix_GenerateNewPawnInternal), new HarmonyMethod(postfix_GenerateNewPawnInternal));
+            //harmony.Patch(generateNewPawnInternal, new HarmonyMethod(prefix_GenerateNewPawnInternal), new HarmonyMethod(postfix_GenerateNewPawnInternal));
             harmony.Patch(GenerateOrRedressPawnInternal, new HarmonyMethod(prefix_GenerateOrRedressPawnInternal));
 
             //backstoryfixer
@@ -118,6 +118,22 @@ namespace EventController_rQP
             var postfix_RefugeePodCrash_GeneratePawn = eventWorker.GetMethod("Postfix_RefugeePodCrash_GeneratePawn");
             harmony.Patch(questNode_Root_RefugeePodCrash_GeneratePawn, new HarmonyMethod(prefix_RefugeePodCrash_GeneratePawn), new HarmonyMethod(postfix_RefugeePodCrash_GeneratePawn));
 
+            //refugee with shield fix
+            var PreApplyDamage = AccessTools.Method(typeof(Pawn_HealthTracker), nameof(Pawn_HealthTracker.PreApplyDamage));
+            var prefix_PreApplyDamage = eventWorker.GetMethod("Prefix_PreApplyDamage");
+
+            harmony.Patch(PreApplyDamage, new HarmonyMethod(prefix_PreApplyDamage));
+
+            var PreApplyDamageThing = AccessTools.Method(typeof(Thing), nameof(Thing.PreApplyDamage));
+            var prefix_PreApplyDamageThing = eventWorker.GetMethod("Prefix_PreApplyDamageThing");
+
+            harmony.Patch(PreApplyDamageThing, new HarmonyMethod(prefix_PreApplyDamageThing));
+
+            //questgen
+            //var QuestGenGenerate = AccessTools.Method(typeof(QuestGen), nameof(QuestGen.Generate));
+            //var prefix_QuestGenGenerate = eventWorker.GetMethod("Prefix_QuestGenGenerate");
+
+            //harmony.Patch(QuestGenGenerate, new HarmonyMethod(prefix_QuestGenGenerate));
             Log.Message("# Real Faction Guest Event Controller - Init Complete");
         }
     }
