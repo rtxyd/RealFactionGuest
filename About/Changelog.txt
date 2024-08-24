@@ -1,7 +1,10 @@
 # Changelog for RealFactionGuest
 
-Forked 1.5.13 Try fix an issue of mismatched pawnkind or story.
-
+Forked 1.5.13a 
+{
+1. Try fix an issue of mismatched pawnkind or story.
+2. Try fix refugee with shield issue (this is not a fault of this mod). Restrict code.
+}
 Forked 1.5.12 Add compatibility with incident inherited IncidentWorker.
 
 Forked 1.5.11 Fix null construction issue with Vanilla Factions Expanded - Insectoids 2.

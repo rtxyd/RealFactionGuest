@@ -48,7 +48,8 @@ namespace EventController_rQP
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
             var flag = true;
-            if (ns == "Verse" || ns == "RimWorld" || EventController_Work.isRefugeePodCrash || stack.GetFrames().Any(t => t.GetMethod().DeclaringType == typeof(IncidentWorker)))
+            if (ns == "Verse" || ns == "RimWorld" || EventController_Work.isRefugeePodCrash
+                || (from frame1 in stack.GetFrames() select frame1.GetMethod().DeclaringType).Any(t => t == typeof(IncidentWorker)))
             {
                 flag = true;
             }
@@ -57,6 +58,15 @@ namespace EventController_rQP
                 flag = false;
             }
             return flag;
+        }
+        public static bool IsNotBypassShield(ref bool absorbed)
+        {
+            if (EventController_Work.isRefugeePodCrash)
+            {
+                absorbed = false;
+                return false;
+            }
+            return true;
         }
     }
 }
