@@ -119,6 +119,11 @@ namespace EventController_rQP
             harmony.Patch(questNode_Root_RefugeePodCrash_GeneratePawn, new HarmonyMethod(prefix_RefugeePodCrash_GeneratePawn), new HarmonyMethod(postfix_RefugeePodCrash_GeneratePawn));
 
             //refugee with shield fix
+            var DamageUntilDowned = AccessTools.Method(typeof(HealthUtility), nameof(HealthUtility.DamageUntilDowned));
+            var prefix_DamageUntilDowned = eventWorker.GetMethod("Prefix_DamageUntilDowned");
+            var postfix_DamageUntilDowned = eventWorker.GetMethod("Postfix_DamageUntilDowned");
+            harmony.Patch(DamageUntilDowned, new HarmonyMethod(prefix_DamageUntilDowned), new HarmonyMethod(postfix_DamageUntilDowned));
+
             var PreApplyDamage = AccessTools.Method(typeof(Pawn_HealthTracker), nameof(Pawn_HealthTracker.PreApplyDamage));
             var prefix_PreApplyDamage = eventWorker.GetMethod("Prefix_PreApplyDamage");
 

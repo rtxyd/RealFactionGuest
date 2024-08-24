@@ -56,17 +56,23 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (!PawnValidator_CrossWork.IsFromVanilla())
+            if (PawnValidator_CrossWork.IsNotFromVanilla())
             {
                 return;
             }
 
+            if (PawnValidator_CrossWork.IsNotValidCreepjoinerRequest_Fix(ref request))
+            {
+                return;
+            }
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             bool flag = true;
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
             var faction = request.Faction.def;
             var kinddef = request.KindDef;
+
+
 
             bool default_filter = faction.modContentPack.PackageId != kinddef.modContentPack.PackageId;
             if (RealFactionGuestSettings.alternativeFaction && default_filter)

@@ -1,11 +1,10 @@
-﻿using EventController_rQP;
-using RimWorld;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace raceQuestPawn
+namespace EventController_rQP
 {
     public static class ChoosePawn
     {
@@ -45,6 +44,7 @@ namespace raceQuestPawn
                 where t.kind.RaceProps != null
                 && t.kind.RaceProps.Humanlike
                 && t.kind.RaceProps.intelligence == Intelligence.Humanlike
+                && t.kind is not CreepJoinerFormKindDef
                 select t.kind;
             var pawnToChoose =
                 from p in pawnKinds

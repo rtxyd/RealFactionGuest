@@ -19,6 +19,7 @@ namespace EventController_rQP
         public static bool isFactionFix = false;
         public static bool isBackstoryFix = false;
         public static bool isQuestGetPawn = false;
+        public static bool isDamageUntilDowned = false;
 
         public static string ongoingEvent = null;
 
@@ -213,6 +214,14 @@ namespace EventController_rQP
         public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
             PawnValidator_CrossWork.RequestValidator(ref request);
+        }
+        public static void Prefix_DamageUntilDowned()
+        {
+            isDamageUntilDowned = isDamageUntilDowned ? false : true;
+        }
+        public static void Postfix_DamageUntilDowned()
+        {
+            isDamageUntilDowned = false;
         }
         public static bool Prefix_PreApplyDamage(ref bool absorbed)
         {
