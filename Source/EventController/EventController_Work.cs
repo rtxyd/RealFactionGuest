@@ -125,7 +125,7 @@ namespace EventController_rQP
         }
         public static void Prefix_PawnGroupKindWorker_GenerateTrader()
         {
-            isTrader = isTrader ? false : true;
+            isTrader = true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateTrader()
@@ -135,7 +135,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GenerateCarriers()
         {
-            isCarrier = isCarrier ? false : true;
+            isCarrier = true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateCarriers()
@@ -145,7 +145,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GenerateGuards()
         {
-            isGuard = isGuard ? false : true;
+            isGuard = true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateGuards()
@@ -155,7 +155,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GeneratePawns()
         {
-            isEnd = isEnd ? false : true;
+            isEnd = true;
         }
 
         public static void Postfix_PawnGroupKindWorker_GeneratePawns()
@@ -164,72 +164,95 @@ namespace EventController_rQP
         }
         public static void Prefix_PawnGroupKindWorker_Trader_GeneratePawns()
         {
-            isTraderGroup = isTraderGroup ? false : true;
+            isTraderGroup = true;
         }
 
         public static void Postfix_PawnGroupKindWorker_Trader_GeneratePawns()
         {
             isTraderGroup = false;
         }
-        public static void Prefix_RefugeePodCrash_GeneratePawn()
+        public static void Prefix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
         {
-            isRefugeePodCrash = isRefugeePodCrash ? false : true;
+            isRefugeePodCrash = true;
         }
 
-        public static void Postfix_RefugeePodCrash_GeneratePawn()
+        public static void Postfix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
         {
             isRefugeePodCrash = false;
         }
-
-        //public static void Prefix_GenerateNewPawnInternal(ref PawnGenerationRequest request)
-        //{
-        //    isInternalGen = true;
-        //}
-
-        //public static void Postfix_GenerateNewPawnInternal()
-        //{
-        //    isInternalGen = false;
-        //}
-
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
             FactionFilter_Work.FactionFilter(ref pawn, ref factionType);
-            isFactionFix = isFactionFix ? false : true;
+            isFactionFix = true;
         }
-
         public static void Postfix_GiveAppropriateBioAndNameTo()
         {
             isFactionFix = false;
         }
+        public static void Prefix_GenerateSkills(ref Pawn pawn)
+        {
+            if (RealFactionGuestSettings.factionLeaderValidator)
+            {
+                PawnValidator_CrossWork.FactionLeaderValidator(ref pawn);
+            }
+        }
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
-            isBackstoryFix = isBackstoryFix ? false : true;
+            isBackstoryFix = true;
         }
 
         public static void Postfix_FillBackstorySlotShuffled()
         {
             isBackstoryFix = false;
         }
-        public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
+        public static bool Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
-            PawnValidator_CrossWork.RequestValidator(ref request);
+            return PawnValidator_CrossWork.RequestValidator(ref request);
         }
         public static void Prefix_DamageUntilDowned()
         {
-            isDamageUntilDowned = isDamageUntilDowned ? false : true;
+            isDamageUntilDowned = true;
         }
         public static void Postfix_DamageUntilDowned()
         {
             isDamageUntilDowned = false;
         }
+        public static bool Prefix_AdjustXenotypeForFactionlessPawn(ref Pawn pawn)
+        {
+            return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true;
+        }
         public static bool Prefix_PreApplyDamage(ref bool absorbed)
         {
-            return PawnValidator_CrossWork.IsNotBypassShield(ref absorbed);
+            return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
         public static bool Prefix_PreApplyDamageThing(ref bool absorbed)
         {
-            return PawnValidator_CrossWork.IsNotBypassShield(ref absorbed);
+            return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
+        }
+        public static bool Prefix_PreApplyDamagePawn(ref bool absorbed)
+        {
+            return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
+        }
+        public static void Postfix_PawnGenerator_GeneratePawn()
+        {
+            EventController_Reset();
+        }
+        public static void EventController_Reset()
+        {
+            //Log.Message(GetOngoingEvent());
+            isTrader = false;
+            isCarrier = false;
+            isGuard = false;
+            isEnd = false;
+            isTraderGroup = false;
+            isRefugeePodCrash = false;
+            isInternalGen = false;
+            isCreepJoiner = false;
+            isFactionFix = false;
+            isBackstoryFix = false;
+            isQuestGetPawn = false;
+            isDamageUntilDowned = false;
         }
     }
 }

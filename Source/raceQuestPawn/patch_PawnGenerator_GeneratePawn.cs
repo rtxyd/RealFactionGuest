@@ -12,20 +12,26 @@ public class patch_PawnGenerator_GeneratePawn
 {
     private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
         AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
-
+    private static bool iscreeped = false;
     [HarmonyPriority(1000)]
-    public static void Prefix(ref PawnGenerationRequest request)
+    public static bool Prefix(ref PawnGenerationRequest request)
     {
         try
         {
+            if (request.KindDef.factionLeader)
+            {
+                return true;
+            }
+            Tools.TestTool_ForceCreepJoiner(ref request, ref iscreeped);
+
             if (Current.ProgramState != ProgramState.Playing)
             {
-                return;
+                return true;
             }
 
             if (request.Faction == null)
             {
-                return;
+                return true;
             }
 
             if (request.KindDef.RaceProps != null && (
@@ -33,46 +39,40 @@ public class patch_PawnGenerator_GeneratePawn
                     || request.KindDef.RaceProps.intelligence <= Intelligence.ToolUser
                 ))
             {
-                return;
+                return true;
             }
 
             if (request.Faction is { IsPlayer: true })
             {
-                return;
+                return true;
             }
 
             if (request.KindDef == PawnKindDefOf.WildMan)
             {
-                return;
+                return true;
             }
 
             if (request.IsCreepJoiner)
             {
-                return;
+                return true;
             }
 
             if (EventController_Work.isTraderGroup)
             {
-                return;
+                return true;
             }
 
             if (PawnValidator_CrossWork.IsNotFromVanilla())
             {
-                return;
+                return true;
             }
 
-            if (PawnValidator_CrossWork.IsNotValidCreepjoinerRequest_Fix(ref request))
-            {
-                return;
-            }
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             bool flag = true;
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
             var faction = request.Faction.def;
             var kinddef = request.KindDef;
-
-
 
             bool default_filter = faction.modContentPack.PackageId != kinddef.modContentPack.PackageId;
             if (RealFactionGuestSettings.alternativeFaction && default_filter)
@@ -107,12 +107,13 @@ public class patch_PawnGenerator_GeneratePawn
 
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
 
-                return;
+                return true;
             }
         }
         catch
         {
             // ignored
         }
+        return true;
     }
 }

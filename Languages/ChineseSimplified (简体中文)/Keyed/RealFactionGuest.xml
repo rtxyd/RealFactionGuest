@@ -1,11 +1,27 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-  <RFGSetting_StrictQuestGuest>严格化任务访客生成</RFGSetting_StrictQuestGuest>
-  <RFGSetting_StrictQuestGuest_Tips>任务访客将尽量生成相应派系的种族，关闭该选项后任务将有一定概率生成非任务派系种族的小人.（异种类型不会被考虑，只考虑主种族）</RFGSetting_StrictQuestGuest_Tips>
+	<RFGSetting_StrictQuestGuest>严格化任务访客生成</RFGSetting_StrictQuestGuest>
+	<RFGSetting_StrictQuestGuest_Tips>任务访客将尽量生成相应派系的种族，关闭该选项后任务将有一定概率生成非任务派系种族的小人.（异种类型不会被考虑，只考虑主种族）</RFGSetting_StrictQuestGuest_Tips>
 
-  <RFGSetting_AlternateFactions>拥有相同种族的派系间可交替生成</RFGSetting_AlternateFactions>
-  <RFGSetting_AlternateFactions_Tips>拥有相同种族的派系在生成小人时将会被同时计算（异种类型不会被考虑，只考虑主种族）</RFGSetting_AlternateFactions_Tips>
+	<RFGSetting_AlternateFactions>拥有相同种族的派系间可交替生成</RFGSetting_AlternateFactions>
+	<RFGSetting_AlternateFactions_Tips>拥有相同种族的派系在生成小人时将会被同时计算（异种类型不会被考虑，只考虑主种族）</RFGSetting_AlternateFactions_Tips>
 
-  <RFGSetting_ToggleFrequency>调整触发与派系绑定的生成的频率：</RFGSetting_ToggleFrequency>
-  <RFGSetting_ToggleFrequency_Tips>主要功能，如果你希望同一派系偶尔生成其他派系种类的小人可以调低这个值，调到1.0代表尽量会生成与派系绑定的小人种类，不代表100%按照派系生成的小人，如果触发错误或生成特殊小人，游戏本身将不会考虑派系（异种类型不会被考虑，只考虑主种族）</RFGSetting_ToggleFrequency_Tips>
+	<RFGSetting_ToggleFrequency>调整触发与派系绑定的生成的频率：</RFGSetting_ToggleFrequency>
+	<RFGSetting_ToggleFrequency_Tips>主要功能，如果你希望同一派系偶尔生成其他派系种类的小人可以调低这个值，调到1.0代表尽量会生成与派系绑定的小人种类，不代表100%按照派系生成的小人，如果触发错误或生成特殊小人，游戏本身将不会考虑派系（异种类型不会被考虑，只考虑主种族）</RFGSetting_ToggleFrequency_Tips>
+
+	<RFGSetting_damageUntilDownedBypassShield>[调试]DamageUntilDowned绕过护盾</RFGSetting_damageUntilDownedBypassShield>
+	<RFGSetting_damageUntilDownedBypassShield_Tips>默认开启以规避某些mod没有判空造成的红字，小人在没有被放在地图上时，如果产生破盾特效，在某些mod中没有对小人当前的坐标进行判空，会导致空指针异常，绕过护盾则不会触发该问题</RFGSetting_damageUntilDownedBypassShield_Tips>
+
+	<RFGSetting_factionLeaderValidator>[调试]派系领袖生成修正</RFGSetting_factionLeaderValidator>
+	<RFGSetting_factionLeaderValidator_Tips>某些mod的派系领袖小人生成的时候射击和近战被禁用了，如果小人本身是需要这两个技能的就会导致地图直接生成不了派系，该选项尝试修复该问题</RFGSetting_factionLeaderValidator_Tips>
+
+	<RFGSetting_creepJoinerValidator>[调试]CreepJoiner生成修正</RFGSetting_creepJoinerValidator>
+	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner某些时候并不在相应事件时生成，这可能会导致错误，该选项尝试修复该问题</RFGSetting_creepJoinerValidator_Tips>
+
+	<RFGSetting_creepJoinerGenerateNoLimit>[调试/测试]不限制CreepJoiner生成条件</RFGSetting_creepJoinerGenerateNoLimit>
+	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner将可能在任何事件中生成，这可能会导致问题</RFGSetting_creepJoinerGenerateNoLimit_Tips>
+	
+	<RFGSetting_dontChangeBodyTypeOfRabbie>[Biotech]不要改变Rabbie的体型</RFGSetting_dontChangeBodyTypeOfRabbie>
+	<RFGSetting_dontChangeBodyTypeOfRabbie_Tips>Rabbie The Moonrabbit race 在有异种的情况下，有可能出现体型bug，从而贴图缺失。开启这个不会强制改变rabbie的体型</RFGSetting_dontChangeBodyTypeOfRabbie_Tips>
+
 </LanguageData>

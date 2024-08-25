@@ -36,7 +36,7 @@ namespace EventController_rQP
             }
             return p;
         }
-        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, bool flag = true)
+        private static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, bool flag = true)
         {
             var pawnKinds =
                 from p in options
@@ -44,7 +44,7 @@ namespace EventController_rQP
                 where t.kind.RaceProps != null
                 && t.kind.RaceProps.Humanlike
                 && t.kind.RaceProps.intelligence == Intelligence.Humanlike
-                && t.kind is not CreepJoinerFormKindDef
+                && (RealFactionGuestSettings.creepJoinerGenerateNoLimit ? t.kind is not CreepJoinerFormKindDef : true)
                 select t.kind;
             var pawnToChoose =
                 from p in pawnKinds
@@ -73,7 +73,7 @@ namespace EventController_rQP
             }
             return null;
         }
-        public static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower)
+        private static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower)
         {
             IEnumerable<PawnKindDef> pawnEquals = [];
             var combatPowerArray =

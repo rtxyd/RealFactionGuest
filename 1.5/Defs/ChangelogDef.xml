@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<RealFactionGuest.ChangelogDef>
+		<defName>RealFactionGuest</defName>
+		<label>RealFactionGuest</label>
+		<!--<TexPath></TexPath>-->
+		<Version>1.5.14</Version>
+		<description>
+			# Changelog for RealFactionGuest
+
+			Forked 1.5.13a Try fix refugee with shield issue (this is not a fault of this mod). Restrict code.
+
+			Forked 1.5.13 Try fix an issue of mismatched pawnkind or story.
+
+			Forked 1.5.12 Add compatibility with incident inherited IncidentWorker.
+
+			Forked 1.5.11 Fix null construction issue with Vanilla Factions Expanded - Insectoids 2.
+
+			Forked 1.5.10 Fix issue with modded pawn generator like Character Editor.
+
+			Forked 1.5.9a Fix a problem when refugee pod crash
+
+			Forked 1.5.9
+			{
+			1. Fix quest pawn sometimes get error.
+			2. Fix creepjoiner generation error.
+			3. Fix error when generating "Mincho_SpaceRefugee", "RatkinPriest".
+			4. Add 3 optional function.
+			5. Add options to modsetting. Now you can tweak some features yourself.
+			6. Strict pawn generation.
+			7. Localization modsetting.
+			}
+
+			Forked 1.5.8 Add mod settings, refine code.
+
+			Forked 1.5.7 Fix an issue of quest pawn generation about combat power.
+
+			Forked 1.5.6a Update mod name, description.
+
+			Forked 1.5.6 - Refine the filter, should be less mismatched backstoies.
+
+			Forked 1.5.5 - Implement a backstory filter to make every pawn get right backstories
+
+			Forked 1.5.4 - Fix a issue about trigger of getting stacktrace frame, add some wip code
+
+			Forked 1.5.3 - Fix a issue of caravan generation, rewrite most code
+
+
+			1.5.2 - Fix for caravan-issues
+
+
+			1.5.1 - Should no longer cause errors with creepjoiners
+
+
+			1.5.0 - Mod updated for 1.5 and passed autotests
+
+
+			1.4.0 - First publish
+		</description>
+	</RealFactionGuest.ChangelogDef>
+
+</Defs>
