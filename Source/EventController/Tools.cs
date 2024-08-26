@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using RimWorld.QuestGen;
 using System;
 using System.Reflection;
 using Verse;
@@ -35,14 +36,21 @@ namespace EventController_rQP
         {
             MethodInfo prefix = null;
             MethodInfo postfix = null;
+            MethodInfo transpiler = null;
             switch (p)
             {
                 case PatchType.Prefix:
                     prefix = type.GetMethod("Prefix_" + variableName);
-                    break;
+                    harmony.Patch(methodInfo, prefix);
+                    return;
                 case PatchType.Postfix:
                     postfix = type.GetMethod("Postfix_" + variableName);
-                    break;
+                    harmony.Patch(methodInfo, null, postfix);
+                    return;
+                case PatchType.Transpiler:
+                    transpiler = type.GetMethod("Transpiler_" + variableName);
+                    harmony.Patch(methodInfo, null, null, transpiler);
+                    return;
                 case PatchType.Both:
                     prefix = type.GetMethod("Prefix_" + variableName);
                     postfix = type.GetMethod("Postfix_" + variableName);
@@ -52,33 +60,36 @@ namespace EventController_rQP
             {
                 Log.Message("Patch: " + $"*{variableName}*".Colorize(UnityEngine.Color.blue));
             }
-            if (postfix == null && prefix != null)
+            if (p == PatchType.Both)
             {
-                harmony.Patch(methodInfo, prefix);
-                return;
+                if (postfix == null && prefix != null)
+                {
+                    harmony.Patch(methodInfo, prefix);
+                    return;
+                }
+                if (postfix == null && prefix == null)
+                {
+                    Log.Error("Patch failed: " + $"*{variableName}*".Colorize(UnityEngine.Color.blue));
+                    return;
+                }
+                if (prefix == null && postfix != null)
+                {
+                    harmony.Patch(methodInfo, null, postfix);
+                    return;
+                }
+                harmony.Patch(methodInfo, prefix, postfix);
             }
-            if (postfix == null && prefix == null)
-            {
-                Log.Error("Patch failed: " + $"*{variableName}*".Colorize(UnityEngine.Color.blue));
-                return;
-            }
-            if (prefix == null && postfix != null)
-            {
-                harmony.Patch(methodInfo, null, postfix);
-                return;
-            }
-            harmony.Patch(methodInfo, prefix, postfix);
         }
-        public static void TestTool_ForceCreepJoiner(ref PawnGenerationRequest request, ref bool iscreeped)
+        public static void TestTool_ForceCreepJoiner(ref PawnGenerationRequest request)
         {
-            if (iscreeped)
+            if (QuestGen_Get.GetMap() != null)
             {
-                iscreeped = false;
-                return;
+                if (!request.KindDef.factionLeader)
+                {
+                    request.KindDef = DefDatabase<CreepJoinerFormKindDef>.AllDefs.RandomElement();
+                    request.IsCreepJoiner = true;
+                }
             }
-            request.KindDef = DefDatabase<CreepJoinerFormKindDef>.AllDefs.RandomElement();
-            request.IsCreepJoiner = true;
-            iscreeped = true;
         }
         public static void TestTool_ForceRabbie(ref PawnGenerationRequest request)
         {

@@ -1,6 +1,10 @@
-﻿using RimWorld;
+﻿using HarmonyLib;
+using RimWorld;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using Verse;
 
 namespace EventController_rQP
@@ -237,11 +241,78 @@ namespace EventController_rQP
         }
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
-            if (isCreepJoinerValidatorOn)
+            if (__result.kindDef is CreepJoinerFormKindDef)
             {
                 PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
             }
             EventController_Reset();
+        }
+        public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(IEnumerable<CodeInstruction> instructions)
+        {
+            var codes = instructions.ToList();
+            List<CodeInstruction> codes1 = new List<CodeInstruction>();
+            var methodinfo = AccessTools.Method(typeof(StorytellerUtility), nameof(StorytellerUtility.DefaultThreatPointsNow), new System.Type[] { typeof(IIncidentTarget) });
+            var labelTrue = new Label();
+            var labelFalse = new Label();
+            var replacer = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Brfalse_S, labelFalse),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Call, methodinfo),
+                new CodeInstruction(OpCodes.Br_S,labelTrue),
+                new CodeInstruction(OpCodes.Nop) { labels = new List<Label> { labelFalse } },
+                new CodeInstruction(OpCodes.Ldc_R4, 100f),
+                new CodeInstruction(OpCodes.Nop) { labels = new List<Label> { labelTrue } },
+                new CodeInstruction(OpCodes.Stloc_0)
+            };
+            return MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
+
+        }
+        public static IEnumerable<CodeInstruction> MethodReplacer(List<CodeInstruction> codes, MethodInfo method, OpCode start, OpCode end, List<CodeInstruction> replacer)
+        {
+            var codelineMethod = 0;
+            for (int i = 1; i < codes.Count; i++)
+            {
+                if (codes[i].Calls(method))
+                {
+                    codelineMethod = i;
+                    break;
+                }
+            }
+            if (codelineMethod == 0)
+            {
+                return null;
+            }
+            var startLine = 0;
+            var endLine = 0;
+            for (int i = codelineMethod; i >= 0; i--)
+            {
+                if (codes[i].opcode == start)
+                {
+                    startLine = i;
+                    break;
+                }
+            }
+            for (int i = codelineMethod; i < codes.Count; i++)
+            {
+                if (codes[i].opcode == end)
+                {
+                    endLine = i;
+                    break;
+                }
+            }
+            var codes1 = new List<CodeInstruction>();
+            for (int i = 0; i < startLine; i++)
+            {
+                codes1.Add(codes[i]);
+            }
+            codes1.AddRange(replacer);
+            for (int i = endLine; i < codes.Count; i++)
+            {
+                codes1.Add(codes[i]);
+            }
+            return codes1.AsEnumerable();
         }
         public static void EventController_Reset()
         {

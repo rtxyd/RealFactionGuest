@@ -32,7 +32,8 @@ namespace EventController_rQP
                 { new Tuple<string, PatchType>("PreApplyDamageThing",                           PatchType.Both),       AccessTools.Method(typeof(Thing), nameof(Thing.PreApplyDamage))},
                 { new Tuple<string, PatchType>("PreApplyDamagePawn",                            PatchType.Both),       AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage))},
                 { new Tuple<string, PatchType>("AdjustXenotypeForFactionlessPawn",              PatchType.Prefix),     AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.AdjustXenotypeForFactionlessPawn))},
-                { new Tuple<string, PatchType>("PawnGenerator_GeneratePawn",                    PatchType.Postfix),    AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] {typeof(PawnGenerationRequest)})}
+                { new Tuple<string, PatchType>("PawnGenerator_GeneratePawn",                    PatchType.Postfix),    AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] {typeof(PawnGenerationRequest)})},
+                { new Tuple<string, PatchType>("GetCreepjoinerSpecifics",                       PatchType.Transpiler), AccessTools.Method(typeof(CreepJoinerUtility), nameof(CreepJoinerUtility.GetCreepjoinerSpecifics))}
             };
             foreach (var item in pairs)
             {

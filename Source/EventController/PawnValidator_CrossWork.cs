@@ -1,6 +1,5 @@
 ﻿using RimWorld;
 using RimWorld.QuestGen;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -177,8 +176,12 @@ namespace EventController_rQP
         }
         public static void CreepJoinerValidator(ref Pawn pawn)
         {
-            pawn.creepjoiner = new Pawn_CreepJoinerTracker(pawn);
-            CreepJoinerUtility.GetCreepjoinerSpecifics(QuestGen_Get.GetMap(), ref pawn.creepjoiner.form, ref pawn.creepjoiner.benefit, ref pawn.creepjoiner.downside, ref pawn.creepjoiner.aggressive, ref pawn.creepjoiner.rejection);
+            if (pawn.creepjoiner == null)
+            {
+                pawn.creepjoiner = new Pawn_CreepJoinerTracker(pawn);
+            }
+            var map = QuestGen_Get.GetMap();
+            CreepJoinerUtility.GetCreepjoinerSpecifics(map, ref pawn.creepjoiner.form, ref pawn.creepjoiner.benefit, ref pawn.creepjoiner.downside, ref pawn.creepjoiner.aggressive, ref pawn.creepjoiner.rejection);
         }
     }
 }

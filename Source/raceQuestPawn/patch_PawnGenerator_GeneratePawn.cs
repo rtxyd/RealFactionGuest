@@ -12,18 +12,12 @@ public class patch_PawnGenerator_GeneratePawn
 {
     private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
         AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
-    private static bool iscreeped = false;
     [HarmonyPriority(1000)]
     public static bool Prefix(ref PawnGenerationRequest request)
     {
         try
         {
-            if (request.KindDef.factionLeader)
-            {
-                return true;
-            }
-            Tools.TestTool_ForceCreepJoiner(ref request, ref iscreeped);
-
+            Tools.TestTool_ForceCreepJoiner(ref request);
             if (Current.ProgramState != ProgramState.Playing)
             {
                 return true;

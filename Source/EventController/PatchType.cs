@@ -4,6 +4,7 @@
     {
         Prefix,
         Postfix,
-        Both
+        Both,
+        Transpiler
     }
 }
