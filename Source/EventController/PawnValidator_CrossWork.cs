@@ -175,20 +175,6 @@ namespace EventController_rQP
                 request.KindDef = pawnKind == null ? PawnKindDefOf.Refugee : pawnKind;
             }
         }
-        public static Pawn TryGenerateCreepJoiner(ref PawnGenerationRequest request)
-        {
-            Pawn pawn = null;
-            try
-            {
-                pawn = TryGenerateCreepJoinerInner(ref request);
-            }
-            catch { }
-            return pawn;
-        }
-        private static Pawn TryGenerateCreepJoinerInner(ref PawnGenerationRequest request)
-        {
-            throw new NotImplementedException();
-        }
         public static void CreepJoinerValidator(ref Pawn pawn)
         {
             pawn.creepjoiner = new Pawn_CreepJoinerTracker(pawn);
