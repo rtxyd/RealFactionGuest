@@ -6,7 +6,7 @@ using Verse;
 namespace EventController_rQP
 {
 
-    public class EventController_Work
+    public static class EventController_Work
     {
         public static bool isTrader = false;
         public static bool isCarrier = false;
@@ -20,6 +20,7 @@ namespace EventController_rQP
         public static bool isBackstoryFix = false;
         public static bool isQuestGetPawn = false;
         public static bool isDamageUntilDowned = false;
+        public static bool isCreepJoinerValidatorOn = false;
 
         public static string ongoingEvent = null;
 
@@ -206,9 +207,9 @@ namespace EventController_rQP
         {
             isBackstoryFix = false;
         }
-        public static bool Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
+        public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
-            return PawnValidator_CrossWork.RequestValidator(ref request);
+            PawnValidator_CrossWork.RequestValidator(ref request);
         }
         public static void Prefix_DamageUntilDowned()
         {
@@ -234,8 +235,12 @@ namespace EventController_rQP
         {
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
-        public static void Postfix_PawnGenerator_GeneratePawn()
+        public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
+            if (isCreepJoinerValidatorOn)
+            {
+                PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
+            }
             EventController_Reset();
         }
         public static void EventController_Reset()
@@ -253,6 +258,7 @@ namespace EventController_rQP
             isBackstoryFix = false;
             isQuestGetPawn = false;
             isDamageUntilDowned = false;
+            isCreepJoinerValidatorOn = false;
         }
     }
 }

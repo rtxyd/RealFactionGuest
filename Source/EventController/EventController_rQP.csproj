@@ -45,8 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChoosePawn.cs" />
-    <Compile Include="Dialogue_Changelog.cs" />
-    <Compile Include="ChangelogDef.cs" />
+    <Compile Include="MethodType.cs" />
+    <Compile Include="ParamValue.cs" />
+    <Compile Include="PatchType.cs" />
     <Compile Include="RealFactionGuest.cs" />
     <Compile Include="RealFactionGuestSettings.cs" />
     <Compile Include="FactionFilter_Work.cs" />

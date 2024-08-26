@@ -7,17 +7,8 @@ namespace EventController_rQP
 {
     public static class Tools
     {
-        public struct MethodType
-        {
-            public BindingFlags a;
-            public BindingFlags b;
-        }
         public static MethodType methodType = new MethodType() { a = BindingFlags.NonPublic | BindingFlags.Instance, b = BindingFlags.NonPublic | BindingFlags.Static };
-        public enum ParamValue
-        {
-            a,
-            b
-        }
+
         public static MethodInfo MethodTool(ParamValue paramValue, Type type, string methodName)
         {
             BindingFlags Instance;
@@ -40,26 +31,19 @@ namespace EventController_rQP
 
             return char.ToUpper(str[0]) + str.Substring(1);
         }
-        public enum Patches
-        {
-            Prefix,
-            Postfix,
-            Both
-        }
-        // 扩展方法
-        public static void PatchTool(this MethodInfo methodInfo, Type type, ref Harmony harmony, string variableName, Patches p)
+        public static void PatchTool(this MethodInfo methodInfo, Type type, ref Harmony harmony, string variableName, PatchType p)
         {
             MethodInfo prefix = null;
             MethodInfo postfix = null;
             switch (p)
             {
-                case Patches.Prefix:
+                case PatchType.Prefix:
                     prefix = type.GetMethod("Prefix_" + variableName);
                     break;
-                case Patches.Postfix:
+                case PatchType.Postfix:
                     postfix = type.GetMethod("Postfix_" + variableName);
                     break;
-                case Patches.Both:
+                case PatchType.Both:
                     prefix = type.GetMethod("Prefix_" + variableName);
                     postfix = type.GetMethod("Postfix_" + variableName);
                     break;

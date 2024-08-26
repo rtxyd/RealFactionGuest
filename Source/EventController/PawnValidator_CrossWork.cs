@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.QuestGen;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +9,7 @@ using Verse;
 namespace EventController_rQP
 {
     //working in process maybe?
-    public class PawnValidator_CrossWork
+    public static class PawnValidator_CrossWork
     {
         public static PawnGenerationRequest PostProcessRequest(PawnGenerationRequest request)
         {
@@ -26,35 +27,37 @@ namespace EventController_rQP
         {
             return EventController_Work.GetValidFactions_RPC();
         }
-        public static bool RequestValidator(ref PawnGenerationRequest request)
+        public static void RequestValidator(ref PawnGenerationRequest request)
         {
-            if (EventController_Work.isRefugeePodCrash
-                || request.KindDef.defName == "Mincho_SpaceRefugee"
+            if (EventController_Work.isRefugeePodCrash)
+            {
+                request.AllowDowned = true;
+            }
+            if (request.KindDef.defName == "Mincho_SpaceRefugee"
                 || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
             {
                 request.AllowDowned = true;
-                return true;
+                return;
             }
             if (request.KindDef.defName == "RatkinPriest")
             {
                 request.MustBeCapableOfViolence = false;
-                return true;
+                return;
             }
             if (RealFactionGuestSettings.creepJoinerValidator && request.KindDef is CreepJoinerFormKindDef && !request.IsCreepJoiner)
             {
                 if (RealFactionGuestSettings.creepJoinerGenerateNoLimit)
                 {
                     request.IsCreepJoiner = true;
-                    TryGenerateCreepJoiner(ref request);
-                    return false;
+                    EventController_Work.isCreepJoinerValidatorOn = true;
+                    return;
                 }
                 else
                 {
                     ValidateRequestKindDef(ref request);
-                    return true;
+                    return;
                 }
             }
-            return true;
         }
         public static bool IsNotFromVanilla()
         {
@@ -112,11 +115,11 @@ namespace EventController_rQP
             };
             if ((pawnKind.requiredWorkTags & WorkTags.Violent) != 0 || (adulthood?.requiredWorkTags & WorkTags.Violent) != 0 || (childhood?.requiredWorkTags & WorkTags.Violent) != 0)
             {
-                var categoryFilter = pawnKind.backstoryFilters != null ? pawnKind.backstoryFilters.RandomElementByWeightWithFallback((BackstoryCategoryFilter c) => c.commonality, fallback): fallback;
+                var categoryFilter = pawnKind.backstoryFilters != null ? pawnKind.backstoryFilters.RandomElementByWeightWithFallback((BackstoryCategoryFilter c) => c.commonality, fallback) : fallback;
                 IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && categoryFilter.Matches(bs));
                 var result = (from bs in source.ToList()
-                 where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
-                 select bs).RandomElement();
+                              where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
+                              select bs).RandomElement();
                 if (slot == BackstorySlot.Childhood)
                 {
                     pawn.story.Childhood = result;
@@ -172,13 +175,24 @@ namespace EventController_rQP
                 request.KindDef = pawnKind == null ? PawnKindDefOf.Refugee : pawnKind;
             }
         }
-        public static void TryGenerateCreepJoiner(ref PawnGenerationRequest request)
+        public static Pawn TryGenerateCreepJoiner(ref PawnGenerationRequest request)
         {
+            Pawn pawn = null;
             try
             {
-                CreepJoinerUtility.GenerateAndSpawn(QuestGen_Get.GetMap(), request.KindDef.combatPower);
+                pawn = TryGenerateCreepJoinerInner(ref request);
             }
             catch { }
+            return pawn;
+        }
+        private static Pawn TryGenerateCreepJoinerInner(ref PawnGenerationRequest request)
+        {
+            throw new NotImplementedException();
+        }
+        public static void CreepJoinerValidator(ref Pawn pawn)
+        {
+            pawn.creepjoiner = new Pawn_CreepJoinerTracker(pawn);
+            CreepJoinerUtility.GetCreepjoinerSpecifics(QuestGen_Get.GetMap(), ref pawn.creepjoiner.form, ref pawn.creepjoiner.benefit, ref pawn.creepjoiner.downside, ref pawn.creepjoiner.aggressive, ref pawn.creepjoiner.rejection);
         }
     }
 }
