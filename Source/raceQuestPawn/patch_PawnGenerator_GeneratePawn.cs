@@ -17,7 +17,6 @@ public class patch_PawnGenerator_GeneratePawn
     {
         try
         {
-            Tools.TestTool_ForceCreepJoiner(ref request);
             if (Current.ProgramState != ProgramState.Playing)
             {
                 return true;
@@ -61,6 +60,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return true;
             }
 
+            new TestTool().TestTool_ForceCreepJoiner(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             bool flag = true;

@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -251,69 +252,59 @@ namespace EventController_rQP
         {
             var codes = instructions.ToList();
             List<CodeInstruction> codes1 = new List<CodeInstruction>();
-            var methodinfo = AccessTools.Method(typeof(StorytellerUtility), nameof(StorytellerUtility.DefaultThreatPointsNow), new System.Type[] { typeof(IIncidentTarget) });
-            var labelTrue = new Label();
-            var labelFalse = new Label();
+            var methodinfo = AccessTools.Method(typeof(StorytellerUtility), nameof(StorytellerUtility.DefaultThreatPointsNow), new System.Type[] { typeof(Map) });
+            //var dm = new DynamicMethod("Replacer_1", typeof(void), new Type[] { typeof(Map) });
+            TmpLabel labelFalse = new TmpLabel();
+            TmpLabel labelTrue = new TmpLabel();
             var replacer = new List<CodeInstruction>()
             {
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Brfalse_S, labelFalse),
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call, methodinfo),
-                new CodeInstruction(OpCodes.Br_S,labelTrue),
-                new CodeInstruction(OpCodes.Nop) { labels = new List<Label> { labelFalse } },
+                //new CodeInstruction(OpCodes.Stloc_0),
+                new CodeInstruction(OpCodes.Br_S, labelTrue),
+                new CodeInstruction(OpCodes.Nop, labelFalse),
                 new CodeInstruction(OpCodes.Ldc_R4, 100f),
-                new CodeInstruction(OpCodes.Nop) { labels = new List<Label> { labelTrue } },
-                new CodeInstruction(OpCodes.Stloc_0)
+                new CodeInstruction(OpCodes.Stloc_0),
+                new CodeInstruction(OpCodes.Nop, labelTrue),
             };
-            return MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
+            //var replacer2 = new OpCode, object>
+            //{
+            //    (OpCodes.Ldarg_0, ),
+            //    (OpCodes.Brfalse_S, labelFalse),
+            //    new CodeInstruction(OpCodes.Ldarg_0),
+            //    new CodeInstruction(OpCodes.Call, methodinfo),
+            //    new CodeInstruction(OpCodes.Stloc_0),
+            //    new CodeInstruction(OpCodes.Br_S,labelTrue),
+            //    new CodeInstruction(OpCodes.Ldc_R4, 100f){ labels = new List<Label> { labelFalse } },
+            //    new CodeInstruction(OpCodes.Stloc_0),
+            //    new CodeInstruction(OpCodes.Nop){ labels = new List<Label> { labelTrue } },
+            //};
+
+            //var replacer = new List<CodeInstruction>()
+            //{
+            //    new CodeInstruction(OpCodes.Ldarg_0),
+            //    new CodeInstruction(OpCodes.Ldnull),
+            //    new CodeInstruction(OpCodes.Ceq),
+            //    new CodeInstruction(OpCodes.Brfalse_S, labelFalse),
+            //    new CodeInstruction(OpCodes.Ldarg_0),
+            //    new CodeInstruction(OpCodes.Call, methodinfo),
+            //    new CodeInstruction(OpCodes.Stloc_0),
+            //    new CodeInstruction(OpCodes.Br_S,labelTrue),
+            //    new CodeInstruction(OpCodes.Ldc_R4, 100f){ labels = new List<Label> { labelFalse } },
+            //    new CodeInstruction(OpCodes.Stloc_0),
+            //    new CodeInstruction(OpCodes.Nop){ labels = new List<Label> { labelTrue } },
+            //};
+            return Tools.MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
 
         }
-        public static IEnumerable<CodeInstruction> MethodReplacer(List<CodeInstruction> codes, MethodInfo method, OpCode start, OpCode end, List<CodeInstruction> replacer)
+
+        public static Label Generator(List<CodeInstruction> replacer)
         {
-            var codelineMethod = 0;
-            for (int i = 1; i < codes.Count; i++)
-            {
-                if (codes[i].Calls(method))
-                {
-                    codelineMethod = i;
-                    break;
-                }
-            }
-            if (codelineMethod == 0)
-            {
-                return null;
-            }
-            var startLine = 0;
-            var endLine = 0;
-            for (int i = codelineMethod; i >= 0; i--)
-            {
-                if (codes[i].opcode == start)
-                {
-                    startLine = i;
-                    break;
-                }
-            }
-            for (int i = codelineMethod; i < codes.Count; i++)
-            {
-                if (codes[i].opcode == end)
-                {
-                    endLine = i;
-                    break;
-                }
-            }
-            var codes1 = new List<CodeInstruction>();
-            for (int i = 0; i < startLine; i++)
-            {
-                codes1.Add(codes[i]);
-            }
-            codes1.AddRange(replacer);
-            for (int i = endLine; i < codes.Count; i++)
-            {
-                codes1.Add(codes[i]);
-            }
-            return codes1.AsEnumerable();
+            throw new NotImplementedException();
         }
+
         public static void EventController_Reset()
         {
             //Log.Message(GetOngoingEvent());
