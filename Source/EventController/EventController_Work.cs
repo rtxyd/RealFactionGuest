@@ -254,50 +254,80 @@ namespace EventController_rQP
             List<CodeInstruction> codes1 = new List<CodeInstruction>();
             var methodinfo = AccessTools.Method(typeof(StorytellerUtility), nameof(StorytellerUtility.DefaultThreatPointsNow), new System.Type[] { typeof(Map) });
             //var dm = new DynamicMethod("Replacer_1", typeof(void), new Type[] { typeof(Map) });
-            TmpLabel labelFalse = new TmpLabel();
-            TmpLabel labelTrue = new TmpLabel();
+
+            //var allIndex = codes.GetOpcodesLabelDictionary_S();
+            //new TmpLabel(allIndex, out List<Label> labels_a, 1);
+
+            TmpLabel labelTrue = new TmpLabel(1);
+
             var replacer = new List<CodeInstruction>()
             {
                 new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Brfalse_S, labelFalse),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Call, methodinfo),
+                new CodeInstruction(OpCodes.Ldind_Ref),
+                //new CodeInstruction(OpCodes.Ldarg_S, aggress),
+
+                new CodeInstruction(OpCodes.Brtrue_S, labelTrue),
+
+                //new CodeInstruction(OpCodes.Brtrue_S, labels_a.Last()),
+
                 //new CodeInstruction(OpCodes.Stloc_0),
-                new CodeInstruction(OpCodes.Br_S, labelTrue),
-                new CodeInstruction(OpCodes.Nop, labelFalse),
-                new CodeInstruction(OpCodes.Ldc_R4, 100f),
+                //new CodeInstruction(OpCodes.Br_S, labelTrue),
+                //new CodeInstruction(OpCodes.Nop, labelFalse),
+                //new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldc_R4, 35f),
                 new CodeInstruction(OpCodes.Stloc_0),
-                new CodeInstruction(OpCodes.Nop, labelTrue),
+                //new CodeInstruction(OpCodes.Nop, new List<TmpLabel>() {labelTrue }),
+
+                new CodeInstruction(OpCodes.Nop, labelTrue ),
+
+                //new CodeInstruction(OpCodes.Nop, labels.Last() ),
+
+                new CodeInstruction(OpCodes.Ldarg_0),
+
+                //new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>() { labels_a.Last() } },
+
+                new CodeInstruction(OpCodes.Call, methodinfo),
+                new CodeInstruction(OpCodes.Stloc_0)
             };
-            //var replacer2 = new OpCode, object>
-            //{
-            //    (OpCodes.Ldarg_0, ),
-            //    (OpCodes.Brfalse_S, labelFalse),
-            //    new CodeInstruction(OpCodes.Ldarg_0),
-            //    new CodeInstruction(OpCodes.Call, methodinfo),
-            //    new CodeInstruction(OpCodes.Stloc_0),
-            //    new CodeInstruction(OpCodes.Br_S,labelTrue),
-            //    new CodeInstruction(OpCodes.Ldc_R4, 100f){ labels = new List<Label> { labelFalse } },
-            //    new CodeInstruction(OpCodes.Stloc_0),
-            //    new CodeInstruction(OpCodes.Nop){ labels = new List<Label> { labelTrue } },
-            //};
+            var replacer2 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Nop),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldind_Ref),
+                //new CodeInstruction(OpCodes.Ldarg_S, aggress),
 
-            //var replacer = new List<CodeInstruction>()
-            //{
-            //    new CodeInstruction(OpCodes.Ldarg_0),
-            //    new CodeInstruction(OpCodes.Ldnull),
-            //    new CodeInstruction(OpCodes.Ceq),
-            //    new CodeInstruction(OpCodes.Brfalse_S, labelFalse),
-            //    new CodeInstruction(OpCodes.Ldarg_0),
-            //    new CodeInstruction(OpCodes.Call, methodinfo),
-            //    new CodeInstruction(OpCodes.Stloc_0),
-            //    new CodeInstruction(OpCodes.Br_S,labelTrue),
-            //    new CodeInstruction(OpCodes.Ldc_R4, 100f){ labels = new List<Label> { labelFalse } },
-            //    new CodeInstruction(OpCodes.Stloc_0),
-            //    new CodeInstruction(OpCodes.Nop){ labels = new List<Label> { labelTrue } },
-            //};
-            return Tools.MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
+                new CodeInstruction(OpCodes.Brtrue_S, new Label()),
 
+                //new CodeInstruction(OpCodes.Brtrue_S, labels_a.Last()),
+
+                //new CodeInstruction(OpCodes.Stloc_0),
+                //new CodeInstruction(OpCodes.Br_S, labelTrue),
+                //new CodeInstruction(OpCodes.Nop, labelFalse),
+                //new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldc_R4, 35f),
+                new CodeInstruction(OpCodes.Stloc_0),
+                //new CodeInstruction(OpCodes.Nop, new List<TmpLabel>() {labelTrue }),
+
+                //new CodeInstruction(OpCodes.Nop, labelTrue ),
+
+                //new CodeInstruction(OpCodes.Nop, labels.Last() ),
+
+                new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>() { new Label()} },
+
+                //new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>() { labels_a.Last() } },
+
+                new CodeInstruction(OpCodes.Call, methodinfo),
+                new CodeInstruction(OpCodes.Stloc_0)
+            };
+            codes1.AddRange(codes);
+            //codes1.RemoveRange(0, 4);
+            replacer2.AddRange(codes1);
+            var codes3 = Tools.MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
+            //var codes3 = Tools.MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
+            //return Tools.MethodReplacer_S(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer, labels_a, 1, allIndex);
+            //return codes3;
+
+            return codes3.AsEnumerable();
         }
 
         public static Label Generator(List<CodeInstruction> replacer)

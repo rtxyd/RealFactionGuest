@@ -1,38 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EventController_rQP
 {
-    internal class TmpLabel
+    public class TmpLabel
     {
-        //private string _label
-        //{
-        //    get
-        //    {
-        //        return _label;
-        //    }
-        //    set
-        //    {
-        //        _label = value;
-        //    }
-        //}
-        //private int _value
-        //{
-        //    get
-        //    {
-        //        return _value;
-        //    }
-        //    set
-        //    {
-        //        _value = value;
-        //    }
-        //}
-        
-        public TmpLabel(/*string label, int value = -1*/) 
-        { /*_label = label; _value = value; */}
-        //TmpLabel(int _value) => new TmpLabel() { _label = string.Empty, _value = _value };
+        public int index { get; set; }
+
+        public TmpLabel()
+        {
+            index = default;
+        }
+        public TmpLabel(int index)
+        {
+            this.index = index;
+        }
+        public TmpLabel(int index, out List<Label> labels, int extraLabelNum = 0)
+        {
+            labels = new List<Label>();
+            if (index + extraLabelNum < 0)
+            {
+                return;
+            }
+            else
+            {
+                DynamicMethod d = new DynamicMethod("temp", typeof(void), null);
+                var il = d.GetILGenerator();
+                for (int i = 0; i < index + extraLabelNum + 1; i++)
+                {
+                    labels.Add(il.DefineLabel());
+                }
+            }
+        }
     }
 }

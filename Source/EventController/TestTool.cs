@@ -43,15 +43,7 @@ namespace EventController_rQP
             //var method = AccessTools.Method(typeof(StorytellerUtility), nameof(StorytellerUtility.DefaultThreatPointsNow), new System.Type[] { typeof(IIncidentTarget) });
             //float combatPoints = (float)method.Invoke(null, new object[] { map });
             //float combatPoints = map == null ? 100f : StorytellerUtility.DefaultThreatPointsNow(map);
-            float combatPoints;
-            if (map == null)
-            {
-                combatPoints = 100f;
-            }
-            else
-            {
-                combatPoints = StorytellerUtility.DefaultThreatPointsNow(map);
-            }
+            float combatPoints = map == null ? 100f : StorytellerUtility.DefaultThreatPointsNow(map);
             if (form == null)
             {
                 form = DefDatabase<CreepJoinerFormKindDef>.AllDefsListForReading.RandomElementByWeight((CreepJoinerFormKindDef x) => x.Weight);
