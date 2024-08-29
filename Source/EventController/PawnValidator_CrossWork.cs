@@ -48,7 +48,6 @@ namespace EventController_rQP
                 if (RealFactionGuestSettings.creepJoinerGenerateNoLimit)
                 {
                     request.IsCreepJoiner = true;
-                    EventController_Work.isCreepJoinerValidatorOn = true;
                     return;
                 }
                 else

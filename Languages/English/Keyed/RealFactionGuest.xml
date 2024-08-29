@@ -20,8 +20,10 @@
 	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner sometimes does't generate in correct incident, this may cause error, this option try to fix it.</RFGSetting_creepJoinerValidator_Tips>
 
 	<RFGSetting_creepJoinerGenerateNoLimit>[DEBUG/TEST]CreepJoinerGenerateNoLimit</RFGSetting_creepJoinerGenerateNoLimit>
-	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner may generate in any incident, this could cause issue.</RFGSetting_creepJoinerGenerateNoLimit_Tips>
+	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner may generate in any incident, this option is now on for default.</RFGSetting_creepJoinerGenerateNoLimit_Tips>
 
 	<RFGSetting_dontChangeBodyTypeOfRabbie>[Biotech]DontChangeBodyTypeOfRabbie</RFGSetting_dontChangeBodyTypeOfRabbie>
 	<RFGSetting_dontChangeBodyTypeOfRabbie_Tips>Rabbie The Moonrabbit race is somehow not compatible with biotech DLC, when they generated with xenotype. Their body will missing texture.</RFGSetting_dontChangeBodyTypeOfRabbie_Tips>
+
+	<RFGSetting_debugOption>Debug/Advance options</RFGSetting_debugOption>
 </LanguageData>

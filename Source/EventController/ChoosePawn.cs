@@ -44,7 +44,7 @@ namespace EventController_rQP
                 where t.kind.RaceProps != null
                 && t.kind.RaceProps.Humanlike
                 && t.kind.RaceProps.intelligence == Intelligence.Humanlike
-                && (RealFactionGuestSettings.creepJoinerGenerateNoLimit ? t.kind is not CreepJoinerFormKindDef : true)
+                //&& (RealFactionGuestSettings.creepJoinerGenerateNoLimit ? t.kind is not CreepJoinerFormKindDef : true)
                 select t.kind;
             var pawnToChoose =
                 from p in pawnKinds

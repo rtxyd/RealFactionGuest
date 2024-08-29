@@ -25,7 +25,11 @@ namespace EventController_rQP
             Scribe_Values.Look(ref factionLeaderValidator, "factionLeaderValidator", true);
             Scribe_Values.Look(ref damageUntilDownedBypassShield, "damageUntilDownedBypassShield", true);
             Scribe_Values.Look(ref creepJoinerValidator, "creepJoinerValidator", true);
-            Scribe_Values.Look(ref creepJoinerGenerateNoLimit, "creepJoinerGenerateNoLimit", false);
+            Scribe_Values.Look(ref creepJoinerGenerateNoLimit, "creepJoinerGenerateNoLimit", true);
+            if (!creepJoinerValidator)
+            {
+                creepJoinerGenerateNoLimit = false;
+            }
             if (ModsConfig.BiotechActive && ModsConfig.IsActive("RunneLatki.RabbieRaceMod"))
             {
                 Scribe_Values.Look(ref dontAdjustXenotypeForRabbie, "dontChangeBodyTypeOfRabbie", true);

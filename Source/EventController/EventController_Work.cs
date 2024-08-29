@@ -1,10 +1,8 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using Verse;
 
@@ -25,7 +23,6 @@ namespace EventController_rQP
         public static bool isBackstoryFix = false;
         public static bool isQuestGetPawn = false;
         public static bool isDamageUntilDowned = false;
-        public static bool isCreepJoinerValidatorOn = false;
 
         public static string ongoingEvent = null;
 
@@ -242,99 +239,32 @@ namespace EventController_rQP
         }
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
-            if (__result.kindDef is CreepJoinerFormKindDef)
+            if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef)
             {
                 PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
             }
             EventController_Reset();
         }
-        public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();
-            List<CodeInstruction> codes1 = new List<CodeInstruction>();
             var methodinfo = AccessTools.Method(typeof(StorytellerUtility), nameof(StorytellerUtility.DefaultThreatPointsNow), new System.Type[] { typeof(Map) });
-            //var dm = new DynamicMethod("Replacer_1", typeof(void), new Type[] { typeof(Map) });
-
-            //var allIndex = codes.GetOpcodesLabelDictionary_S();
-            //new TmpLabel(allIndex, out List<Label> labels_a, 1);
-
-            TmpLabel labelTrue = new TmpLabel(1);
-
-            var replacer = new List<CodeInstruction>()
+            MethodReplaceHelper replaceHelper = new MethodReplaceHelper();
+            Label labelTrue = iLGenerator.DefineLabel();
+            var replacer = new List<CodeInstruction>
             {
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Ldind_Ref),
-                //new CodeInstruction(OpCodes.Ldarg_S, aggress),
-
                 new CodeInstruction(OpCodes.Brtrue_S, labelTrue),
-
-                //new CodeInstruction(OpCodes.Brtrue_S, labels_a.Last()),
-
-                //new CodeInstruction(OpCodes.Stloc_0),
-                //new CodeInstruction(OpCodes.Br_S, labelTrue),
-                //new CodeInstruction(OpCodes.Nop, labelFalse),
-                //new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Ldc_R4, 35f),
                 new CodeInstruction(OpCodes.Stloc_0),
-                //new CodeInstruction(OpCodes.Nop, new List<TmpLabel>() {labelTrue }),
-
-                new CodeInstruction(OpCodes.Nop, labelTrue ),
-
-                //new CodeInstruction(OpCodes.Nop, labels.Last() ),
-
-                new CodeInstruction(OpCodes.Ldarg_0),
-
-                //new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>() { labels_a.Last() } },
-
+                new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>(){ labelTrue } },
                 new CodeInstruction(OpCodes.Call, methodinfo),
                 new CodeInstruction(OpCodes.Stloc_0)
             };
-            var replacer2 = new List<CodeInstruction>()
-            {
-                new CodeInstruction(OpCodes.Nop),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Ldind_Ref),
-                //new CodeInstruction(OpCodes.Ldarg_S, aggress),
-
-                new CodeInstruction(OpCodes.Brtrue_S, new Label()),
-
-                //new CodeInstruction(OpCodes.Brtrue_S, labels_a.Last()),
-
-                //new CodeInstruction(OpCodes.Stloc_0),
-                //new CodeInstruction(OpCodes.Br_S, labelTrue),
-                //new CodeInstruction(OpCodes.Nop, labelFalse),
-                //new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Ldc_R4, 35f),
-                new CodeInstruction(OpCodes.Stloc_0),
-                //new CodeInstruction(OpCodes.Nop, new List<TmpLabel>() {labelTrue }),
-
-                //new CodeInstruction(OpCodes.Nop, labelTrue ),
-
-                //new CodeInstruction(OpCodes.Nop, labels.Last() ),
-
-                new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>() { new Label()} },
-
-                //new CodeInstruction(OpCodes.Ldarg_0){ labels = new List<Label>() { labels_a.Last() } },
-
-                new CodeInstruction(OpCodes.Call, methodinfo),
-                new CodeInstruction(OpCodes.Stloc_0)
-            };
-            codes1.AddRange(codes);
-            //codes1.RemoveRange(0, 4);
-            replacer2.AddRange(codes1);
-            var codes3 = Tools.MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
-            //var codes3 = Tools.MethodReplacer(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer);
-            //return Tools.MethodReplacer_S(codes, methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, replacer, labels_a, 1, allIndex);
-            //return codes3;
-
-            return codes3.AsEnumerable();
+            replaceHelper.SetAllNeededProperties(methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, codes, replacer, true);
+            return replaceHelper.Run().AsEnumerable();
         }
-
-        public static Label Generator(List<CodeInstruction> replacer)
-        {
-            throw new NotImplementedException();
-        }
-
         public static void EventController_Reset()
         {
             //Log.Message(GetOngoingEvent());
@@ -350,7 +280,6 @@ namespace EventController_rQP
             isBackstoryFix = false;
             isQuestGetPawn = false;
             isDamageUntilDowned = false;
-            isCreepJoinerValidatorOn = false;
         }
     }
 }

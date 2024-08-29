@@ -13,18 +13,18 @@ public class patch_PawnGenerator_GeneratePawn
     private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
         AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
     [HarmonyPriority(1000)]
-    public static bool Prefix(ref PawnGenerationRequest request)
+    public static void Prefix(ref PawnGenerationRequest request)
     {
         try
         {
             if (Current.ProgramState != ProgramState.Playing)
             {
-                return true;
+                return;
             }
 
             if (request.Faction == null)
             {
-                return true;
+                return;
             }
 
             if (request.KindDef.RaceProps != null && (
@@ -32,35 +32,35 @@ public class patch_PawnGenerator_GeneratePawn
                     || request.KindDef.RaceProps.intelligence <= Intelligence.ToolUser
                 ))
             {
-                return true;
+                return;
             }
 
             if (request.Faction is { IsPlayer: true })
             {
-                return true;
+                return;
             }
 
             if (request.KindDef == PawnKindDefOf.WildMan)
             {
-                return true;
+                return;
             }
 
             if (request.IsCreepJoiner)
             {
-                return true;
+                return;
             }
 
             if (EventController_Work.isTraderGroup)
             {
-                return true;
+                return;
             }
 
             if (PawnValidator_CrossWork.IsNotFromVanilla())
             {
-                return true;
+                return;
             }
 
-            new TestTool().TestTool_ForceCreepJoiner(ref request);
+            //new TestTool().TestTool_ForceCreepJoiner(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             bool flag = true;
@@ -101,13 +101,13 @@ public class patch_PawnGenerator_GeneratePawn
 
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
 
-                return true;
+                return;
             }
         }
         catch
         {
             // ignored
         }
-        return true;
+        return;
     }
 }
