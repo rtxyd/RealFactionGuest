@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.QuestGen;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace EventController_rQP
         }
         public static bool IsNotBypassShield(ref bool absorbed)
         {
-            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
+            if (EventController_Work.ongoingEvent is OngoingEvent.DamageUntilDowned)
             {
                 absorbed = false;
                 return false;
@@ -101,7 +102,14 @@ namespace EventController_rQP
                 IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && categoryFilter.Matches(bs));
                 var result = (from bs in source.ToList()
                               where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
-                              select bs).RandomElement();
+                              select bs).RandomElement() ??
+                              ((Func<BackstoryDef>)(() =>
+                              {
+                                  IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && fallback.Matches(bs));
+                                  return (from bs in source.ToList()
+                                          where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
+                                          select bs).RandomElement();
+                              }))();
                 if (slot == BackstorySlot.Childhood)
                 {
                     pawn.story.Childhood = result;
