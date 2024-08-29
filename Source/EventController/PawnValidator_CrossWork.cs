@@ -10,25 +10,9 @@ namespace EventController_rQP
     //working in process maybe?
     public static class PawnValidator_CrossWork
     {
-        public static PawnGenerationRequest PostProcessRequest(PawnGenerationRequest request)
-        {
-            if (EventController_Work.isRefugeePodCrash)
-            {
-                request.AllowDowned = true;
-            }
-            return request;
-        }
-        public static bool IsRefugeePodCrash(int f = 8)
-        {
-            return EventController_Work.IsRefugeePodCrash(f);
-        }
-        public static HashSet<FactionDef> GetValidFactions_RPC()
-        {
-            return EventController_Work.GetValidFactions_RPC();
-        }
         public static void RequestValidator(ref PawnGenerationRequest request)
         {
-            if (EventController_Work.isRefugeePodCrash)
+            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
             {
                 request.AllowDowned = true;
             }
@@ -62,12 +46,12 @@ namespace EventController_rQP
             var stack = new StackTrace(0, true);
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
-            return ns == "Verse" || ns == "RimWorld" || EventController_Work.isRefugeePodCrash
+            return ns == "Verse" || ns == "RimWorld" || EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash
                 || (from frame1 in stack.GetFrames() select frame1.GetMethod().DeclaringType).Any(t => t == typeof(IncidentWorker)) ? false : true;
         }
         public static bool IsNotBypassShield(ref bool absorbed)
         {
-            if (EventController_Work.isDamageUntilDowned)
+            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
             {
                 absorbed = false;
                 return false;

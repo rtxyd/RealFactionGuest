@@ -11,7 +11,7 @@
 	<RFGSetting_ToggleFrequency>Toggle how often the pawn will trigger the faction-bounded generation: </RFGSetting_ToggleFrequency>
 
 	<RFGSetting_damageUntilDownedBypassShield>[DEBUG]DamageUntilDownedBypassShield</RFGSetting_damageUntilDownedBypassShield>
-	<RFGSetting_damageUntilDownedBypassShield_Tips>Default: On. This is an option to avoid method DamageUntilDowned trigger damage absorption when pawn is not on the map (Some other mods didn't make a null check)</RFGSetting_damageUntilDownedBypassShield_Tips>
+	<RFGSetting_damageUntilDownedBypassShield_Tips>Default: On. This is an option to avoid method DamageUntilDowned trigger damage absorption when pawn is not on the map (Some other mods didn't make a null check, result to pawn not spawn normally)</RFGSetting_damageUntilDownedBypassShield_Tips>
 
 	<RFGSetting_factionLeaderValidator>[DEBUG]FactionLeaderValidator</RFGSetting_factionLeaderValidator>
 	<RFGSetting_factionLeaderValidator_Tips>This is an option to avoid FactionLeader that requirs certain type of skill, but they are disabled by backstories/traits/genes from some other mods.</RFGSetting_factionLeaderValidator_Tips>

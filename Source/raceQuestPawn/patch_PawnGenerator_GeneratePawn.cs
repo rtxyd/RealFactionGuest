@@ -50,7 +50,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (EventController_Work.isTraderGroup)
+            if (EventController_Work.ongoingEvent is OngoingEvent.TraderGroup)
             {
                 return;
             }

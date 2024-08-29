@@ -47,6 +47,7 @@
     <Compile Include="ChoosePawn.cs" />
     <Compile Include="MethodReplacerTools.cs" />
     <Compile Include="MethodType.cs" />
+    <Compile Include="OngoingEvent.cs" />
     <Compile Include="ParamValue.cs" />
     <Compile Include="PatchType.cs" />
     <Compile Include="RealFactionGuest.cs" />

@@ -1,7 +1,5 @@
-﻿using RimWorld;
-using RimWorld.QuestGen;
+﻿using RimWorld.QuestGen;
 using System;
-using System.Collections.Generic;
 using Verse;
 
 namespace EventController_rQP
