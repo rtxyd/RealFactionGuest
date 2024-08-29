@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using Verse;
@@ -11,20 +10,7 @@ namespace EventController_rQP
 
     public static class EventController_Work
     {
-        public static bool isTrader = false;
-        public static bool isCarrier = false;
-        public static bool isGuard = false;
-        public static bool isEnd = false;
-        public static bool isTraderGroup = false;
-        public static bool isRefugeePodCrash = false;
-        public static bool isInternalGen = false;
-        public static bool isCreepJoiner = false;
-        public static bool isFactionFix = false;
-        public static bool isBackstoryFix = false;
-        public static bool isQuestGetPawn = false;
-        public static bool isDamageUntilDowned = false;
-
-        public static string ongoingEvent = null;
+        public static OngoingEvent ongoingEvent = OngoingEvent.None;
 
         public static float GetHumanlikeModFactionNum()
         {
@@ -54,176 +40,119 @@ namespace EventController_rQP
         {
             return FactionFilter_Init.factionPawnBodies;
         }
-
-        public static bool IsCreepJoiner(ref PawnGenerationRequest request)
-        {
-            if (request.KindDef is CreepJoinerFormKindDef)
-            {
-                isCreepJoiner = true;
-            }
-            else
-            {
-                isCreepJoiner = false;
-            }
-            return isCreepJoiner;
-        }
-
-        public static bool IsRefugeePodCrash(int f = 8)
-        {
-            var stack = new StackTrace(0, true);
-            if (stack.FrameCount < 18)
-            {
-                return isRefugeePodCrash = false;
-            }
-            var frame = stack.GetFrame(f);
-            if (frame.GetMethod().DeclaringType == typeof(RimWorld.QuestGen.QuestNode_Root_RefugeePodCrash))
-            {
-                isRefugeePodCrash = true;
-            }
-            else
-            {
-                isRefugeePodCrash = false;
-            }
-            return isRefugeePodCrash;
-        }
         public static string GetOngoingEvent()
         {
-            if (isTrader)
+            switch (ongoingEvent)
             {
-                ongoingEvent = "trader";
+                case OngoingEvent.Trader: return "Trader";
+                case OngoingEvent.Carrier: return "Carrier";
+                case OngoingEvent.Guard: return "Guard";
+                case OngoingEvent.RefugeePodCrash: return "RefugeePodCrash";
+                case OngoingEvent.InternalGen: return "GenerateOrRedressPawnInternal";
+                case OngoingEvent.GenerateNewPawnInternal: return "GenerateNewPawnInternal";
+                case OngoingEvent.CreepJoiner: return "CreepJoiner";
+                case OngoingEvent.FactionFix: return "FactionFix";
+                case OngoingEvent.BackstoryFix: return "BackstoryFix";
+                case OngoingEvent.QuestGetPawn: return "QuestGetPawn";
+                case OngoingEvent.DamageUntilDowned: return "DamageUntilDowned";
+                case OngoingEvent.FactionLeaderValidator: return "FactionLeaderValidator";
+                case OngoingEvent.RequestValidator: return "RequestValidator";
+                case OngoingEvent.AdjustXenotype: return "AdjustXenotype";
+                case OngoingEvent.PreApplyDamage: return "PreApplyDamage";
+                case OngoingEvent.PreApplyDamagePawn: return "PreApplyDamagePawn";
+                case OngoingEvent.PreApplyDamageThing: return "PreApplyDamageThing";
+                case OngoingEvent.CreepJoinerValidator: return "CreepJoinerValidator";
             }
-            else if (isCarrier)
-            {
-                ongoingEvent = "carriers";
-            }
-            else if (isGuard)
-            {
-                ongoingEvent = "guards";
-            }
-            else if (isRefugeePodCrash)
-            {
-                ongoingEvent = "RefugeePodCrash";
-            }
-            else if (isInternalGen)
-            {
-                ongoingEvent = "GenerateNewPawnInternal";
-            }
-            else if (isCreepJoiner)
-            {
-                ongoingEvent = "CreepJoiner";
-            }
-            else if (isFactionFix)
-            {
-                ongoingEvent = "isFactionFix";
-            }
-            else if (isBackstoryFix)
-            {
-                ongoingEvent = "isBackstoryFix";
-            }
-            else
-            {
-                ongoingEvent = "options or unknown";
-            }
-            return ongoingEvent;
+            return "NULL";
         }
         public static void Prefix_PawnGroupKindWorker_GenerateTrader()
         {
-            isTrader = true;
+            ongoingEvent = OngoingEvent.Trader;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateTrader()
         {
-            isTrader = false;
+            ongoingEvent = OngoingEvent.None;
         }
 
         public static void Prefix_PawnGroupKindWorker_GenerateCarriers()
         {
-            isCarrier = true;
+            ongoingEvent = OngoingEvent.Carrier;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateCarriers()
         {
-            isCarrier = false;
+            ongoingEvent = OngoingEvent.None;
         }
 
         public static void Prefix_PawnGroupKindWorker_GenerateGuards()
         {
-            isGuard = true;
+            ongoingEvent = OngoingEvent.Guard;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateGuards()
         {
-            isGuard = false;
-        }
-
-        public static void Prefix_PawnGroupKindWorker_GeneratePawns()
-        {
-            isEnd = true;
-        }
-
-        public static void Postfix_PawnGroupKindWorker_GeneratePawns()
-        {
-            isEnd = true;
+            ongoingEvent = OngoingEvent.None;
         }
         public static void Prefix_PawnGroupKindWorker_Trader_GeneratePawns()
         {
-            isTraderGroup = true;
+            ongoingEvent = OngoingEvent.TraderGroup;
         }
 
         public static void Postfix_PawnGroupKindWorker_Trader_GeneratePawns()
         {
-            isTraderGroup = false;
+            ongoingEvent = OngoingEvent.None;
         }
         public static void Prefix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
         {
-            isRefugeePodCrash = true;
+            ongoingEvent = OngoingEvent.RefugeePodCrash;
         }
 
         public static void Postfix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
         {
-            isRefugeePodCrash = false;
+            ongoingEvent = OngoingEvent.None;
         }
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
-            FactionFilter_Work.FactionFilter(ref pawn, ref factionType);
-            isFactionFix = true;
+            try { ongoingEvent = OngoingEvent.FactionFix; FactionFilter_Work.FactionFilter(ref pawn, ref factionType); }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvent = OngoingEvent.None; }
         }
         public static void Postfix_GiveAppropriateBioAndNameTo()
         {
-            isFactionFix = false;
+            ongoingEvent = OngoingEvent.None;
         }
         public static void Prefix_GenerateSkills(ref Pawn pawn)
         {
-            if (RealFactionGuestSettings.factionLeaderValidator)
-            {
-                PawnValidator_CrossWork.FactionLeaderValidator(ref pawn);
-            }
+            try { ongoingEvent = OngoingEvent.FactionLeaderValidator; if (RealFactionGuestSettings.factionLeaderValidator) PawnValidator_CrossWork.FactionLeaderValidator(ref pawn); }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvent = OngoingEvent.None; }
         }
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
-            FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
-            isBackstoryFix = true;
+            try { ongoingEvent = OngoingEvent.BackstoryFix; FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories); }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvent = OngoingEvent.None; }
         }
 
         public static void Postfix_FillBackstorySlotShuffled()
         {
-            isBackstoryFix = false;
+            ongoingEvent = OngoingEvent.None;
         }
         public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
-            PawnValidator_CrossWork.RequestValidator(ref request);
+            try { ongoingEvent = OngoingEvent.InternalGen; PawnValidator_CrossWork.RequestValidator(ref request); }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvent = OngoingEvent.None; }
         }
         public static void Prefix_DamageUntilDowned()
         {
-            isDamageUntilDowned = true;
+            ongoingEvent = OngoingEvent.DamageUntilDowned;
         }
         public static void Postfix_DamageUntilDowned()
         {
-            isDamageUntilDowned = false;
+            ongoingEvent = OngoingEvent.None;
         }
         public static bool Prefix_AdjustXenotypeForFactionlessPawn(ref Pawn pawn)
         {
-            return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true;
+            try { ongoingEvent = OngoingEvent.AdjustXenotype; return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvent = OngoingEvent.None; return true; }
         }
         public static bool Prefix_PreApplyDamage(ref bool absorbed)
         {
@@ -239,10 +168,8 @@ namespace EventController_rQP
         }
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
-            if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef)
-            {
-                PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
-            }
+            try { ongoingEvent = OngoingEvent.CreepJoinerValidator; if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result); }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvent = OngoingEvent.None; }
             EventController_Reset();
         }
         public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
@@ -268,18 +195,7 @@ namespace EventController_rQP
         public static void EventController_Reset()
         {
             //Log.Message(GetOngoingEvent());
-            isTrader = false;
-            isCarrier = false;
-            isGuard = false;
-            isEnd = false;
-            isTraderGroup = false;
-            isRefugeePodCrash = false;
-            isInternalGen = false;
-            isCreepJoiner = false;
-            isFactionFix = false;
-            isBackstoryFix = false;
-            isQuestGetPawn = false;
-            isDamageUntilDowned = false;
+            ongoingEvent = OngoingEvent.None;
         }
     }
 }

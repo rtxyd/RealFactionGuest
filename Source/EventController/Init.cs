@@ -17,7 +17,7 @@ namespace EventController_rQP
             Type eventWorker = typeof(EventController_Work);
             Dictionary<Tuple<string, PatchType>, MethodInfo> pairs = new Dictionary<Tuple<string, PatchType>, MethodInfo>()
             {
-                { new Tuple<string, PatchType>("PawnGroupKindWorker_GeneratePawns",             PatchType.Both),       AccessTools.Method(typeof(PawnGroupKindWorker), nameof(PawnGroupKindWorker.GeneratePawns), new Type[] { typeof(PawnGroupMakerParms), typeof(PawnGroupMaker), typeof(bool) }) },
+                //{ new Tuple<string, PatchType>("PawnGroupKindWorker_GeneratePawns",             PatchType.Both),       AccessTools.Method(typeof(PawnGroupKindWorker), nameof(PawnGroupKindWorker.GeneratePawns), new Type[] { typeof(PawnGroupMakerParms), typeof(PawnGroupMaker), typeof(bool) }) },
                 { new Tuple<string, PatchType>("PawnGroupKindWorker_Trader_GeneratePawns",      PatchType.Both),       Tools.MethodTool(ParamValue.a, typeof(PawnGroupKindWorker_Trader), "GeneratePawns") },
                 { new Tuple<string, PatchType>("PawnGroupKindWorker_GenerateTrader",            PatchType.Both),       Tools.MethodTool(ParamValue.a, typeof(PawnGroupKindWorker_Trader), "GenerateTrader")},
                 { new Tuple<string, PatchType>("PawnGroupKindWorker_GenerateCarriers",          PatchType.Both),       Tools.MethodTool(ParamValue.a, typeof(PawnGroupKindWorker_Trader), "GenerateCarriers")},
