@@ -5,9 +5,8 @@ using Verse;
 
 namespace EventController_rQP
 {
-    internal class FactionFilter_Work
+    internal static class FactionFilter_Work
     {
-
         public static void FactionFilter(ref Pawn pawn, ref FactionDef factionType)
         {
             var race = pawn.kindDef.race;

@@ -1,11 +1,10 @@
-﻿using EventController_rQP;
-using RimWorld;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace raceQuestPawn
+namespace EventController_rQP
 {
     public static class ChoosePawn
     {
@@ -37,7 +36,7 @@ namespace raceQuestPawn
             }
             return p;
         }
-        public static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, bool flag = true)
+        private static PawnKindDef ChoosePawnKindInner(IEnumerable<List<PawnGenOption>> options, float combatPower, bool flag = true)
         {
             var pawnKinds =
                 from p in options
@@ -45,6 +44,7 @@ namespace raceQuestPawn
                 where t.kind.RaceProps != null
                 && t.kind.RaceProps.Humanlike
                 && t.kind.RaceProps.intelligence == Intelligence.Humanlike
+                //&& (RealFactionGuestSettings.creepJoinerGenerateNoLimit ? t.kind is not CreepJoinerFormKindDef : true)
                 select t.kind;
             var pawnToChoose =
                 from p in pawnKinds
@@ -73,7 +73,7 @@ namespace raceQuestPawn
             }
             return null;
         }
-        public static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower)
+        private static PawnKindDef ChoosePawnKindInner_A(IEnumerable<PawnKindDef> pawnKinds, float combatPower)
         {
             IEnumerable<PawnKindDef> pawnEquals = [];
             var combatPowerArray =

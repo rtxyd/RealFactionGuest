@@ -12,7 +12,6 @@ public class patch_PawnGenerator_GeneratePawn
 {
     private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
         AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
-
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
@@ -56,11 +55,12 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (!PawnValidator_CrossWork.IsFromVanilla())
+            if (PawnValidator_CrossWork.IsNotFromVanilla())
             {
                 return;
             }
 
+            //new TestTool().TestTool_ForceCreepJoiner(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             bool flag = true;
@@ -108,5 +108,6 @@ public class patch_PawnGenerator_GeneratePawn
         {
             // ignored
         }
+        return;
     }
 }

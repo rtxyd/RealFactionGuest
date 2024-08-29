@@ -1,12 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <!--ModSetting-->
-  <RFGSetting_StrictQuestGuest>Strict quest guest</RFGSetting_StrictQuestGuest>
-  <RFGSetting_StrictQuestGuest_Tips>Quest guest will generate the very pawn race of its faction as much as possible. Turn off this will sometimes generate pawns not the very pawnkind of quest faction. (not xenotype, only main race concerned)</RFGSetting_StrictQuestGuest_Tips>
+	<!--ModSetting-->
+	<RFGSetting_StrictQuestGuest>Strict quest guest</RFGSetting_StrictQuestGuest>
+	<RFGSetting_StrictQuestGuest_Tips>Quest guest will generate the very pawn race of its faction as much as possible. Turn off this will sometimes generate pawns not the very pawnkind of quest faction. (not xenotype, only main race concerned)</RFGSetting_StrictQuestGuest_Tips>
 
-  <RFGSetting_AlternateFactions>Alternate factions which has same pawn race</RFGSetting_AlternateFactions>
-  <RFGSetting_AlternateFactions_Tips>Factions with same pawn race will be alternative when generate pawns.(not xenotype, only main race concerned)</RFGSetting_AlternateFactions_Tips>
+	<RFGSetting_AlternateFactions>Alternate factions which has same pawn race</RFGSetting_AlternateFactions>
+	<RFGSetting_AlternateFactions_Tips>Factions with same pawn race will be alternative when generate pawns.(not xenotype, only main race concerned)</RFGSetting_AlternateFactions_Tips>
 
-  <RFGSetting_ToggleFrequency_Tips>Main function, if you want sometimes pawnkinds in other factions can generate in every faction (), you can lower this value, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)</RFGSetting_ToggleFrequency_Tips>
-  <RFGSetting_ToggleFrequency>Toggle how often the pawn will trigger the faction-bounded generation: </RFGSetting_ToggleFrequency>
+	<RFGSetting_ToggleFrequency_Tips>Main function, if you want sometimes pawnkinds in other factions can generate in every faction (), you can lower this value, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)</RFGSetting_ToggleFrequency_Tips>
+	<RFGSetting_ToggleFrequency>Toggle how often the pawn will trigger the faction-bounded generation: </RFGSetting_ToggleFrequency>
+
+	<RFGSetting_damageUntilDownedBypassShield>[DEBUG]DamageUntilDownedBypassShield</RFGSetting_damageUntilDownedBypassShield>
+	<RFGSetting_damageUntilDownedBypassShield_Tips>Default: On. This is an option to avoid method DamageUntilDowned trigger damage absorption when pawn is not on the map (Some other mods didn't make a null check)</RFGSetting_damageUntilDownedBypassShield_Tips>
+
+	<RFGSetting_factionLeaderValidator>[DEBUG]FactionLeaderValidator</RFGSetting_factionLeaderValidator>
+	<RFGSetting_factionLeaderValidator_Tips>This is an option to avoid FactionLeader that requirs certain type of skill, but they are disabled by backstories/traits/genes from some other mods.</RFGSetting_factionLeaderValidator_Tips>
+
+	<RFGSetting_creepJoinerValidator>[DEBUG]CreepJoinerValidator</RFGSetting_creepJoinerValidator>
+	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner sometimes does't generate in correct incident, this may cause error, this option try to fix it.</RFGSetting_creepJoinerValidator_Tips>
+
+	<RFGSetting_creepJoinerGenerateNoLimit>[DEBUG/TEST]CreepJoinerGenerateNoLimit</RFGSetting_creepJoinerGenerateNoLimit>
+	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner may generate in any incident, this option is now on for default.</RFGSetting_creepJoinerGenerateNoLimit_Tips>
+
+	<RFGSetting_dontChangeBodyTypeOfRabbie>[Biotech]DontChangeBodyTypeOfRabbie</RFGSetting_dontChangeBodyTypeOfRabbie>
+	<RFGSetting_dontChangeBodyTypeOfRabbie_Tips>Rabbie The Moonrabbit race is somehow not compatible with biotech DLC, when they generated with xenotype. Their body will missing texture.</RFGSetting_dontChangeBodyTypeOfRabbie_Tips>
+
+	<RFGSetting_debugOption>Debug/Advance options</RFGSetting_debugOption>
 </LanguageData>
