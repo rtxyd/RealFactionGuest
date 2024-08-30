@@ -68,12 +68,21 @@ namespace EventController_rQP
                 case OngoingEvent.PreApplyDamagePawn: return "PreApplyDamagePawn";
                 case OngoingEvent.PreApplyDamageThing: return "PreApplyDamageThing";
                 case OngoingEvent.CreepJoinerValidator: return "CreepJoinerValidator";
+                default:
+                    var list = new List<OngoingEvent>();
+                    foreach (OngoingEvent item in Enum.GetValues(typeof(OngoingEvent)))
+                    {
+                        if ((ongoingEvents & item) != 0)
+                        {
+                            list.Add(item);
+                        }
+                    }
+                    return string.Join(Environment.NewLine, list);
             }
-            return "NULL";
         }
         public static void Prefix_PawnGroupKindWorker_GenerateTrader()
         {
-            ongoingEvents &= OngoingEvent.Trader;
+            ongoingEvents |= OngoingEvent.Trader;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateTrader()
@@ -83,7 +92,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GenerateCarriers()
         {
-            ongoingEvents &= OngoingEvent.Carrier;
+            ongoingEvents |= OngoingEvent.Carrier;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateCarriers()
@@ -93,7 +102,7 @@ namespace EventController_rQP
 
         public static void Prefix_PawnGroupKindWorker_GenerateGuards()
         {
-            ongoingEvents &= OngoingEvent.Guard;
+            ongoingEvents |= OngoingEvent.Guard;
         }
 
         public static void Postfix_PawnGroupKindWorker_GenerateGuards()
@@ -102,7 +111,7 @@ namespace EventController_rQP
         }
         public static void Prefix_PawnGroupKindWorker_Trader_GeneratePawns()
         {
-            ongoingEvents &= OngoingEvent.TraderGroup;
+            ongoingEvents |= OngoingEvent.TraderGroup;
         }
 
         public static void Postfix_PawnGroupKindWorker_Trader_GeneratePawns()
@@ -111,7 +120,7 @@ namespace EventController_rQP
         }
         public static void Prefix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
         {
-            ongoingEvents &= OngoingEvent.RefugeePodCrash;
+            ongoingEvents |= OngoingEvent.RefugeePodCrash;
         }
 
         public static void Postfix_QuestNode_Root_RefugeePodCrash_GeneratePawn()
@@ -120,7 +129,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
-            try { ongoingEvents &= OngoingEvent.FactionFix; FactionFilter_Work.FactionFilter(ref pawn, ref factionType); }
+            try { ongoingEvents |= OngoingEvent.FactionFix; FactionFilter_Work.FactionFilter(ref pawn, ref factionType); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionFix; }
         }
         public static void Postfix_GiveAppropriateBioAndNameTo()
@@ -129,12 +138,12 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateSkills(ref Pawn pawn)
         {
-            try { ongoingEvents &= OngoingEvent.FactionLeaderValidator; if (RealFactionGuestSettings.factionLeaderValidator) PawnValidator_CrossWork.FactionLeaderValidator(ref pawn); }
+            try { ongoingEvents |= OngoingEvent.FactionLeaderValidator; if (RealFactionGuestSettings.factionLeaderValidator) PawnValidator_CrossWork.FactionLeaderValidator(ref pawn); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionLeaderValidator; }
         }
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
-            try { ongoingEvents &= OngoingEvent.BackstoryFix; FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories); }
+            try { ongoingEvents |= OngoingEvent.BackstoryFix; FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
         }
 
@@ -144,12 +153,12 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
-            try { ongoingEvents &= OngoingEvent.InternalGen; PawnValidator_CrossWork.RequestValidator(ref request); }
+            try { ongoingEvents |= OngoingEvent.InternalGen; PawnValidator_CrossWork.RequestValidator(ref request); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.InternalGen; }
         }
         public static void Prefix_DamageUntilDowned()
         {
-            ongoingEvents &= OngoingEvent.DamageUntilDowned;
+            ongoingEvents |= OngoingEvent.DamageUntilDowned;
         }
         public static void Postfix_DamageUntilDowned()
         {
@@ -157,7 +166,7 @@ namespace EventController_rQP
         }
         public static bool Prefix_AdjustXenotypeForFactionlessPawn(ref Pawn pawn)
         {
-            try { ongoingEvents &= OngoingEvent.AdjustXenotype; return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true; }
+            try { ongoingEvents |= OngoingEvent.AdjustXenotype; return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true; }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.AdjustXenotype; return true; }
         }
         public static bool Prefix_PreApplyDamage(ref bool absorbed)
@@ -174,7 +183,7 @@ namespace EventController_rQP
         }
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
-            try { ongoingEvents &= OngoingEvent.CreepJoinerValidator; if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result); }
+            try { ongoingEvents |= OngoingEvent.CreepJoinerValidator; if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
             EventController_Reset();
         }

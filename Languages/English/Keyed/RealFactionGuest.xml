@@ -17,10 +17,10 @@
 	<RFGSetting_factionLeaderValidator_Tips>This is an option to avoid FactionLeader that requirs certain type of skill, but they are disabled by backstories/traits/genes from some other mods.</RFGSetting_factionLeaderValidator_Tips>
 
 	<RFGSetting_creepJoinerValidator>[DEBUG]CreepJoinerValidator</RFGSetting_creepJoinerValidator>
-	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner sometimes does't generate in correct incident, this may cause error, this option try to fix it.</RFGSetting_creepJoinerValidator_Tips>
+	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner sometimes does't generate in correct incident, this may cause error, this option make them can correctly generate in these incidents.</RFGSetting_creepJoinerValidator_Tips>
 
 	<RFGSetting_creepJoinerGenerateNoLimit>[DEBUG/TEST]CreepJoinerGenerateNoLimit</RFGSetting_creepJoinerGenerateNoLimit>
-	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner may generate in any incident, this option is now on for default.</RFGSetting_creepJoinerGenerateNoLimit_Tips>
+	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner [may] generate in any incident(if it's in the generation list of this faction), this option is now on for default.</RFGSetting_creepJoinerGenerateNoLimit_Tips>
 
 	<RFGSetting_dontAdjustXenotypeForRabbie>[Biotech]DontChangeBodyTypeOfRabbie</RFGSetting_dontAdjustXenotypeForRabbie>
 	<RFGSetting_dontAdjustXenotypeForRabbie_Tips>Rabbie The Moonrabbit race is somehow not compatible with biotech DLC, when they generated with xenotype. Their body will missing texture.</RFGSetting_dontAdjustXenotypeForRabbie_Tips>
