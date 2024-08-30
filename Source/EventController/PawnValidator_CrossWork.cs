@@ -1,6 +1,5 @@
 ﻿using RimWorld;
 using RimWorld.QuestGen;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,10 +12,6 @@ namespace EventController_rQP
     {
         public static void RequestValidator(ref PawnGenerationRequest request)
         {
-            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
-            {
-                request.AllowDowned = true;
-            }
             if (request.KindDef.defName == "Mincho_SpaceRefugee"
                 || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
             {
@@ -41,18 +36,26 @@ namespace EventController_rQP
                     return;
                 }
             }
+            if ((EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0)
+            {
+                request.AllowDowned = true;
+            }
         }
         public static bool IsNotFromVanilla()
         {
             var stack = new StackTrace(0, true);
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
-            return ns == "Verse" || ns == "RimWorld" || EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash
+            return ns == "Verse" || ns == "RimWorld" || (EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0
                 || (from frame1 in stack.GetFrames() select frame1.GetMethod().DeclaringType).Any(t => t == typeof(IncidentWorker)) ? false : true;
         }
         public static bool IsNotBypassShield(ref bool absorbed)
         {
-            if (EventController_Work.ongoingEvent is OngoingEvent.DamageUntilDowned)
+<<<<<<< Updated upstream
+            if ((EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0)
+=======
+            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
+>>>>>>> Stashed changes
             {
                 absorbed = false;
                 return false;
@@ -102,14 +105,7 @@ namespace EventController_rQP
                 IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && categoryFilter.Matches(bs));
                 var result = (from bs in source.ToList()
                               where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
-                              select bs).RandomElement() ??
-                              ((Func<BackstoryDef>)(() =>
-                              {
-                                  IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && fallback.Matches(bs));
-                                  return (from bs in source.ToList()
-                                          where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
-                                          select bs).RandomElement();
-                              }))();
+                              select bs).RandomElement();
                 if (slot == BackstorySlot.Childhood)
                 {
                     pawn.story.Childhood = result;

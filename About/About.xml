@@ -50,5 +50,9 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2263021260
 --------------------Mlie's original description--------------------
 See url above.
   </description>
-  <modVersion IgnoreIfNoMatchingField="True">1.5.14a</modVersion>
+<<<<<<< Updated upstream
+  <modVersion IgnoreIfNoMatchingField="True">1.5.14b</modVersion>
+=======
+  <modVersion IgnoreIfNoMatchingField="True">1.5.13a</modVersion>
+>>>>>>> Stashed changes
 </ModMetaData>

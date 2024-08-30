@@ -1,8 +1,14 @@
 # Changelog for RealFactionGuest
 
+<<<<<<< Updated upstream
+Foked 1.5.14b flags
+
 Forked 1.5.14a Small fix.
 
 Forked 1.5.14 Try fix refugee with shield issue/faction leader issue/Rabbie body missing/CreepJoiner .
+=======
+Forked 1.5.14 Try fix creepjoiner issue.
+>>>>>>> Stashed changes
 
 Forked 1.5.13a Try fix refugee with shield issue (this is not a fault of this mod). Restrict code.
 
