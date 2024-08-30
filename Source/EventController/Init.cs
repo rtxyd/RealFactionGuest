@@ -36,14 +36,11 @@ namespace EventController_rQP
                 { new Tuple<string, PatchType>("GetCreepjoinerSpecifics",                       PatchType.Transpiler), AccessTools.Method(typeof(CreepJoinerUtility), nameof(CreepJoinerUtility.GetCreepjoinerSpecifics))}
             };
             foreach (var item in pairs)
-                try
-                {
-                    var variableName = item.Key.Item1;
-                    var patches = item.Key.Item2;
-                    item.Value.PatchTool(eventWorker, ref harmony, variableName, patches);
-                }
-                catch (Exception ex)
-                { Log.Message("Patch Failed: " + $"*{item.Key.Item1}*".Colorize(UnityEngine.Color.blue) + "\n" + ex); }
+            {
+                var variableName = item.Key.Item1;
+                var patches = item.Key.Item2;
+                item.Value.PatchTool(eventWorker, ref harmony, variableName, patches);
+            }
             Log.Message("# Real Faction Guest Event Controller - Init Complete");
         }
     }

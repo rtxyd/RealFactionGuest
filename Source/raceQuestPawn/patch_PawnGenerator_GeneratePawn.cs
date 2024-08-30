@@ -2,6 +2,7 @@
 using HarmonyLib;
 using RimWorld;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace raceQuestPawn;
@@ -49,11 +50,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-<<<<<<< Updated upstream
-            if ((EventController_Work.ongoingEvents & OngoingEvent.TraderGroup) != 0)
-=======
-            if (EventController_Work.ongoingEvent - OngoingEvent.TraderGroup < 4)
->>>>>>> Stashed changes
+            if (EventController_Work.ongoingEvent is OngoingEvent.TraderGroup)
             {
                 return;
             }
@@ -76,7 +73,7 @@ public class patch_PawnGenerator_GeneratePawn
             {
                 var factionpawnraces = EventController_Work.GetFactionPawnRaces();
 
-                if (factionpawnraces.ContainsKey(faction))
+                if (factionpawnraces.Keys.Contains(faction))
                 {
                     default_filter = factionpawnraces[faction].Contains(kinddef.race);
                 }

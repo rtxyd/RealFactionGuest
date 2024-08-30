@@ -66,6 +66,11 @@ namespace EventController_rQP
                     harmony.Patch(methodInfo, prefix);
                     return;
                 }
+                if (postfix == null && prefix == null)
+                {
+                    Log.Error("Patch failed: " + $"*{variableName}*".Colorize(UnityEngine.Color.blue));
+                    return;
+                }
                 if (prefix == null && postfix != null)
                 {
                     harmony.Patch(methodInfo, null, postfix);

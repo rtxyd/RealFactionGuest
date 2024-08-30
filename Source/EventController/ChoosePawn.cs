@@ -12,7 +12,7 @@ namespace EventController_rQP
         {
 
             PawnKindDef p = null;
-            if ((EventController_Work.ongoingEvents & OngoingEvent.Trader) != 0)
+            if (EventController_Work.ongoingEvent is OngoingEvent.Trader)
             {
                 var traders = plans.Where(t => t.traders != null).Select(t => t.traders);
                 if (traders.Any())
@@ -21,7 +21,7 @@ namespace EventController_rQP
                 }
             }
             //carrier is skipped.
-            else if ((EventController_Work.ongoingEvents & OngoingEvent.Guard) != 0)
+            else if (EventController_Work.ongoingEvent is OngoingEvent.Guard)
             {
                 var guards = plans.Where(t => t.guards != null).Select(t => t.guards);
                 if (guards.Any())

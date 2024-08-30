@@ -32,11 +32,11 @@ namespace EventController_rQP
             }
             if (ModsConfig.BiotechActive && ModsConfig.IsActive("RunneLatki.RabbieRaceMod"))
             {
-                Scribe_Values.Look(ref dontAdjustXenotypeForRabbie, "dontAdjustXenotypeForRabbie", true);
+                Scribe_Values.Look(ref dontAdjustXenotypeForRabbie, "dontChangeBodyTypeOfRabbie", true);
             }
             else
             {
-                Scribe_Values.Look(ref dontAdjustXenotypeForRabbie, "dontAdjustXenotypeForRabbie", false);
+                Scribe_Values.Look(ref dontAdjustXenotypeForRabbie, "dontChangeBodyTypeOfRabbie", false);
             }
             Scribe_Values.Look(ref alternativeFaction, "alternativeFaction", false);
             Scribe_Values.Look(ref strictChance, "guestChance", 1.0f);
