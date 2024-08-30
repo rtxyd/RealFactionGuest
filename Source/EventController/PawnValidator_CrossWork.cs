@@ -12,10 +12,6 @@ namespace EventController_rQP
     {
         public static void RequestValidator(ref PawnGenerationRequest request)
         {
-            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
-            {
-                request.AllowDowned = true;
-            }
             if (request.KindDef.defName == "Mincho_SpaceRefugee"
                 || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
             {
@@ -40,18 +36,22 @@ namespace EventController_rQP
                     return;
                 }
             }
+            if ((EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0)
+            {
+                request.AllowDowned = true;
+            }
         }
         public static bool IsNotFromVanilla()
         {
             var stack = new StackTrace(0, true);
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
-            return ns == "Verse" || ns == "RimWorld" || EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash
+            return ns == "Verse" || ns == "RimWorld" || (EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0
                 || (from frame1 in stack.GetFrames() select frame1.GetMethod().DeclaringType).Any(t => t == typeof(IncidentWorker)) ? false : true;
         }
         public static bool IsNotBypassShield(ref bool absorbed)
         {
-            if (EventController_Work.ongoingEvent is OngoingEvent.RefugeePodCrash)
+            if ((EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0)
             {
                 absorbed = false;
                 return false;
