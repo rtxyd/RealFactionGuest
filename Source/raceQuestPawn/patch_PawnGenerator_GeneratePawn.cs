@@ -62,8 +62,6 @@ public class patch_PawnGenerator_GeneratePawn
             //new TestTool().TestTool_ForceCreepJoiner(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
-            bool flag = true;
-            bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
             var faction = request.Faction.def;
             var kinddef = request.KindDef;
 
@@ -77,6 +75,7 @@ public class patch_PawnGenerator_GeneratePawn
                     default_filter = factionpawnraces[faction].Contains(kinddef.race);
                 }
             }
+            bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
             bool strict = chance && default_filter;
             if (strict
                 && (request.Faction?.def.modContentPack != null
@@ -90,7 +89,7 @@ public class patch_PawnGenerator_GeneratePawn
 
                 if (faction.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(faction.pawnGroupMakers, combatPower, flag);
+                    p_make = ChoosePawn.ChoosePawnKind(faction.pawnGroupMakers, combatPower, true);
                 }
 
                 if (p_make != null)

@@ -47,12 +47,12 @@ namespace EventController_rQP
             var stack = new StackTrace(0, true);
             var frame = stack.GetFrame(3);
             var ns = frame.GetMethod().DeclaringType.Namespace;
-            return ns == "Verse" || ns == "RimWorld" || (EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0
-                || (from frame1 in stack.GetFrames() select frame1.GetMethod().DeclaringType).Any(t => t == typeof(IncidentWorker)) ? false : true;
+            return !(ns == "Verse" || ns == "RimWorld" || (EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0
+                || stack.GetFrames().Any(t => t.GetMethod().DeclaringType == typeof(IncidentWorker)));
         }
         public static bool IsNotBypassShield(ref bool absorbed)
         {
-            if ((EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0)
+            if ((EventController_Work.ongoingEvents & OngoingEvent.DamageUntilDowned) != 0)
             {
                 absorbed = false;
                 return false;
@@ -108,7 +108,7 @@ namespace EventController_rQP
                                   IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && fallback.Matches(bs));
                                   return (from bs in source.ToList()
                                           where bs.slot == slot && (bs.workDisables & WorkTags.Violent) == 0
-                              select bs).RandomElement();
+                                          select bs).RandomElement();
                               }))();
                 if (slot == BackstorySlot.Childhood)
                 {
