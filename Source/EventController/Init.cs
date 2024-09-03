@@ -30,6 +30,7 @@ namespace EventController_rQP
                 { new Tuple<string, PatchType>("DamageUntilDowned",                             PatchType.Both),       AccessTools.Method(typeof(HealthUtility), nameof(HealthUtility.DamageUntilDowned))},
                 { new Tuple<string, PatchType>("PreApplyDamage",                                PatchType.Both),       AccessTools.Method(typeof(Pawn_HealthTracker), nameof(Pawn_HealthTracker.PreApplyDamage))},
                 { new Tuple<string, PatchType>("PreApplyDamageThing",                           PatchType.Both),       AccessTools.Method(typeof(Thing), nameof(Thing.PreApplyDamage))},
+                { new Tuple<string, PatchType>("PreApplyDamageThingWithComps",                  PatchType.Both),       AccessTools.Method(typeof(ThingWithComps), nameof(ThingWithComps.PreApplyDamage))},
                 { new Tuple<string, PatchType>("PreApplyDamagePawn",                            PatchType.Both),       AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage))},
                 { new Tuple<string, PatchType>("AdjustXenotypeForFactionlessPawn",              PatchType.Prefix),     AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.AdjustXenotypeForFactionlessPawn))},
                 { new Tuple<string, PatchType>("PawnGenerator_GeneratePawn",                    PatchType.Postfix),    AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] {typeof(PawnGenerationRequest)})},

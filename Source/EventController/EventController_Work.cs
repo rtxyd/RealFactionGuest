@@ -169,6 +169,7 @@ namespace EventController_rQP
             try { ongoingEvents |= OngoingEvent.AdjustXenotype; return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true; }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.AdjustXenotype; return true; }
         }
+        #region DamageUntilDowned
         public static bool Prefix_PreApplyDamage(ref bool absorbed)
         {
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
@@ -177,10 +178,15 @@ namespace EventController_rQP
         {
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
+        public static bool Prefix_PreApplyDamageThingWithComps(ref bool absorbed)
+        {
+            return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
+        }
         public static bool Prefix_PreApplyDamagePawn(ref bool absorbed)
         {
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
+        #endregion
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
             try

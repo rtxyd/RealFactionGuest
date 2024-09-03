@@ -44,7 +44,7 @@ namespace EventController_rQP
         }
         public static void ResetToDefault()
         {
-            creepJoinerGenerateNoLimit = false;
+            creepJoinerGenerateNoLimit = true;
             creepJoinerValidator = true;
             strictQuestGuest = true;
             damageUntilDownedBypassShield = true;

@@ -48,20 +48,21 @@ namespace EventController_rQP
             {
                 return false;
             }
-            return StackCheckIsNotVanilla(6);
+            return StackCheckIsNotVanilla(3);
         }
         public static bool StackCheckIsNotVanilla(int maxFrames)
         {
-            var stackTrace = new StackTrace();
+            var stackTrace = new StackTrace(4, false);
             int frameCount = Math.Min(stackTrace.FrameCount, maxFrames);
-            var frame = stackTrace.GetFrame(3);
+            var frame = stackTrace.GetFrame(0);
             var method = frame.GetMethod();
             var ns = method.DeclaringType.Namespace;
+            //Tools.GetStackTraceInfo(stackTrace);
             if (ns == "Verse" || ns == "RimWorld")
             {
                 return false;
             }
-            for (int i = 4; i < frameCount; i++)
+            for (int i = 1; i < frameCount; i++)
             {
                 frame = stackTrace.GetFrame(i);
                 method = frame.GetMethod();

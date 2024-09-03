@@ -24,13 +24,6 @@ namespace EventController_rQP
             }
             return null;
         }
-        public static string ToUpperFirstLetter(this string str)
-        {
-            if (string.IsNullOrEmpty(str))
-                return str;
-
-            return char.ToUpper(str[0]) + str.Substring(1);
-        }
         public static void PatchTool(this MethodInfo methodInfo, Type type, ref Harmony harmony, string variableName, PatchType p)
         {
             MethodInfo prefix = null;
@@ -74,5 +67,12 @@ namespace EventController_rQP
                 harmony.Patch(methodInfo, prefix, postfix);
             }
         }
+#if DEBUG
+        public static void GetStackTraceInfo(StackTrace stack)
+        {
+            var frames = stack.GetFrames();
+            Log.Message(string.Join(Environment.NewLine,(IEnumerable<StackFrame>) frames));
+        }
+#endif
     }
 }
