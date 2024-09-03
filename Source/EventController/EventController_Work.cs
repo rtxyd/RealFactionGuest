@@ -183,7 +183,12 @@ namespace EventController_rQP
         }
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
-            try { ongoingEvents |= OngoingEvent.CreepJoinerValidator; if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result); }
+            try
+            {
+                ongoingEvents |= OngoingEvent.CreepJoinerValidator;
+                if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
+                /*Log.Message($"A : {__result.kindDef}");*/
+            }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
             EventController_Reset();
         }

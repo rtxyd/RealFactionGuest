@@ -44,11 +44,33 @@ namespace EventController_rQP
         }
         public static bool IsNotFromVanilla()
         {
-            var stack = new StackTrace(0, true);
-            var frame = stack.GetFrame(3);
-            var ns = frame.GetMethod().DeclaringType.Namespace;
-            return !(ns == "Verse" || ns == "RimWorld" || (EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0
-                || stack.GetFrames().Any(t => t.GetMethod().DeclaringType == typeof(IncidentWorker)));
+            if ((EventController_Work.ongoingEvents & OngoingEvent.RefugeePodCrash) != 0)
+            {
+                return false;
+            }
+            return StackCheckIsNotVanilla(6);
+        }
+        public static bool StackCheckIsNotVanilla(int maxFrames)
+        {
+            var stackTrace = new StackTrace();
+            int frameCount = Math.Min(stackTrace.FrameCount, maxFrames);
+            var frame = stackTrace.GetFrame(3);
+            var method = frame.GetMethod();
+            var ns = method.DeclaringType.Namespace;
+            if (ns == "Verse" || ns == "RimWorld")
+            {
+                return false;
+            }
+            for (int i = 4; i < frameCount; i++)
+            {
+                frame = stackTrace.GetFrame(i);
+                method = frame.GetMethod();
+                if (method.Name.Contains("IncidentWorker"))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public static bool IsNotBypassShield(ref bool absorbed)
         {

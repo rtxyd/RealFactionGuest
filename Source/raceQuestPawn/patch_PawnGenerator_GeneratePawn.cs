@@ -96,7 +96,7 @@ public class patch_PawnGenerator_GeneratePawn
                 {
                     request.KindDef = p_make;
                 }
-
+                //Log.Message($"A : {request.KindDef}");
                 //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
 
                 return;
