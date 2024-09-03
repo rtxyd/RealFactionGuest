@@ -1,5 +1,9 @@
 # Changelog for RealFactionGuest
 
+Foked 1.5.14d Switch to release build. Small change.
+
+Foked 1.5.14c flags fix
+
 Foked 1.5.14b flags
 
 Forked 1.5.14a Small fix.

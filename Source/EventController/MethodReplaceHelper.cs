@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using Verse;
 
 namespace EventController_rQP
 {
@@ -39,6 +41,10 @@ namespace EventController_rQP
             {
                 codes.GetOpcodesLabelDictionary(out Dictionary<Label, List<int>> labelsCodesIndex);
                 tail = codes.Tail(endLine, ref ILGenerator, labelsCodesIndex);
+            }
+            if (tail.Empty() || tail.Last().opcode != OpCodes.Ret)
+            {
+                return codes;
             }
             List<CodeInstruction> codes1 = new List<CodeInstruction>();
             codes1.AddRange(head);
