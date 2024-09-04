@@ -2,7 +2,10 @@
 using System;
 using System.Reflection;
 using Verse;
-
+#if DEBUG
+using System.Diagnostics;
+using System.Collections.Generic;
+#endif
 namespace EventController_rQP
 {
     public static class Tools

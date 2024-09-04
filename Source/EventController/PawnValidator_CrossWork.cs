@@ -58,7 +58,7 @@ namespace EventController_rQP
             var method = frame.GetMethod();
             var ns = method.DeclaringType.Namespace;
             //Tools.GetStackTraceInfo(stackTrace);
-            if (ns == "Verse" || ns == "RimWorld")
+            if (ns.StartsWith("Verse") || ns.StartsWith("RimWorld"))
             {
                 return false;
             }
