@@ -178,12 +178,22 @@ namespace EventController_rQP
         {
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
-        public static bool Prefix_PreApplyDamageThingWithComps(ref bool absorbed)
+        public static bool Prefix_PreApplyDamageThingWithComps(ThingWithComps __instance, ref bool absorbed)
         {
+            if (__instance.Map == null)
+            {
+                absorbed = false;
+                return false;
+            }
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
-        public static bool Prefix_PreApplyDamagePawn(ref bool absorbed)
+        public static bool Prefix_PreApplyDamagePawn(Pawn __instance, ref bool absorbed)
         {
+            if (__instance.Map == null)
+            {
+                absorbed = false;
+                return false;
+            }
             return RealFactionGuestSettings.damageUntilDownedBypassShield ? PawnValidator_CrossWork.IsNotBypassShield(ref absorbed) : true;
         }
         #endregion

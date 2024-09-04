@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.14g Add null check of pawn that not spawned on map.
+
 Forked 1.5.14f Fix DamageUntilDowned not bypassing armor. Flag fix 4.
 
 Forked 1.5.14e flag fix. (for compatibility)
