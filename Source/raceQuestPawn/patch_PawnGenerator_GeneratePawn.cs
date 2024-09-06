@@ -79,8 +79,8 @@ public class patch_PawnGenerator_GeneratePawn
             bool strict = chance && default_filter;
             if (strict
                 && (request.Faction?.def.modContentPack != null
-                && (!request.Faction.def.modContentPack.PackageId.Contains("ludeon")
-                || request.Faction.def.modContentPack.PackageId.Contains("rimworld.biotech")))
+                && (!request.Faction.def.modContentPack.PackageId.StartsWith("ludeon")
+                || request.Faction.def.modContentPack.PackageId.EndsWith("rimworld.biotech")))
                )
             {
                 // 팩션이 있을때

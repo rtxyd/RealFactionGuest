@@ -9,6 +9,7 @@ namespace EventController_rQP
     {
         public static void FactionFilter(ref Pawn pawn, ref FactionDef factionType)
         {
+            //Log.Message("O'FactionFilter: " + factionType + "、" + pawn.kindDef + "、" + pawn);
             var race = pawn.kindDef.race;
             var body = pawn.kindDef.RaceProps.body;
             if (pawn.Faction != null)
@@ -35,6 +36,7 @@ namespace EventController_rQP
             {
                 if (races.Contains(race) && bodies.Contains(body))
                 {
+                    //Log.Message("A'FactionFilter: " + factionType + "、" + race + "、" + body);
                     return;
                 }
             }
@@ -43,8 +45,12 @@ namespace EventController_rQP
             {
                 factionType = factions.RandomElement();
             }
+            else
+            {
+                factionType = EventController_Work.GetHumanlikeVanillaFactions().RandomElement();
+            }
+            //Log.Message("E'FactionFilter: " + factionType);
         }
-
         public static List<FactionDef> GetValidFactions(ThingDef race, BodyDef body)
         {
             var factionKinds = EventController_Work.GetFactionPawnKinds();
