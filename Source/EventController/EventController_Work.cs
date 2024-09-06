@@ -13,6 +13,10 @@ namespace EventController_rQP
     {
         public static OngoingEvent ongoingEvents = OngoingEvent.None;
 
+        public static HashSet<FactionDef> GetHumanlikeVanillaFactions()
+        {
+            return FactionFilter_Init.vanillaHumanlikeFactions;
+        }
         public static float GetHumanlikeModFactionNum()
         {
             return FactionFilter_Init.humanlikeModFactionNum;
@@ -127,6 +131,7 @@ namespace EventController_rQP
         {
             ongoingEvents &= ~OngoingEvent.RefugeePodCrash;
         }
+        [HarmonyPriority(200)]
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
             try { ongoingEvents |= OngoingEvent.FactionFix; FactionFilter_Work.FactionFilter(ref pawn, ref factionType); }
@@ -141,12 +146,12 @@ namespace EventController_rQP
             try { ongoingEvents |= OngoingEvent.FactionLeaderValidator; if (RealFactionGuestSettings.factionLeaderValidator) PawnValidator_CrossWork.FactionLeaderValidator(ref pawn); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionLeaderValidator; }
         }
+        [HarmonyPriority(1000)]
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             try { ongoingEvents |= OngoingEvent.BackstoryFix; FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
         }
-
         public static void Postfix_FillBackstorySlotShuffled()
         {
             ongoingEvents &= ~OngoingEvent.BackstoryFix;

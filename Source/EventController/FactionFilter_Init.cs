@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RimWorld.BaseGen;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -13,6 +14,7 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
+        public static readonly HashSet<FactionDef> vanillaHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> validFactions_RPC = new();
         public static readonly HashSet<string> fallbackBackstory = new();
         static FactionFilter_Init()
@@ -51,6 +53,7 @@ namespace EventController_rQP
                     foreach (var pawnGroupMaker in f.pawnGroupMakers)
                     {
                         var options = pawnGroupMaker.options;
+                        bool added = false;
                         foreach (var pawnGenOption in options)
                         {
                             if (flag)
@@ -62,12 +65,19 @@ namespace EventController_rQP
                                 thingDefs.Add(race);
                                 bodyDefs.Add(body);
                             }
-                            if (!flag2
-                                || pawnGenOption.kind.RaceProps == null
+                            if (pawnGenOption.kind.RaceProps == null
                                 || pawnGenOption.kind.RaceProps.intelligence == Intelligence.Humanlike
                                 || pawnGenOption.kind.RaceProps.Humanlike)
                             {
-                                isHumanlike = true;
+                                if (!flag2)
+                                {
+                                    isHumanlike = true;
+                                }
+                                else if (!added)
+                                {
+                                    added = true;
+                                    vanillaHumanlikeFactions.Add(f);
+                                }
                             }
                         }
                     }

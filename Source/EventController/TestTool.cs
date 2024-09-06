@@ -1,4 +1,5 @@
-﻿using RimWorld.QuestGen;
+﻿using RimWorld;
+using RimWorld.QuestGen;
 using System;
 using Verse;
 
@@ -16,6 +17,11 @@ namespace EventController_rQP
                     request.IsCreepJoiner = true;
                 }
             }
+        }
+        public void TestTool_ForceRefugee(ref PawnGenerationRequest request)
+        {
+            request.KindDef = PawnKindDefOf.Refugee;
+            request.Faction = null;
         }
         public void TestTool_ForceRabbie(ref PawnGenerationRequest request)
         {

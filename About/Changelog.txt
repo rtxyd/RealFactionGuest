@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.5.14i Fix a patch prioity issue with AdeptusMechanicus.(or pawn may take a mismatched backstory before the backstory fix)
+
 Forked 1.5.14h Fix mod in quest Hospitality not working.
 
 Forked 1.5.14g Add null check of pawn that not spawned on map.
