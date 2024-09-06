@@ -203,7 +203,7 @@ namespace EventController_rQP
             {
                 ongoingEvents |= OngoingEvent.CreepJoinerValidator;
                 if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
-                /*Log.Message($"A : {__result.kindDef}")*/;
+                /*Log.Message($"A : {__result.kindDef}");*/
             }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
             EventController_Reset();
