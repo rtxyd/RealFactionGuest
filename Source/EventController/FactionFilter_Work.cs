@@ -70,9 +70,9 @@ namespace EventController_rQP
             }
             return factions;
         }
-        public static void ExcludeStoryCategories(Pawn pawn, ref List<BackstoryCategoryFilter> backstoryCategories)
+        public static void ExcludeStoryCategories(Pawn pawn, ref List<BackstoryCategoryFilter> backstoryCategories, FactionDef factionType)
         {
-            if (pawn.Faction.def.defName.StartsWith("OG_Mili") && !pawn.def.defName.StartsWith("OG_"))
+            if (factionType.defName.StartsWith("OG_Mi") && !pawn.kindDef.defName.StartsWith("OG_"))
             {
                 for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
                 {
