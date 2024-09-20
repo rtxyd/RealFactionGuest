@@ -88,7 +88,7 @@ namespace EventController_rQP
         }
         public static void FactionLeaderValidator(ref Pawn pawn)
         {
-            if (pawn.kindDef.factionLeader && pawn.WorkTagIsDisabled(WorkTags.Violent))
+            if (pawn.WorkTagIsDisabled(WorkTags.Violent))
             {
                 if (pawn.story.Childhood != null && (pawn.story.Childhood.workDisables & WorkTags.Violent) != 0)
                 {
