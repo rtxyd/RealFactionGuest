@@ -104,6 +104,38 @@ namespace EventController_rQP
                 }
             }
         }
+        public static void WorkDisableValidator(ref Pawn pawn)
+        {
+            WorkTags workTags = WorkTags.None;
+            workTags |= pawn.story.Childhood.requiredWorkTags;
+            if (pawn.story.Adulthood != null)
+            {
+                workTags |= pawn.story.Adulthood.requiredWorkTags;
+            }
+            workTags |= pawn.kindDef.requiredWorkTags;
+            if ((workTags & pawn.story.DisabledWorkTagsBackstoryAndTraits) != 0)
+            {
+                var allTraits = pawn.story.traits.allTraits;
+                for (int i = 0; i < allTraits.Count; i++)
+                {
+                    if ((allTraits[i].def.disabledWorkTags & workTags) != 0)
+                    {
+                        pawn.story.traits.RemoveTrait(allTraits[i]);
+                    }
+                }
+            }
+            if ((workTags & pawn.genes.DisabledWorkTags) != 0)
+            {
+                var allGenes = pawn.genes.GenesListForReading;
+                for (int i = 0; i < allGenes.Count; i++)
+                {
+                    if ((allGenes[i].def.disabledWorkTags & workTags) != 0)
+                    {
+                        pawn.genes.RemoveGene(allGenes[i]);
+                    }
+                }
+            }
+        }
         public static void FactionLeaderValidatorInner(ref Pawn pawn, BackstorySlot slot)
         {
             var childhood = pawn.story.Childhood;

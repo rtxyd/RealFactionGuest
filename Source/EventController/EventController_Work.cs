@@ -143,7 +143,16 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateSkills(ref Pawn pawn)
         {
-            try { ongoingEvents |= OngoingEvent.FactionLeaderValidator; if (RealFactionGuestSettings.factionLeaderValidator) PawnValidator_CrossWork.FactionLeaderValidator(ref pawn); }
+            try
+            {
+                ongoingEvents |= OngoingEvent.FactionLeaderValidator;
+                if (RealFactionGuestSettings.factionLeaderValidator && pawn.kindDef.factionLeader)
+                {
+                    PawnValidator_CrossWork.FactionLeaderValidator(ref pawn);
+                    return;
+                }
+                //PawnValidator_CrossWork.WorkDisableValidator(ref pawn);
+            }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionLeaderValidator; }
         }
         [HarmonyPriority(1000)]
@@ -152,7 +161,7 @@ namespace EventController_rQP
             try
             {
                 ongoingEvents |= OngoingEvent.BackstoryFix;
-                FactionFilter_Work.ExcludeStoryCategories(pawn, ref backstoryCategories);
+                FactionFilter_Work.ExcludeStoryCategories(pawn, ref backstoryCategories, factionType);
                 FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
             }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
