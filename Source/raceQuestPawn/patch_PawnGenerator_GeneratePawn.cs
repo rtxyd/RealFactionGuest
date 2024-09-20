@@ -35,6 +35,11 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
+            if (request.KindDef.trader)
+            {
+                return;
+            }
+
             if (request.KindDef == PawnKindDefOf.WildMan)
             {
                 return;
