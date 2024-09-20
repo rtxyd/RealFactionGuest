@@ -89,7 +89,7 @@ namespace EventController_rQP
         }
         public static void IncludeStoryCategories(Pawn pawn, BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories)
         {
-            if (backstoryCategories.Where(f => f.categories == null).Any(f => f.categoriesChildhood == null || f.categoriesAdulthood == null))
+            if (backstoryCategories.Where(f => f.categories == null).Where(f => f.categoriesChildhood == null || f.categoriesAdulthood == null).Any())
             {
                 var fallback = EventController_Work.GetFallbackBackstroy();
                 for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
