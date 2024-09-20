@@ -1,5 +1,8 @@
 # Changelog for RealFactionGuest
 
+1.5.3 - Fix for pawngeneration for trade-caravans, thanks to rtxyd!
+
+
 1.5.2 - Fix for caravan-issues
 
 

@@ -7,11 +7,8 @@ using Verse;
 namespace raceQuestPawn;
 
 [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), typeof(PawnGenerationRequest))]
-public class patch_PawnGenerator_GeneratePawn
+public class PawnGenerator_GeneratePawn
 {
-    private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
-        AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
-
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
@@ -49,8 +46,6 @@ public class patch_PawnGenerator_GeneratePawn
             {
                 return;
             }
-
-            //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             float combatPower;
             FactionDef fd;
@@ -97,7 +92,6 @@ public class patch_PawnGenerator_GeneratePawn
                 if (p_make != null)
                 {
                     request.KindDef = p_make;
-                    //Log.Message($"A : {p_make.defName} : {p_make.combatPower}");
                     return;
                 }
             }
@@ -163,7 +157,6 @@ public class patch_PawnGenerator_GeneratePawn
                             continue;
                         }
 
-                        //Log.Message($"B0 : {fd.modContentPack.PackageId}");
                         allPawnKinds.Add(pawnGenOption.kind);
                     }
                 }
@@ -184,7 +177,6 @@ public class patch_PawnGenerator_GeneratePawn
             }
 
             request.KindDef = p_make;
-            //Log.Message($"B : {p_make.defName} : {p_make.combatPower}");
         }
         catch
         {

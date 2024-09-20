@@ -13,7 +13,6 @@ public static class Core
 
     static Core()
     {
-        //Log.Message("# Real Faction Guest - Init");
         new Harmony("raceQuestPawn").PatchAll(Assembly.GetExecutingAssembly());
 
         var humanlikeModFactionNum = 0;
@@ -53,7 +52,6 @@ public static class Core
                     continue;
                 }
 
-                //Log.Message($"{f.defName} : {f.label}");
                 humanlikeModFactionNum++;
             }
             catch
@@ -63,10 +61,5 @@ public static class Core
         }
 
         vanillaRatio = 3f / (humanlikeModFactionNum + 3f);
-
-        //Log.Message($"humanlikeModFactionNum : {humanlikeModFactionNum}");
-        //Log.Message($"vanillaRatio : {vanillaRatio}");
-
-        Log.Message("# Real Faction Guest - Initiation Complete");
     }
 }
