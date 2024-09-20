@@ -14,7 +14,9 @@ namespace EventController_rQP
             var body = pawn.kindDef.RaceProps.body;
             if (pawn.Faction != null)
             {
-                if (!pawn.Faction.IsPlayer && pawn.Faction.def == factionType || factionType.modContentPack.IsOfficialMod)
+                if (!pawn.Faction.IsPlayer && pawn.Faction.def == factionType
+                    || factionType.modContentPack.IsOfficialMod
+                    || factionType.isPlayer)
                 {
                     return;
                 }
@@ -67,6 +69,23 @@ namespace EventController_rQP
                 }
             }
             return factions;
+        }
+        public static void ExcludeStoryCategories(Pawn pawn, ref List<BackstoryCategoryFilter> backstoryCategories)
+        {
+            if (pawn.Faction.def.defName.StartsWith("OG_Mili") && !pawn.def.defName.StartsWith("OG_"))
+            {
+                for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
+                {
+                    if (backstoryCategories[i].categories == null)
+                    {
+                        return;
+                    }
+                    else if (backstoryCategories[i].categories.Contains("Imperium_Soldier"))
+                    {
+                        backstoryCategories[i].categories = new List<string>() { "Imperium_Standard" };
+                    }
+                }
+            }
         }
         public static void IncludeStoryCategories(Pawn pawn, BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories)
         {

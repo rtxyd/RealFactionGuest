@@ -1,7 +1,6 @@
 ﻿using EventController_rQP;
 using HarmonyLib;
 using RimWorld;
-using System.Collections.Generic;
 using Verse;
 
 namespace raceQuestPawn;
@@ -9,8 +8,6 @@ namespace raceQuestPawn;
 [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), typeof(PawnGenerationRequest))]
 public class patch_PawnGenerator_GeneratePawn
 {
-    private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
-        AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
@@ -39,7 +36,8 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (request.KindDef == PawnKindDefOf.WildMan)
+            if (request.KindDef == PawnKindDefOf.WildMan
+                || request.KindDef.trader)
             {
                 return;
             }
@@ -59,7 +57,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            //new TestTool().TestTool_ForceCreepJoiner(ref request);
+            //new TestTool().TestTool_ForceRabbie(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             var faction = request.Faction.def;
