@@ -72,17 +72,20 @@ namespace EventController_rQP
         }
         public static void ExcludeStoryCategories(Pawn pawn, ref List<BackstoryCategoryFilter> backstoryCategories, FactionDef factionType)
         {
-            if (factionType.defName.StartsWith("OG_Mi") && !pawn.kindDef.defName.StartsWith("OG_"))
+            if (factionType != null)
             {
-                for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
+                if (factionType.defName.StartsWith("OG_Mi") && !pawn.kindDef.defName.StartsWith("OG_"))
                 {
-                    if (backstoryCategories[i].categories == null)
+                    for (global::System.Int32 i = 0; i < backstoryCategories.Count; i++)
                     {
-                        return;
-                    }
-                    else if (backstoryCategories[i].categories.Contains("Imperium_Soldier"))
-                    {
-                        backstoryCategories[i].categories = new List<string>() { "Imperium_Standard" };
+                        if (backstoryCategories[i].categories == null)
+                        {
+                            return;
+                        }
+                        else if (backstoryCategories[i].categories.Contains("Imperium_Soldier"))
+                        {
+                            backstoryCategories[i].categories = new List<string>() { "Imperium_Standard" };
+                        }
                     }
                 }
             }
