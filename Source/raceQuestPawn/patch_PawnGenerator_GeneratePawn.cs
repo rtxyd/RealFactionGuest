@@ -1,7 +1,6 @@
 ﻿using EventController_rQP;
 using HarmonyLib;
 using RimWorld;
-using System.Collections.Generic;
 using Verse;
 
 namespace raceQuestPawn;
@@ -37,12 +36,13 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (request.KindDef == PawnKindDefOf.WildMan)
+            if (request.KindDef == PawnKindDefOf.WildMan
+                || request.KindDef.trader)
             {
                 return;
             }
 
-            if (request.IsCreepJoiner || request.KindDef.trader)
+            if (request.IsCreepJoiner)
             {
                 return;
             }

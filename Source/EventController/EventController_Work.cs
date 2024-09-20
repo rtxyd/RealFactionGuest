@@ -149,11 +149,11 @@ namespace EventController_rQP
         [HarmonyPriority(1000)]
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
-            try 
-            { 
+            try
+            {
                 ongoingEvents |= OngoingEvent.BackstoryFix;
                 FactionFilter_Work.ExcludeStoryCategories(pawn, ref backstoryCategories);
-                FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories); 
+                FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
             }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
         }
