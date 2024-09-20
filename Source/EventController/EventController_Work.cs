@@ -147,11 +147,101 @@ namespace EventController_rQP
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionLeaderValidator; }
         }
         [HarmonyPriority(1000)]
-        public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
+        public static bool Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
             try { ongoingEvents |= OngoingEvent.BackstoryFix; FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories); }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
+            bool flag = pawn.kindDef.fixedChildBackstories.Any();
+            bool flag2 = pawn.kindDef.fixedAdultBackstories.Any();
+            bool flag3 = pawn.ageTracker.AgeBiologicalYearsFloat >= 20f;
+            if (slot == BackstorySlot.Childhood)
+            {
+                FillBackstorySlotShuffled(pawn, BackstorySlot.Childhood, backstoryCategories, factionType, flag3 ? new BackstorySlot?(BackstorySlot.Adulthood) : null);
+            }
+            else
+            {
+                FillBackstorySlotShuffled(pawn, BackstorySlot.Adulthood, backstoryCategories, factionType);
+            }
+            return false;
         }
+        #region ces1
+        private static float BackstorySelectionWeight(BackstoryDef bs)
+        {
+            return SelectionWeightFactorFromWorkTagsDisabled(bs.workDisables);
+        }
+
+        private static float BioSelectionWeight(PawnBio bio)
+        {
+            return SelectionWeightFactorFromWorkTagsDisabled(bio.adulthood.workDisables | bio.childhood.workDisables);
+        }
+
+        private static float SelectionWeightFactorFromWorkTagsDisabled(WorkTags wt)
+        {
+            float num = 1f;
+            if ((wt & WorkTags.ManualDumb) != 0)
+            {
+                num *= 0.5f;
+            }
+            if ((wt & WorkTags.ManualSkilled) != 0)
+            {
+                num *= 1f;
+            }
+            if ((wt & WorkTags.Violent) != 0)
+            {
+                num *= 0.6f;
+            }
+            if ((wt & WorkTags.Social) != 0)
+            {
+                num *= 0.7f;
+            }
+            if ((wt & WorkTags.Intellectual) != 0)
+            {
+                num *= 0.4f;
+            }
+            if ((wt & WorkTags.Firefighting) != 0)
+            {
+                num *= 0.8f;
+            }
+            return num;
+        }
+        private static readonly BackstoryCategoryFilter FallbackCategoryGroup = new BackstoryCategoryFilter
+        {
+            categories = new List<string> { "Civil" },
+            commonality = 1f
+        };
+        public static void FillBackstorySlotShuffled(Pawn pawn, BackstorySlot slot, List<BackstoryCategoryFilter> backstoryCategories, FactionDef factionType, BackstorySlot? mustBeCompatibleTo = null)
+        {
+            BackstoryCategoryFilter categoryFilter = backstoryCategories.RandomElementByWeight((BackstoryCategoryFilter c) => c.commonality) ?? FallbackCategoryGroup;
+            IEnumerable<BackstoryDef> source = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.shuffleable && categoryFilter.Matches(bs));
+            List<BackstoryDef> tmpBackstories = new List<BackstoryDef>();
+            tmpBackstories.Clear();
+            if (!mustBeCompatibleTo.HasValue)
+            {
+                tmpBackstories.AddRange(source.Where((BackstoryDef bs) => bs.slot == slot));
+            }
+            else
+            {
+                IEnumerable<BackstoryDef> compatibleBackstories = source.Where((BackstoryDef bs) => bs.slot == mustBeCompatibleTo.Value);
+                tmpBackstories.AddRange(source.Where((BackstoryDef bs) => bs.slot == slot && compatibleBackstories.Any((BackstoryDef b) => !b.requiredWorkTags.OverlapsWithOnAnyWorkType(bs.workDisables))));
+            }
+            if (!(from bs in tmpBackstories.TakeRandom(20)
+                  where (slot != BackstorySlot.Adulthood || bs.requiredWorkTags == WorkTags.None || !bs.requiredWorkTags.OverlapsWithOnAnyWorkType(pawn.story.Childhood.workDisables)) ? true : false
+                  select bs).TryRandomElementByWeight(BackstorySelectionWeight, out var result))
+            {
+                Log.Error(string.Concat("No shuffled ", slot, " found for ", pawn.ToStringSafe(), " of ", factionType.ToStringSafe(), ". Choosing random."));
+                result = DefDatabase<BackstoryDef>.AllDefs.Where((BackstoryDef bs) => bs.slot == slot).RandomElement();
+            }
+            if (slot == BackstorySlot.Adulthood)
+            {
+                pawn.story.Adulthood = result;
+            }
+            else
+            {
+                pawn.story.Childhood = result;
+            }
+            tmpBackstories.Clear();
+        }
+        #endregion
         public static void Postfix_FillBackstorySlotShuffled()
         {
             ongoingEvents &= ~OngoingEvent.BackstoryFix;

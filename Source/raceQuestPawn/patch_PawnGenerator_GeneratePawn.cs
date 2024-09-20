@@ -44,7 +44,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (request.IsCreepJoiner)
+            if (request.IsCreepJoiner || request.KindDef.trader)
             {
                 return;
             }
@@ -59,7 +59,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            //new TestTool().TestTool_ForceCreepJoiner(ref request);
+            //new TestTool().TestTool_ForceRabbie(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
 
             var faction = request.Faction.def;

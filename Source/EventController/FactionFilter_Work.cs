@@ -12,9 +12,14 @@ namespace EventController_rQP
             //Log.Message("O'FactionFilter: " + factionType + "、" + pawn.kindDef + "、" + pawn);
             var race = pawn.kindDef.race;
             var body = pawn.kindDef.RaceProps.body;
+            if (pawn.Faction.def.defName == "OG_Militarum_Cadian_Faction")
+            {
+            }
             if (pawn.Faction != null)
             {
-                if (!pawn.Faction.IsPlayer && pawn.Faction.def == factionType || factionType.modContentPack.IsOfficialMod)
+                if (!pawn.Faction.IsPlayer && pawn.Faction.def == factionType
+                    || factionType.modContentPack.IsOfficialMod
+                    || factionType.isPlayer)
                 {
                     return;
                 }
