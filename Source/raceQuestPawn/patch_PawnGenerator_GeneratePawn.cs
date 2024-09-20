@@ -9,8 +9,6 @@ namespace raceQuestPawn;
 [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), typeof(PawnGenerationRequest))]
 public class patch_PawnGenerator_GeneratePawn
 {
-    private static AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
-        AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
     [HarmonyPriority(1000)]
     public static void Prefix(ref PawnGenerationRequest request)
     {
