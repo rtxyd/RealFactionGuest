@@ -13,12 +13,12 @@ namespace EventController_rQP
     {
         public static void RequestValidator(ref PawnGenerationRequest request)
         {
-            if (request.KindDef.defName == "Mincho_SpaceRefugee"
-                || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
-            {
-                request.AllowDowned = true;
-                return;
-            }
+            //if (request.KindDef.defName == "Mincho_SpaceRefugee"
+            //    || request.KindDef.defName == "Mincho_SpaceRefugee_Clothed")
+            //{
+            //    request.AllowDowned = true;
+            //    return;
+            //}
             if (request.KindDef.defName == "RatkinPriest")
             {
                 request.MustBeCapableOfViolence = false;
