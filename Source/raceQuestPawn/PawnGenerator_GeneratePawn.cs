@@ -103,7 +103,7 @@ public class PawnGenerator_GeneratePawn
             }
 
             // 팩션이 없거나 조난자 일때
-            if (Rand.Value <= Core.vanillaRatio)
+            if (Rand.Value <= Core.VanillaRatio)
             {
                 return;
             }

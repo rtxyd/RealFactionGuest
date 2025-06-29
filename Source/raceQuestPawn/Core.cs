@@ -9,7 +9,7 @@ namespace raceQuestPawn;
 [StaticConstructorOnStartup]
 public static class Core
 {
-    public static readonly float vanillaRatio;
+    public static readonly float VanillaRatio;
 
     static Core()
     {
@@ -60,6 +60,6 @@ public static class Core
             }
         }
 
-        vanillaRatio = 3f / (humanlikeModFactionNum + 3f);
+        VanillaRatio = 3f / (humanlikeModFactionNum + 3f);
     }
 }

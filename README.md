@@ -48,6 +48,6 @@ If you are proficient in C# and are interested, please contact me on the rimworl
 -  If you have the solution for a problem, please post it to the GitHub repository.
 -  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
+ 
 
-
-[![Image](https://img.shields.io/github/v/release/emipa606/RealFactionGuest?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2886929245)
+[![Image](https://img.shields.io/github/v/release/emipa606/RealFactionGuest?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2886929245) | tags:  faction diversity
