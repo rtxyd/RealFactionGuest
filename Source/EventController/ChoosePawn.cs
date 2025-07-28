@@ -46,6 +46,9 @@ namespace EventController_rQP
                 && t.kind.RaceProps.intelligence == Intelligence.Humanlike
                 //&& (RealFactionGuestSettings.creepJoinerGenerateNoLimit ? t.kind is not CreepJoinerFormKindDef : true)
                 select t.kind;
+            if (RealFactionGuestSettings.strictQuestGuest && flag) {
+                return ChoosePawnKindInner_A(pawnKinds, combatPower);
+            }
             var pawnToChoose =
                 from p in pawnKinds
                 where Mathf.Abs(p.combatPower - combatPower) < 30f
@@ -66,10 +69,6 @@ namespace EventController_rQP
                 {
                     return pawnToChoose.ToHashSet().RandomElement();
                 }
-            }
-            else if (RealFactionGuestSettings.strictQuestGuest && flag)
-            {
-                return ChoosePawnKindInner_A(pawnKinds, combatPower);
             }
             return null;
         }

@@ -25,6 +25,7 @@ namespace EventController_rQP
         PreApplyDamage = 65536,
         PreApplyDamagePawn = 131072,
         PreApplyDamageThing = 262144,
-        CreepJoinerValidator = 524288
+        CreepJoinerValidator = 524288,
+        QuestGen = 1048576
     }
 }

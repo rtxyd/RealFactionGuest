@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Verse;
+using Verse.Grammar;
 
 namespace EventController_rQP
 {
@@ -24,6 +25,9 @@ namespace EventController_rQP
                 { new Tuple<string, PatchType>("PawnGroupKindWorker_GenerateGuards",            PatchType.Both),       Tools.MethodTool(ParamValue.a, typeof(PawnGroupKindWorker_Trader), "GenerateGuards")},
                 { new Tuple<string, PatchType>("GenerateSkills",                                PatchType.Prefix),     Tools.MethodTool(ParamValue.b, typeof(PawnGenerator), "GenerateSkills")},
                 { new Tuple<string, PatchType>("GenerateOrRedressPawnInternal",                 PatchType.Both),       Tools.MethodTool(ParamValue.b, typeof(PawnGenerator), "GenerateOrRedressPawnInternal")},
+
+                //{ new Tuple<string, PatchType>("QuestGenUtility_AddSlateVar",                   PatchType.Both),       Tools.MethodTool(ParamValue.b, typeof(QuestGenUtility), "AddSlateVar", types: new Type[]{typeof(GrammarRequest).MakeByRefType(), typeof(string), typeof(object)})},
+
                 { new Tuple<string, PatchType>("GiveAppropriateBioAndNameTo",                   PatchType.Both),       AccessTools.Method(typeof(PawnBioAndNameGenerator), nameof(PawnBioAndNameGenerator.GiveAppropriateBioAndNameTo))},
                 { new Tuple<string, PatchType>("FillBackstorySlotShuffled",                     PatchType.Both),       AccessTools.Method(typeof(PawnBioAndNameGenerator), nameof(PawnBioAndNameGenerator.FillBackstorySlotShuffled))},
                 { new Tuple<string, PatchType>("QuestNode_Root_RefugeePodCrash_GeneratePawn",   PatchType.Both),       AccessTools.Method(typeof(QuestNode_Root_RefugeePodCrash), nameof(QuestNode_Root_RefugeePodCrash.GeneratePawn))},
@@ -32,6 +36,12 @@ namespace EventController_rQP
                 { new Tuple<string, PatchType>("PreApplyDamageThing",                           PatchType.Both),       AccessTools.Method(typeof(Thing), nameof(Thing.PreApplyDamage))},
                 { new Tuple<string, PatchType>("PreApplyDamageThingWithComps",                  PatchType.Both),       AccessTools.Method(typeof(ThingWithComps), nameof(ThingWithComps.PreApplyDamage))},
                 { new Tuple<string, PatchType>("PreApplyDamagePawn",                            PatchType.Both),       AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage))},
+
+                //{ new Tuple<string, PatchType>("QuestGenUtility_ResolveAbsoluteText",           PatchType.Both),       AccessTools.Method(typeof(QuestGenUtility), nameof(QuestGenUtility.ResolveAbsoluteText))},
+                //{ new Tuple<string, PatchType>("Slate_Set",                                     PatchType.Both),       AccessTools.Method(typeof(Slate), nameof(Slate.Set), generics: new Type[] { typeof(Pawn) })},
+                //{ new Tuple<string, PatchType>("QuestGen_Generate",                             PatchType.Both),       AccessTools.Method(typeof(QuestGen), nameof(QuestGen.Generate))},
+                { new Tuple<string, PatchType>("Pawn_Set_Name",                                 PatchType.Both),       AccessTools.PropertySetter(typeof(Pawn), nameof(Pawn.Name))},
+
                 { new Tuple<string, PatchType>("AdjustXenotypeForFactionlessPawn",              PatchType.Prefix),     AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.AdjustXenotypeForFactionlessPawn))},
                 { new Tuple<string, PatchType>("PawnGenerator_GeneratePawn",                    PatchType.Postfix),    AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] {typeof(PawnGenerationRequest)})},
                 { new Tuple<string, PatchType>("GetCreepjoinerSpecifics",                       PatchType.Transpiler), AccessTools.Method(typeof(CreepJoinerUtility), nameof(CreepJoinerUtility.GetCreepjoinerSpecifics))}

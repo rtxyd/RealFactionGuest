@@ -1,10 +1,12 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RimWorld.QuestGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using Verse;
+using Verse.Grammar;
 
 namespace EventController_rQP
 {
@@ -12,6 +14,7 @@ namespace EventController_rQP
     public static class EventController_Work
     {
         public static OngoingEvent ongoingEvents = OngoingEvent.None;
+        public static Pawn cachedPawn = null;
 
         public static HashSet<FactionDef> GetHumanlikeVanillaFactions()
         {
@@ -225,6 +228,7 @@ namespace EventController_rQP
                 /*Log.Message($"A : {__result.kindDef}");*/
             }
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
+            cachedPawn = __result;
             EventController_Reset();
         }
         public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
@@ -246,6 +250,59 @@ namespace EventController_rQP
             };
             replaceHelper.SetAllNeededProperties(methodinfo, OpCodes.Ldarg_0, OpCodes.Stloc_0, codes, replacer, true);
             return replaceHelper.Run().AsEnumerable();
+        }
+        //public static void Prefix_Slate_Set(ref string name, ref Pawn var, ref bool isAbsoluteName)
+        //{
+        //    if (var is Pawn)
+        //    {
+        //        //Log.Message($"{name} ; {var} ; {isAbsoluteName}");
+        //    }
+        //}
+        //public static void Postfix_Slate_Set(ref string name, ref Pawn var, ref bool isAbsoluteName)
+        //{
+        //    if (var is Pawn)
+        //    {
+        //        //Log.Message($"{name} ; {var} ; {isAbsoluteName}");
+        //    }
+        //}
+        //public static void Prefix_QuestGenUtility_ResolveAbsoluteText(ref List<Rule> absoluteRules, ref Dictionary<string, string> absoluteConstants, ref string absoluteRootKeyword, ref bool capitalizeFirstSentence)
+        //{
+        //    //Log.Message(absoluteRootKeyword);
+        //}
+        //public static void Postfix_QuestGenUtility_ResolveAbsoluteText(ref List<Rule> absoluteRules, ref Dictionary<string, string> absoluteConstants, ref string absoluteRootKeyword, ref bool capitalizeFirstSentence)
+        //{
+        //    Log.Message(absoluteRootKeyword);
+        //}
+        //public static void Prefix_QuestGenUtility_AddSlateVar(ref GrammarRequest req, ref string absoluteName, ref object obj)
+        //{
+        //    if (obj is not Pawn) return;
+        //    //Log.Message(absoluteName);
+        //}
+        //public static void Postfix_QuestGenUtility_AddSlateVar(ref GrammarRequest req, ref string absoluteName, ref object obj)
+        //{
+        //    if (obj is not Pawn) return;
+        //    //Log.Message(absoluteName);
+        //}
+        //public static void Prefix_QuestGen_Generate(ref QuestScriptDef root, ref Slate initialVars)
+        //{
+        //    if ((ongoingEvents & OngoingEvent.QuestGen) != 0)
+        //    {
+        //        Log.Message(ongoingEvents);
+        //    }
+        //}
+        //public static void Postfix_QuestGen_Generate(ref QuestScriptDef root, ref Slate initialVars, ref Quest __result)
+        //{
+        //    Log.Message(__result);
+        //}
+        public static void Prefix_Pawn_Set_Name(ref Name value, Pawn __instance)
+        {
+            if (__instance != cachedPawn) return;
+            Log.Message(value);
+        }
+        public static void Postfix_Pawn_Set_Name(ref Name value, Pawn __instance)
+        {
+            if (__instance != cachedPawn) return;
+            Log.Message(value);
         }
         public static void EventController_Reset()
         {

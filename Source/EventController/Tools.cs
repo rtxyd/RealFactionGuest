@@ -2,6 +2,8 @@
 using System;
 using System.Reflection;
 using Verse;
+using Verse.Grammar;
+
 #if DEBUG
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -12,18 +14,28 @@ namespace EventController_rQP
     {
         public static MethodType methodType = new MethodType() { a = BindingFlags.NonPublic | BindingFlags.Instance, b = BindingFlags.NonPublic | BindingFlags.Static };
 
-        public static MethodInfo MethodTool(ParamValue paramValue, Type type, string methodName)
+        public static MethodInfo MethodTool(ParamValue paramValue, Type type, string methodName, Type[] types = null)
         {
             BindingFlags Instance;
             if (paramValue == ParamValue.a)
             {
                 Instance = methodType.a;
-                return type.GetMethod(methodName, Instance);
             }
             else if (paramValue == ParamValue.b)
             {
                 Instance = methodType.b;
+            }
+            else
+            {
+                return null;
+            }
+            if (types == null)
+            {
                 return type.GetMethod(methodName, Instance);
+            }
+            else
+            {
+                return type.GetMethod(methodName, Instance, null, types, null);
             }
             return null;
         }
