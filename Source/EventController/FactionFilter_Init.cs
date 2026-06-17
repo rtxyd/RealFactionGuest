@@ -14,6 +14,7 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
         public static readonly HashSet<FactionDef> vanillaHumanlikeFactions = new();
+        public static readonly HashSet<FactionDef> moddedHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> allHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> validFactions_RPC = new();
         public static readonly HashSet<string> fallbackBackstory = new();
@@ -72,7 +73,7 @@ namespace EventController_rQP
                                 if (!flag2)
                                 {
                                     isHumanlike = true;
-                                    allHumanlikeFactions.Add(f);
+                                    moddedHumanlikeFactions.Add(f);
                                 }
                                 else if (!added)
                                 {
@@ -100,19 +101,29 @@ namespace EventController_rQP
                 {
                     // ignored
                 }
-            foreach (var f2 in vanillaFactions)
+            try
             {
-                if (f2.backstoryFilters != null)
+                foreach (var f2 in vanillaFactions)
                 {
-                    foreach (var item in f2.backstoryFilters)
+                    if (f2.backstoryFilters != null)
                     {
-                        if (item.categories != null)
+                        foreach (var item in f2.backstoryFilters)
                         {
-                            fallbackBackstory.UnionWith(item.categories);
+                            if (item.categories != null)
+                            {
+                                fallbackBackstory.UnionWith(item.categories);
+                            }
                         }
                     }
                 }
+                allHumanlikeFactions.UnionWith(vanillaHumanlikeFactions);
+                allHumanlikeFactions.UnionWith(moddedHumanlikeFactions);
             }
+            catch
+            {
+                Log.Error("# Real Faction Guest - Finalization Failed.");
+            }
+
             Log.Message("# Real Faction Guest - Faction Filter Init Complete");
         }
     }

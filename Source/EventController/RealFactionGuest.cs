@@ -67,9 +67,11 @@ namespace EventController_rQP
             //Rect rectb = new Rect(listingStandard.ColumnWidth - 225, Text.LineHeight + 30, 450, Text.LineHeight + 10);
             listingStandard.Label("RFGSetting_ToggleFrequency".Translate() + $"{RealFactionGuestSettings.strictChance}", -1, "RFGSetting_ToggleFrequency_Tips".Translate());
             RealFactionGuestSettings.strictChance = Mathf.RoundToInt(listingStandard.Slider(RealFactionGuestSettings.strictChance, 0f, 1f) * 100f) / 100f;
+
             listingStandard.Label("RFGSetting_ToggleNormalJoinerWeight".Translate() + $"{RealFactionGuestSettings.normalJoinerWeight}", -1, "RFGSetting_ToggleNormalJoinerWeight_Tips".Translate());
             RealFactionGuestSettings.normalJoinerWeight = Mathf.RoundToInt(listingStandard.Slider(RealFactionGuestSettings.normalJoinerWeight, 0f, 1f) * 100f) / 100f;
-            listingStandard.Label("RFGSetting_ToggleIdeoJoinerWeight".Translate() + $"{RealFactionGuestSettings.normalJoinerWeight}", -1, "RFGSetting_ToggleIdeoJoinerWeight_Tips".Translate());
+
+            listingStandard.Label("RFGSetting_ToggleIdeoJoinerWeight".Translate() + $"{RealFactionGuestSettings.ideoJoinerWeight}", -1, "RFGSetting_ToggleIdeoJoinerWeight_Tips".Translate());
             RealFactionGuestSettings.ideoJoinerWeight = Mathf.RoundToInt(listingStandard.Slider(RealFactionGuestSettings.ideoJoinerWeight, 0f, 1f) * 100f) / 100f;
             listingStandard.Gap();
             if (RealFactionGuestSettings.debugOption)

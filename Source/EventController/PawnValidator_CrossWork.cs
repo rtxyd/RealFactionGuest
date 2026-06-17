@@ -263,7 +263,16 @@ namespace EventController_rQP
 
             if (isPlayerFaction)
             {
-                return Faction.OfPlayer.def;
+                var comp = Current.Game.GetComponent<StarterWatcher>();
+                if (comp != null && comp.IsCaptured())
+                {
+                    var race = comp.GetRandomRaceByWeight();
+                    return comp.GetRandomFactionByRace(race);
+                }
+                else
+                {
+                    return Faction.OfPlayer.def;
+                }
             }
             else
             {
