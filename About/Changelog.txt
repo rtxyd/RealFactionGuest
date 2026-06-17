@@ -1,5 +1,9 @@
 # Changelog for RealFactionGuest
 
+Forked 1.6.2 Try to fix joiner issue
+
+Forked 1.6.1 Fix modsettings
+
 Forked 1.6.0 Bump the version to Rimworld 1.6.4488-beta
 
 Forked 1.5.14k/l Fix a backstoryfilter issue with AdeptusMechanicus agian.
