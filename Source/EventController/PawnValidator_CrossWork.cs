@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Verse;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace EventController_rQP
 {
@@ -50,9 +51,27 @@ namespace EventController_rQP
             }
             return StackCheckIsNotVanilla(3);
         }
+
+        public static bool IsNotWandererJoin()
+        {
+            var stackTrace = GetTypicalStack(5);
+            var frame = stackTrace.GetFrame(0);
+            var method = frame.GetMethod();
+            var type = method.DeclaringType;
+            if (type.Name.StartsWith("QuestNode_Root_WandererJoin"))
+            {
+                return false;
+            }
+            return true;
+        }
+        public static StackTrace GetTypicalStack(int ignored)
+        {
+            return new StackTrace(ignored, false);
+        }
         public static bool StackCheckIsNotVanilla(int maxFrames)
         {
-            var stackTrace = new StackTrace(4, false);
+            // used in patch_PawnGenerator_GeneratePawn, typical stack frame ignoring 4 + this = 5
+            var stackTrace = GetTypicalStack(5);
             int frameCount = Math.Min(stackTrace.FrameCount, maxFrames);
             var frame = stackTrace.GetFrame(0);
             var method = frame.GetMethod();
@@ -228,6 +247,28 @@ namespace EventController_rQP
             }
             var map = QuestGen_Get.GetMap();
             CreepJoinerUtility.GetCreepjoinerSpecifics(map, ref pawn.creepjoiner.form, ref pawn.creepjoiner.benefit, ref pawn.creepjoiner.downside, ref pawn.creepjoiner.aggressive, ref pawn.creepjoiner.rejection);
+        }
+
+        public static FactionDef OutputAssumedFaction(ref PawnGenerationRequest request)
+        {
+            bool isPlayerFaction = false;
+            if (Faction.OfPlayer.ideos.PrimaryIdeo.Equals(request.FixedIdeo))
+            {
+                isPlayerFaction = Rand.Chance(RealFactionGuestSettings.ideoJoinerWeight);
+            }
+            else
+            {
+                isPlayerFaction = Rand.Chance(RealFactionGuestSettings.normalJoinerWeight);
+            }
+
+            if (isPlayerFaction)
+            {
+                return Faction.OfPlayer.def;
+            }
+            else
+            {
+                return EventController_Work.GetAllHumanLikeFactions().RandomElementWithFallback(Faction.OfPlayer.def);
+            }
         }
     }
 }

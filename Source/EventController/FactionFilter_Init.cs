@@ -14,6 +14,7 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
         public static readonly HashSet<FactionDef> vanillaHumanlikeFactions = new();
+        public static readonly HashSet<FactionDef> allHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> validFactions_RPC = new();
         public static readonly HashSet<string> fallbackBackstory = new();
         static FactionFilter_Init()
@@ -71,6 +72,7 @@ namespace EventController_rQP
                                 if (!flag2)
                                 {
                                     isHumanlike = true;
+                                    allHumanlikeFactions.Add(f);
                                 }
                                 else if (!added)
                                 {

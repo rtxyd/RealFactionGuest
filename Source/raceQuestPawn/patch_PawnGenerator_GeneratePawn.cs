@@ -18,9 +18,11 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
+            FactionDef assumed_faction = null;
             if (request.Faction == null)
             {
-                return;
+                if (PawnValidator_CrossWork.IsNotWandererJoin()) return;
+                assumed_faction = PawnValidator_CrossWork.OutputAssumedFaction(ref request);
             }
 
             if (request.KindDef.RaceProps != null && (
@@ -59,35 +61,36 @@ public class patch_PawnGenerator_GeneratePawn
 
             //new TestTool().TestTool_ForceRabbie(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
-
-            var faction = request.Faction.def;
+            if (assumed_faction == null && request.Faction != null) {
+                assumed_faction = request.Faction.def;
+            }
             var kinddef = request.KindDef;
 
-            bool default_filter = faction.modContentPack.PackageId != kinddef.modContentPack.PackageId;
+            bool default_filter = assumed_faction.modContentPack.PackageId != kinddef.modContentPack.PackageId;
             if (RealFactionGuestSettings.alternativeFaction && default_filter)
             {
                 var factionpawnraces = EventController_Work.GetFactionPawnRaces();
 
-                if (factionpawnraces.ContainsKey(faction))
+                if (factionpawnraces.ContainsKey(assumed_faction))
                 {
-                    default_filter = factionpawnraces[faction].Contains(kinddef.race);
+                    default_filter = factionpawnraces[assumed_faction].Contains(kinddef.race);
                 }
             }
             bool chance = Rand.Chance(RealFactionGuestSettings.strictChance);
             bool strict = chance && default_filter;
             if (strict
-                && (request.Faction?.def.modContentPack != null
-                && (!request.Faction.def.modContentPack.PackageId.StartsWith("ludeon")
-                || request.Faction.def.modContentPack.PackageId.EndsWith("rimworld.biotech")))
+                && (assumed_faction.modContentPack != null
+                && (!assumed_faction.modContentPack.PackageId.StartsWith("ludeon")
+                || assumed_faction.modContentPack.PackageId.EndsWith("rimworld.biotech")))
                )
             {
                 // 팩션이 있을때
                 float combatPower = kinddef.combatPower;
                 PawnKindDef p_make = null;
 
-                if (faction.pawnGroupMakers != null)
+                if (assumed_faction.pawnGroupMakers != null)
                 {
-                    p_make = ChoosePawn.ChoosePawnKind(faction.pawnGroupMakers, combatPower, true);
+                    p_make = ChoosePawn.ChoosePawnKind(assumed_faction.pawnGroupMakers, combatPower, true);
                 }
 
                 if (p_make != null)

@@ -10,6 +10,8 @@ namespace EventController_rQP
         public static bool strictQuestGuest = true;
         public static bool alternativeFaction = false;
         public static float strictChance = 1.0f;
+        public static float ideoJoinerWeight = 0.5f;
+        public static float normalJoinerWeight = 0.5f;
         public static bool factionLeaderValidator = true;
         public static bool debugOption = false;
         public static bool damageUntilDownedBypassShield = true;
@@ -41,6 +43,8 @@ namespace EventController_rQP
             }
             Scribe_Values.Look(ref alternativeFaction, "alternativeFaction", false);
             Scribe_Values.Look(ref strictChance, "guestChance", 1.0f);
+            Scribe_Values.Look(ref normalJoinerWeight, "normalJoinerWeight", 0.5f);
+            Scribe_Values.Look(ref ideoJoinerWeight, "ideoJoinerWeight", 0.5f);
         }
         public static void ResetToDefault()
         {
@@ -56,6 +60,8 @@ namespace EventController_rQP
             debugOption = false;
             alternativeFaction = false;
             strictChance = 1f;
+            normalJoinerWeight = 0.5f;
+            ideoJoinerWeight = 0.5f;
         }
     }
 }

@@ -21,6 +21,10 @@ namespace EventController_rQP
         {
             return FactionFilter_Init.humanlikeModFactionNum;
         }
+        public static HashSet<FactionDef> GetAllHumanLikeFactions()
+        {
+            return FactionFilter_Init.allHumanlikeFactions;
+        }
         public static HashSet<FactionDef> GetValidFactions_RPC()
         {
             return FactionFilter_Init.validFactions_RPC;
