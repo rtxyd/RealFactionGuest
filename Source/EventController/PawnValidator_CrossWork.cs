@@ -252,6 +252,20 @@ namespace EventController_rQP
         public static FactionDef OutputAssumedFaction(ref PawnGenerationRequest request)
         {
             bool isPlayerFaction = false;
+            var originalRace = request.KindDef.race;
+            // if original is not vanilla
+            if (originalRace != ThingDefOf.Human)
+            {
+                if (EventController_Work.GetRacePawnFactions().TryGetValue(request.KindDef.race, out var factions))
+                {
+                    return factions.RandomElement();
+                }
+                else
+                {
+                    Log.Error($"{originalRace} should have at least one candidate faction, but find 0, fallback player faction.");
+                    return Faction.OfPlayer.def;
+                }
+            }
             if (Faction.OfPlayer.ideos.PrimaryIdeo.Equals(request.FixedIdeo))
             {
                 isPlayerFaction = Rand.Chance(RealFactionGuestSettings.ideoJoinerWeight);

@@ -72,8 +72,11 @@ namespace EventController_rQP
         }
         public ThingDef FallbackRace()
         {
-            var fallback = EventController_Work.GetFactionPawnRaces().TryGetValue(Faction.OfPlayer.def);
-            if (fallback.Count == 0)
+            if (!EventController_Work.GetFactionPawnRaces().TryGetValue(Faction.OfPlayer.def, out var fallback))
+            {
+                return ThingDefOf.Human;
+            }
+            else if (fallback.Count == 0)
             {
                 var resultset = EventController_Work.GetFactionPawnRaces().RandomElement().Value;
                 if (resultset.Count != 0)

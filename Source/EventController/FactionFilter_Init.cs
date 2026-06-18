@@ -11,8 +11,10 @@ namespace EventController_rQP
         public static readonly float humanlikeModFactionNum;
         public static readonly Dictionary<FactionDef, HashSet<PawnKindDef>> factionPawnKinds = new();
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
+        public static readonly Dictionary<ThingDef, HashSet<FactionDef>> racePawnFactions = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
+        public static readonly HashSet<ThingDef> allRaces = new();
         public static readonly HashSet<FactionDef> vanillaHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> moddedHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> allHumanlikeFactions = new();
@@ -64,6 +66,7 @@ namespace EventController_rQP
                                 var body = pawnGenOption.kind.RaceProps.body;
                                 pawnKindDefs.Add(kind);
                                 thingDefs.Add(race);
+                                allRaces.Add(race);
                                 bodyDefs.Add(body);
                             }
                             if (pawnGenOption.kind.RaceProps == null
@@ -113,6 +116,21 @@ namespace EventController_rQP
                             {
                                 fallbackBackstory.UnionWith(item.categories);
                             }
+                        }
+                    }
+                }
+                foreach (var r in allRaces)
+                {
+                    foreach(var entry in factionPawnRaces)
+                    {
+                        if (entry.Value.Contains(r))
+                        {
+                            if (!racePawnFactions.TryGetValue(r, out var factions1))
+                            {
+                                factions1 = new HashSet<FactionDef>();
+                                racePawnFactions[r] = factions1;
+                            }
+                            factions1.Add(entry.Key);
                         }
                     }
                 }

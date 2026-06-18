@@ -13,6 +13,10 @@ namespace EventController_rQP
     {
         public static OngoingEvent ongoingEvents = OngoingEvent.None;
 
+        public static Dictionary<ThingDef, HashSet<FactionDef>> GetRacePawnFactions()
+        {
+            return FactionFilter_Init.racePawnFactions;
+        }
         public static HashSet<FactionDef> GetHumanlikeVanillaFactions()
         {
             return FactionFilter_Init.vanillaHumanlikeFactions;

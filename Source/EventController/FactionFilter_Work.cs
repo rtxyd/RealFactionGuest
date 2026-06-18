@@ -31,10 +31,8 @@ namespace EventController_rQP
                 }
             }
             var factionRaces = EventController_Work.GetFactionPawnRaces();
-            var races = factionRaces.TryGetValue(factionType);
             var factionBodies = EventController_Work.GetFactionPawnBodies();
-            var bodies = factionBodies.TryGetValue(factionType);
-            if (races != null && bodies != null)
+            if (!factionRaces.TryGetValue(factionType, out var races) && !factionBodies.TryGetValue(factionType, out var bodies))
             {
                 if (races.Contains(race) && bodies.Contains(body))
                 {
