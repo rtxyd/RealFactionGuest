@@ -19,9 +19,11 @@ public class patch_PawnGenerator_GeneratePawn
             }
 
             FactionDef assumed_faction = null;
+            bool isNotWandererJoin = true;
             if (request.Faction == null)
             {
                 if (PawnValidator_CrossWork.IsNotWandererJoin()) return;
+                isNotWandererJoin = false;
                 assumed_faction = PawnValidator_CrossWork.OutputAssumedFaction(ref request);
             }
 
@@ -54,7 +56,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (PawnValidator_CrossWork.IsNotFromVanilla())
+            if (isNotWandererJoin && PawnValidator_CrossWork.IsNotFromVanilla())
             {
                 return;
             }

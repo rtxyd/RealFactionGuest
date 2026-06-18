@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -55,6 +56,7 @@ namespace EventController_rQP
         }
         public ThingDef GetRandomRaceByWeight()
         {
+            if (raceWeights.Count == 0) return FallbackRace();
             var result = raceWeights.RandomElementByWeight(kv =>
             {
                 return kv.Value;
@@ -68,10 +70,31 @@ namespace EventController_rQP
                 return result.Key;
             }
         }
+        public ThingDef FallbackRace()
+        {
+            var fallback = EventController_Work.GetFactionPawnRaces().TryGetValue(Faction.OfPlayer.def);
+            if (fallback.Count == 0)
+            {
+                var resultset = EventController_Work.GetFactionPawnRaces().RandomElement().Value;
+                if (resultset.Count != 0)
+                {
+                    return resultset.RandomElement();
+                }
+                else
+                {
+                    return ThingDefOf.Human;
+                }
+            }
+            return fallback.RandomElement();
+        }
+        public FactionDef FallbackFaction()
+        {
+            return EventController_Work.GetAllHumanLikeFactions().RandomElement();
+        }
         public FactionDef GetRandomFactionByRace(ThingDef race)
         {
             mappingFactions.TryGetValue(race, out var factions);
-            if (factions == null) return Faction.OfPlayer.def;
+            if (factions == null) return FallbackFaction();
             else
             {
                 return factions.RandomElement();
@@ -79,7 +102,6 @@ namespace EventController_rQP
         }
         private void ComputWeights()
         {
-            HashSet<ThingDef> counted = new HashSet<ThingDef>();
             List<ThingDef> copy = starterPawnRaces.ListFullCopy();
             foreach (var race in starterPawnRaces)
             {
@@ -93,7 +115,7 @@ namespace EventController_rQP
                             count++;
                         }
                     }
-                    float weight = count / copy.Count;
+                    float weight = (float)count / copy.Count;
                     raceWeights.Add(race, weight);
                     var factions = from item in EventController_Work.GetFactionPawnRaces()
                                    where item.Value.Contains(race)
@@ -112,6 +134,13 @@ namespace EventController_rQP
 
         public override void ExposeData()
         {
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (captured && starterPawnRaces.Count == 0)
+                {
+                    captured = false;
+                }
+            }
             Scribe_Values.Look(ref captured, "captured", false);
             Scribe_Collections.Look(ref starterPawnRaces, "startingPawnRaces", LookMode.Def);
             Scribe_Collections.Look(ref raceWeights, "raceWeights", LookMode.Def, LookMode.Value);
@@ -144,7 +173,7 @@ namespace EventController_rQP
             starterPawnRaces.Clear();
             var pawns = Find.Maps
                 .SelectMany(m => m.mapPawns.AllPawnsSpawned)
-                .Where(p => p.Faction is { IsPlayer: true })
+                .Where(p => p.Faction is { IsPlayer: true } && (p.RaceProps == null || p.RaceProps.intelligence == Intelligence.Humanlike || p.RaceProps.Humanlike))
                 .ToList();
             foreach (var pawn in pawns)
             {

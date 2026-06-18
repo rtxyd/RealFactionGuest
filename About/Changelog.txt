@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.6.2a Race weight zero bug fix
+
 Forked 1.6.2 Try to fix joiner issue
 
 Forked 1.6.1 Fix modsettings
