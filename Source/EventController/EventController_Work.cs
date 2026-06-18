@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RimWorld.QuestGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -238,6 +239,50 @@ namespace EventController_rQP
             catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
             EventController_Reset();
         }
+        #region issue fix of ver 1.6.4850
+        public static void Prefix_IncidentWorker_GiveQuest_GiveQuest(IncidentWorker __instance, IncidentParms parms, QuestScriptDef questDef)
+        {
+            // slate is initialized in this method, no ongoing event
+            GlobalParams.SetCachedIncident(__instance.def);
+        }
+        public static void Prefix_QuestUtility_GenerateQuestAndMakeAvailable_B(QuestScriptDef root, Slate vars)
+        {
+            IncidentDef def = GlobalParams.GetCachedIncidentAndReset();
+            if (def != null)
+            {
+                vars.Set("RFG_incident_cache", def);
+            }
+        }
+        public static void Prefix_QuestNode_Root_WandererJoin_RunInt()
+        {
+            try
+            {
+                ongoingEvents |= OngoingEvent.WandererJoin;
+                var slate = QuestGen.slate;
+                IncidentDef incident;
+                Log.Message(slate.ToString());
+                if (!slate.TryGet("RFG_incident_cache", out incident))
+                {
+                    return;
+                }
+                if (incident == null)
+                {
+                    return;
+                }
+                Gender? fixedGender = null;
+                if (!slate.TryGet<PawnGenerationRequest>("overridePawnGenParams", out PawnGenerationRequest var, false))
+                {
+                    var = new PawnGenerationRequest(PawnKindDefOf.Villager, null, PawnGenerationContext.NonPlayer, -1, true, false, false, true, false, 20f, false, true, true, true, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, fixedGender, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, true, false, false, -1, 0, false);
+                    if (incident.pawnKind != null)
+                    {
+                        var.KindDef = incident.pawnKind;
+                        slate.Set("overridePawnGenParams", var);
+                    }
+                }
+            }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.WandererJoin; }
+        }
+        #endregion
         public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();

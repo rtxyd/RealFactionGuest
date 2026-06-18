@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.6.2d May fix the pawn generation issue from vanilla update ver.1.6.4850
+
 Forked 1.6.2c Fix save bug, add race faction mapping
 
 Forked 1.6.2b Fix potential bugs in old code, add more validators

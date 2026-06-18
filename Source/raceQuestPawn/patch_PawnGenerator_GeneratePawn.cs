@@ -19,11 +19,11 @@ public class patch_PawnGenerator_GeneratePawn
             }
 
             FactionDef assumed_faction = null;
-            bool isNotWandererJoin = true;
-            if (request.Faction == null)
+            bool isNotVanillaWandererJoin = true;
+            if (request.Faction == null && request.KindDef.modContentPack.PackageId.StartsWith("ludeon"))
             {
-                if (PawnValidator_CrossWork.IsNotWandererJoin()) return;
-                isNotWandererJoin = false;
+                if ((EventController_Work.ongoingEvents & OngoingEvent.WandererJoin) == 0) return;
+                isNotVanillaWandererJoin = false;
                 assumed_faction = PawnValidator_CrossWork.OutputAssumedFaction(ref request);
             }
 
@@ -56,7 +56,7 @@ public class patch_PawnGenerator_GeneratePawn
                 return;
             }
 
-            if (isNotWandererJoin && PawnValidator_CrossWork.IsNotFromVanilla())
+            if (isNotVanillaWandererJoin && PawnValidator_CrossWork.IsNotFromVanilla())
             {
                 return;
             }

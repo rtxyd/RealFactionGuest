@@ -34,6 +34,9 @@ namespace EventController_rQP
                 { new Tuple<string, PatchType>("PreApplyDamagePawn",                            PatchType.Both),       AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage))},
                 { new Tuple<string, PatchType>("AdjustXenotypeForFactionlessPawn",              PatchType.Prefix),     AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.AdjustXenotypeForFactionlessPawn))},
                 { new Tuple<string, PatchType>("PawnGenerator_GeneratePawn",                    PatchType.Postfix),    AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] {typeof(PawnGenerationRequest)})},
+                { new Tuple<string, PatchType>("IncidentWorker_GiveQuest_GiveQuest",            PatchType.Prefix),     AccessTools.Method(typeof(IncidentWorker_GiveQuest),"GiveQuest", new[] { typeof(IncidentParms), typeof(QuestScriptDef) })},
+                { new Tuple<string, PatchType>("QuestNode_Root_WandererJoin_RunInt",            PatchType.Prefix),     AccessTools.Method(typeof(QuestNode_Root_WandererJoin),"RunInt")},
+                { new Tuple<string, PatchType>("QuestUtility_GenerateQuestAndMakeAvailable_B",  PatchType.Prefix),     AccessTools.Method(typeof(QuestUtility),"GenerateQuestAndMakeAvailable", new[] { typeof(QuestScriptDef), typeof(Slate) })},
                 { new Tuple<string, PatchType>("GetCreepjoinerSpecifics",                       PatchType.Transpiler), AccessTools.Method(typeof(CreepJoinerUtility), nameof(CreepJoinerUtility.GetCreepjoinerSpecifics))}
             };
             foreach (var item in pairs)
