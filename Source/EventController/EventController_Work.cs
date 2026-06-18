@@ -12,7 +12,10 @@ namespace EventController_rQP
     public static class EventController_Work
     {
         public static OngoingEvent ongoingEvents = OngoingEvent.None;
-
+        public static Dictionary<ThingDef, HashSet<FactionDef>> GetRacePawnHiddenFactions()
+        {
+            return FactionFilter_Init.racePawnHiddenFactions;
+        }
         public static Dictionary<ThingDef, HashSet<FactionDef>> GetRacePawnFactions()
         {
             return FactionFilter_Init.racePawnFactions;

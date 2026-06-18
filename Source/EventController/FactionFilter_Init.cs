@@ -12,8 +12,10 @@ namespace EventController_rQP
         public static readonly Dictionary<FactionDef, HashSet<PawnKindDef>> factionPawnKinds = new();
         public static readonly Dictionary<FactionDef, HashSet<ThingDef>> factionPawnRaces = new();
         public static readonly Dictionary<ThingDef, HashSet<FactionDef>> racePawnFactions = new();
+        public static readonly Dictionary<ThingDef, HashSet<FactionDef>> racePawnHiddenFactions = new();
         public static readonly Dictionary<FactionDef, HashSet<BodyDef>> factionPawnBodies = new();
         public static readonly HashSet<FactionDef> vanillaFactions = new();
+        public static readonly HashSet<FactionDef> hiddenFactions = new();
         public static readonly HashSet<ThingDef> allRaces = new();
         public static readonly HashSet<FactionDef> vanillaHumanlikeFactions = new();
         public static readonly HashSet<FactionDef> moddedHumanlikeFactions = new();
@@ -49,6 +51,9 @@ namespace EventController_rQP
                             vanillaFactions.Add(f);
                         }
                         validFactions_RPC.Add(f);
+                    } else
+                    {
+                        hiddenFactions.Add(f);
                     }
                     HashSet<PawnKindDef> pawnKindDefs = new();
                     HashSet<ThingDef> thingDefs = new();
@@ -68,6 +73,15 @@ namespace EventController_rQP
                                 thingDefs.Add(race);
                                 allRaces.Add(race);
                                 bodyDefs.Add(body);
+                            } else
+                            {
+                                var race = pawnGenOption.kind.race;
+                                allRaces.Add(race);
+                                if (!racePawnHiddenFactions.TryGetValue(race, out var set))
+                                {
+                                    racePawnHiddenFactions[race] = set;
+                                }
+                                set.Add(f);
                             }
                             if (pawnGenOption.kind.RaceProps == null
                                 || pawnGenOption.kind.RaceProps.intelligence == Intelligence.Humanlike
@@ -88,7 +102,7 @@ namespace EventController_rQP
                     }
                     if (flag)
                     {
-                        //create faction -> pawn reflection
+                        //create faction -> pawn mapping
                         factionPawnKinds.Add(f, pawnKindDefs);
                         factionPawnRaces.Add(f, thingDefs);
                         factionPawnBodies.Add(f, bodyDefs);

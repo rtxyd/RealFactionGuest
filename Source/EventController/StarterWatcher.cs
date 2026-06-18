@@ -14,16 +14,21 @@ namespace EventController_rQP
 {
     public class StarterWatcher : GameComponent
     {
-        public class ThingFactionEntry
+        public class ThingFactionEntry : IExposable
         {
             public ThingDef thing;
             public FactionDef faction;
+
+            public void ExposeData()
+            {
+                Scribe_Defs.Look(ref thing, "thing");
+                Scribe_Defs.Look(ref faction, "faction");
+            }
         }
         private bool captured = false;
+        private bool noCandidateFactions = false;
         private List<ThingDef> starterPawnRaces = new List<ThingDef>();
         private Dictionary<ThingDef, float> raceWeights = new Dictionary<ThingDef, float>();
-        private List<ThingFactionEntry> mappingFactionsList = new List<ThingFactionEntry>();
-        private Dictionary<ThingDef, HashSet<FactionDef>> mappingFactions = new Dictionary<ThingDef, HashSet<FactionDef>>();
         private HashSet<int> startingPawnIDs = new HashSet<int>();
 
         public StarterWatcher(Game game) { }
@@ -49,9 +54,22 @@ namespace EventController_rQP
                 Log.Message($"# Real Faction Guest - Preparing Player Faction Races Weights Capture");
                 foreach (var item in raceWeights)
                 {
-                    HashSet<FactionDef> candidates = mappingFactions.TryGetValue(item.Key, []);
-                    Log.Message($"# Real Faction Guest - Race { item.Key.defName } ; Weight { String.Format("{0:P}", item.Value) } ; Factions {String.Join(", ", candidates) }");
+                    HashSet<FactionDef> candidates = EventController_Work.GetRacePawnFactions().TryGetValue(item.Key, []);
+                    if (candidates.Count == 0)
+                    {
+                        EventController_Work.GetRacePawnHiddenFactions().TryGetValue(item.Key, out candidates);
+                        if (candidates.Count == 0)
+                        {
+                            noCandidateFactions = true;
+                            Log.Error("Trying to find pawn potential factions, but none.");
+                        }
+                    }
+                    string factionmsg = candidates.Any() ? string.Join(", ", candidates.Select(x => x?.defName ?? "null")) : "None";
+                    Log.Message($"# Real Faction Guest - Race [{ item.Key.defName }] ; Weight [{ String.Format("{0:P}", item.Value) }] ; Factions [{ factionmsg }]");
                 }
+            } else
+            {
+                Log.Message("Player faction has more than 10 races, skip printing details.");
             }
         }
         public ThingDef GetRandomRaceByWeight()
@@ -96,7 +114,7 @@ namespace EventController_rQP
         }
         public FactionDef GetRandomFactionByRace(ThingDef race)
         {
-            mappingFactions.TryGetValue(race, out var factions);
+            EventController_Work.GetRacePawnFactions().TryGetValue(race, out var factions);
             if (factions == null) return FallbackFaction();
             else
             {
@@ -120,54 +138,25 @@ namespace EventController_rQP
                     }
                     float weight = (float)count / copy.Count;
                     raceWeights.Add(race, weight);
-                    var factions = from item in EventController_Work.GetFactionPawnRaces()
-                                   where item.Value.Contains(race)
-                                   select item.Key;
-                    mappingFactions.Add(race, factions.ToHashSet());
-                    foreach (var f in factions)
-                    {
-                        ThingFactionEntry entry = new ThingFactionEntry();
-                        entry.thing = race;
-                        entry.faction = f;
-                        mappingFactionsList.Add(entry);
-                    }
                 }
             }
         }
 
         public override void ExposeData()
         {
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                if (captured && starterPawnRaces.Count == 0)
-                {
-                    captured = false;
-                }
-            }
             Scribe_Values.Look(ref captured, "captured", false);
             Scribe_Collections.Look(ref starterPawnRaces, "startingPawnRaces", LookMode.Def);
             Scribe_Collections.Look(ref raceWeights, "raceWeights", LookMode.Def, LookMode.Value);
-            Scribe_Collections.Look(ref mappingFactionsList, "mappingFactionsList", LookMode.Deep);
             Scribe_Collections.Look(ref startingPawnIDs, "startingPawnIDs", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                RebuildMap();
-            }
-        }
-
-        private void RebuildMap()
-        {
-            foreach (var e in mappingFactionsList)
-            {
-                if (e.thing == null || e.faction == null) continue;
-
-                if (!mappingFactions.TryGetValue(e.thing, out var set))
+                if (captured)
                 {
-                    set = new HashSet<FactionDef>();
-                    mappingFactions[e.thing] = set;
+                    if (noCandidateFactions || starterPawnRaces.Count == 0 || startingPawnIDs.Count == 0)
+                    {
+                        captured = false;
+                    }
                 }
-
-                set.Add(e.faction);
             }
         }
 
