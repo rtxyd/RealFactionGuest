@@ -76,6 +76,21 @@ namespace EventController_rQP
             var frames = stack.GetFrames();
             Log.Message(string.Join(Environment.NewLine,(IEnumerable<StackFrame>) frames));
         }
+        public static string GetTopExceptionLocation(Exception ex)
+        {
+            var baseEx = ex.GetBaseException();
+            var lines = baseEx.StackTrace?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            return lines?.Length > 0 ? lines[0].Trim() : baseEx.Message;
+        }
+        public static void HandleEventControllerError(Exception ex, OngoingEvent ongoingEvent)
+        {
+            Log.Error(OrganizeErrorMsg(ex));
+            EventController_Work.ongoingEvents &= ~ongoingEvent;
+        }
+        public static string OrganizeErrorMsg(Exception ex)
+        {
+            return "Real Faction Guest: " + EventController_Work.GetOngoingEvent() + " Failed.\n" + GetTopExceptionLocation(ex);
+        }
 #endif
     }
 }
