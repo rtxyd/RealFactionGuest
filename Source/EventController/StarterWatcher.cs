@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Unity.Collections;
+using UnityEngine;
 using Verse;
 
 namespace EventController_rQP
@@ -57,11 +58,12 @@ namespace EventController_rQP
                     HashSet<FactionDef> candidates = EventController_Work.GetRacePawnFactions().TryGetValue(item.Key, []);
                     if (candidates.Count == 0)
                     {
-                        EventController_Work.GetRacePawnHiddenFactions().TryGetValue(item.Key, out candidates);
+                        candidates = EventController_Work.GetRacePawnHiddenFactions().TryGetValue(item.Key, []);
                         if (candidates.Count == 0)
                         {
                             noCandidateFactions = true;
-                            Log.Error("Trying to find pawn potential factions, but none.");
+                            ColorUtility.TryParseHtmlString("#FF6D0080", out var color);
+                            Log.Message("[RFG Warning]".Colorize(color) + "Trying to find pawn race's potential factions, but none. This means the race has special generation method.".Colorize(UnityEngine.Color.blue));
                         }
                     }
                     string factionmsg = candidates.Any() ? string.Join(", ", candidates.Select(x => x?.defName ?? "null")) : "None";

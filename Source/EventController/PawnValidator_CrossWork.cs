@@ -70,7 +70,7 @@ namespace EventController_rQP
         }
         public static bool StackCheckIsNotVanilla(int maxFrames)
         {
-            // used in patch_PawnGenerator_GeneratePawn, typical stack frame ignoring 4 + this = 5
+            // used in patch_PawnGenerator_GeneratePawn, typical stack frame ignoring 4 + this = 5. (4 is GeneratePawn)
             var stackTrace = GetTypicalStack(5);
             int frameCount = Math.Min(stackTrace.FrameCount, maxFrames);
             var frame = stackTrace.GetFrame(0);
@@ -85,7 +85,7 @@ namespace EventController_rQP
             {
                 frame = stackTrace.GetFrame(i);
                 method = frame.GetMethod();
-                if (method.Name.Contains("IncidentWorker"))
+                if (typeof(IncidentWorker).IsAssignableFrom(method.DeclaringType))
                 {
                     return false;
                 }
