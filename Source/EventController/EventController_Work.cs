@@ -13,7 +13,6 @@ namespace EventController_rQP
     public static class EventController_Work
     {
         public static OngoingEvent ongoingEvents = OngoingEvent.None;
-        private static OngoingEvent tempEvent = OngoingEvent.None;
         public static Dictionary<ThingDef, HashSet<FactionDef>> GetRacePawnHiddenFactions()
         {
             return FactionFilter_Init.racePawnHiddenFactions;
@@ -147,7 +146,7 @@ namespace EventController_rQP
         [HarmonyPriority(200)]
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
-            tempEvent = OngoingEvent.FactionFix;
+            var tempEvent = OngoingEvent.FactionFix;
             try { ongoingEvents |= tempEvent; FactionFilter_Work.FactionFilter(ref pawn, ref factionType); }
             catch (Exception ex) { Tools.HandleEventControllerError(ex, tempEvent); }
         }
@@ -157,7 +156,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateSkills(ref Pawn pawn)
         {
-            tempEvent = OngoingEvent.FactionLeaderValidator;
+            var tempEvent = OngoingEvent.FactionLeaderValidator;
             try
             {
                 ongoingEvents |= tempEvent;
@@ -173,7 +172,7 @@ namespace EventController_rQP
         [HarmonyPriority(1000)]
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
         {
-            tempEvent = OngoingEvent.BackstoryFix;
+            var tempEvent = OngoingEvent.BackstoryFix;
             try
             {
                 ongoingEvents |= tempEvent;
@@ -188,7 +187,7 @@ namespace EventController_rQP
         }
         public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
-            tempEvent = OngoingEvent.InternalGen;
+            var tempEvent = OngoingEvent.InternalGen;
             try { ongoingEvents |= tempEvent; PawnValidator_CrossWork.RequestValidator(ref request); }
             catch (Exception ex) { Tools.HandleEventControllerError(ex, tempEvent); }
         }
@@ -202,7 +201,7 @@ namespace EventController_rQP
         }
         public static bool Prefix_AdjustXenotypeForFactionlessPawn(ref Pawn pawn)
         {
-            tempEvent = OngoingEvent.AdjustXenotype;
+            var tempEvent = OngoingEvent.AdjustXenotype;
             bool result = true;
             try { ongoingEvents |= tempEvent; result = RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true; }
             catch (Exception ex) { Tools.HandleEventControllerError(ex, tempEvent); }
@@ -238,7 +237,7 @@ namespace EventController_rQP
         #endregion
         public static void Postfix_PawnGenerator_GeneratePawn(ref Pawn __result)
         {
-            tempEvent = OngoingEvent.CreepJoinerValidator;
+            var tempEvent = OngoingEvent.CreepJoinerValidator;
             try
             {
                 ongoingEvents |= tempEvent;
@@ -264,7 +263,7 @@ namespace EventController_rQP
         }
         public static void Prefix_QuestNode_Root_WandererJoin_RunInt()
         {
-            tempEvent = OngoingEvent.WandererJoin;
+            var tempEvent = OngoingEvent.WandererJoin;
             try
             {
                 ongoingEvents |= tempEvent;
@@ -317,7 +316,6 @@ namespace EventController_rQP
         {
             //Log.Message(GetOngoingEvent());
             ongoingEvents = OngoingEvent.None;
-            tempEvent = OngoingEvent.None;
         }
     }
 }
