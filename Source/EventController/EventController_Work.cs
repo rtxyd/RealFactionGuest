@@ -147,7 +147,7 @@ namespace EventController_rQP
         public static void Prefix_GiveAppropriateBioAndNameTo(ref Pawn pawn, ref FactionDef factionType)
         {
             try { ongoingEvents |= OngoingEvent.FactionFix; FactionFilter_Work.FactionFilter(ref pawn, ref factionType); }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.FactionFix; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionFix; }
         }
         public static void Postfix_GiveAppropriateBioAndNameTo()
         {
@@ -165,7 +165,7 @@ namespace EventController_rQP
                 }
                 //PawnValidator_CrossWork.WorkDisableValidator(ref pawn);
             }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.FactionLeaderValidator; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.FactionLeaderValidator; }
         }
         [HarmonyPriority(1000)]
         public static void Prefix_FillBackstorySlotShuffled(ref Pawn pawn, ref BackstorySlot slot, ref List<BackstoryCategoryFilter> backstoryCategories, ref FactionDef factionType)
@@ -176,7 +176,7 @@ namespace EventController_rQP
                 //FactionFilter_Work.ExcludeStoryCategories(pawn, ref backstoryCategories, factionType);
                 FactionFilter_Work.IncludeStoryCategories(pawn, slot, ref backstoryCategories);
             }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.BackstoryFix; }
         }
         public static void Postfix_FillBackstorySlotShuffled()
         {
@@ -185,7 +185,7 @@ namespace EventController_rQP
         public static void Prefix_GenerateOrRedressPawnInternal(ref PawnGenerationRequest request)
         {
             try { ongoingEvents |= OngoingEvent.InternalGen; PawnValidator_CrossWork.RequestValidator(ref request); }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.InternalGen; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.InternalGen; }
         }
         public static void Prefix_DamageUntilDowned()
         {
@@ -198,7 +198,7 @@ namespace EventController_rQP
         public static bool Prefix_AdjustXenotypeForFactionlessPawn(ref Pawn pawn)
         {
             try { ongoingEvents |= OngoingEvent.AdjustXenotype; return RealFactionGuestSettings.dontAdjustXenotypeForRabbie ? PawnValidator_CrossWork.IsAdjustXenotype(ref pawn) : true; }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.AdjustXenotype; return true; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.AdjustXenotype; return true; }
         }
         #region DamageUntilDowned
         public static bool Prefix_PreApplyDamage(ref bool absorbed)
@@ -236,7 +236,7 @@ namespace EventController_rQP
                 if (RealFactionGuestSettings.creepJoinerGenerateNoLimit && __result.kindDef is CreepJoinerFormKindDef) PawnValidator_CrossWork.CreepJoinerValidator(ref __result);
                 /*Log.Message($"A : {__result.kindDef}");*/
             }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.CreepJoinerValidator; }
             EventController_Reset();
         }
         #region issue fix of ver 1.6.4850
@@ -280,7 +280,7 @@ namespace EventController_rQP
                     }
                 }
             }
-            catch (Exception ex) { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed.\n" + ex); ongoingEvents &= ~OngoingEvent.WandererJoin; }
+            catch { Log.Error("Real Faction Guest: " + GetOngoingEvent() + " Failed"); ongoingEvents &= ~OngoingEvent.WandererJoin; }
         }
         #endregion
         public static IEnumerable<CodeInstruction> Transpiler_GetCreepjoinerSpecifics(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
