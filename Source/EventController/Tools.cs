@@ -2,6 +2,8 @@
 using System;
 using System.Reflection;
 using Verse;
+using System.Linq;
+
 #if DEBUG
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -77,5 +79,36 @@ namespace EventController_rQP
             Log.Message(string.Join(Environment.NewLine,(IEnumerable<StackFrame>) frames));
         }
 #endif
+        public static string GetShortExceptionString(Exception ex)
+        {
+            var messages = new List<string>();
+            var current = ex;
+            while (current != null)
+            {
+                messages.Add($"{current.GetType().FullName}: {current.Message}");
+                current = current.InnerException;
+            }
+            string messageChain = string.Join(" ---> ", messages);
+
+            var baseEx = ex.GetBaseException();
+            var topStackLine = baseEx.StackTrace
+                ?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault()?.Trim();
+
+            if (string.IsNullOrEmpty(topStackLine))
+            {
+                return messageChain;
+            }
+            return $"{messageChain}{Environment.NewLine}{topStackLine}";
+        }
+        public static void HandleEventControllerError(Exception ex, OngoingEvent ongoingEvent)
+        {
+            Log.Error(OrganizeErrorMsg(ex));
+            EventController_Work.ongoingEvents &= ~ongoingEvent;
+        }
+        public static string OrganizeErrorMsg(Exception ex)
+        {
+            return "Real Faction Guest: " + EventController_Work.GetOngoingEvent() + " Failed.\n" + GetShortExceptionString(ex);
+        }
     }
 }
