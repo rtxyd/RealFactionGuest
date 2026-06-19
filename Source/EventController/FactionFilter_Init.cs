@@ -51,7 +51,8 @@ namespace EventController_rQP
                             vanillaFactions.Add(f);
                         }
                         validFactions_RPC.Add(f);
-                    } else
+                    }
+                    else
                     {
                         hiddenFactions.Add(f);
                     }
@@ -73,7 +74,8 @@ namespace EventController_rQP
                                 thingDefs.Add(race);
                                 allRaces.Add(race);
                                 bodyDefs.Add(body);
-                            } else
+                            }
+                            else
                             {
                                 var race = pawnGenOption.kind.race;
                                 allRaces.Add(race);
@@ -135,7 +137,7 @@ namespace EventController_rQP
                 }
                 foreach (var r in allRaces)
                 {
-                    foreach(var entry in factionPawnRaces)
+                    foreach (var entry in factionPawnRaces)
                     {
                         if (entry.Value.Contains(r))
                         {

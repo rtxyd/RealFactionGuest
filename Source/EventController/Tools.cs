@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Verse;
-using System.Linq;
-using System.Collections.Generic;
 
 #if DEBUG
 using System.Diagnostics;

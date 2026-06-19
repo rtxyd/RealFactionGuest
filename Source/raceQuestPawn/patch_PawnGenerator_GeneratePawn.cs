@@ -63,7 +63,8 @@ public class patch_PawnGenerator_GeneratePawn
 
             //new TestTool().TestTool_ForceRabbie(ref request);
             //Log.Message($"request : {(request.Faction != null ? request.Faction.def.defName : "none")}, {(request.KindDef != null ? request.KindDef.defName : "none")}");
-            if (assumed_faction == null && request.Faction != null) {
+            if (assumed_faction == null && request.Faction != null)
+            {
                 assumed_faction = request.Faction.def;
             }
             var kinddef = request.KindDef;

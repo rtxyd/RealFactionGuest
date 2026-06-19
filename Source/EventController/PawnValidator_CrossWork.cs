@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Verse;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace EventController_rQP
 {

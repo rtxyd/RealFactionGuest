@@ -1,13 +1,7 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Unity.Collections;
 using UnityEngine;
 using Verse;
 
@@ -67,9 +61,10 @@ namespace EventController_rQP
                         }
                     }
                     string factionmsg = candidates.Any() ? string.Join(", ", candidates.Select(x => x?.defName ?? "null")) : "None";
-                    Log.Message($"# Real Faction Guest - Race [{ item.Key.defName }] ; Weight [{ String.Format("{0:P}", item.Value) }] ; Factions [{ factionmsg }]");
+                    Log.Message($"# Real Faction Guest - Race [{item.Key.defName}] ; Weight [{String.Format("{0:P}", item.Value)}] ; Factions [{factionmsg}]");
                 }
-            } else
+            }
+            else
             {
                 Log.Message("Player faction has more than 10 races, skip printing details.");
             }
@@ -85,7 +80,8 @@ namespace EventController_rQP
             {
                 Log.Error("Failed getting valid pawn race for player.");
                 return ThingDefOf.Human;
-            } else
+            }
+            else
             {
                 return result.Key;
             }
