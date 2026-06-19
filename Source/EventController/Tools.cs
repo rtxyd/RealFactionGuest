@@ -3,10 +3,10 @@ using System;
 using System.Reflection;
 using Verse;
 using System.Linq;
+using System.Collections.Generic;
 
 #if DEBUG
 using System.Diagnostics;
-using System.Collections.Generic;
 #endif
 namespace EventController_rQP
 {
