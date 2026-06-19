@@ -7,14 +7,14 @@
 	<RFGSetting_AlternateFactions>Alternate factions which has same pawn race</RFGSetting_AlternateFactions>
 	<RFGSetting_AlternateFactions_Tips>Factions with same pawn race will be alternative when generate pawns.(not xenotype, only main race concerned)</RFGSetting_AlternateFactions_Tips>
 
-	<RFGSetting_ToggleFrequency_Tips>Main function, if you want sometimes pawnkinds in other factions can generate in every faction (), you can lower this value, set to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)</RFGSetting_ToggleFrequency_Tips>
+	<RFGSetting_ToggleFrequency_Tips>Main function, if you want sometimes pawnkinds in other factions can generate in every faction, you can lower this value. Setting to 1.0 means it will generate the very pawn race of its current faction as much as possible, the mod cannot really reach 100% for now since if there's an error when generating pawn, basegame may fix it to another pawn. (not xenotype, only main race concerned)</RFGSetting_ToggleFrequency_Tips>
 	<RFGSetting_ToggleFrequency>Toggle how often the pawn will trigger the faction-bounded generation: </RFGSetting_ToggleFrequency>
 
 	<RFGSetting_ToggleNormalJoinerWeight>Toggle player faction weight of normal wanderer：</RFGSetting_ToggleNormalJoinerWeight>
-	<RFGSetting_ToggleNormalJoinerWeight_Tips>Higher value，normal wanderers will be more likely to be the pawn race of player faction (if player chooses a mod faction, they are more likely to be the race of this mod)</RFGSetting_ToggleNormalJoinerWeight_Tips>
+	<RFGSetting_ToggleNormalJoinerWeight_Tips>Higher value，normal wanderers will be more likely to be the pawn race of player faction (if player chooses a mod faction, they are more likely to be the race of this mod, however, some special races (for example, DragonionRace) which have special generation mechanic cannot be counted)</RFGSetting_ToggleNormalJoinerWeight_Tips>
 
 	<RFGSetting_ToggleIdeoJoinerWeight>Toggle player faction weight of ideological ritual joiner：</RFGSetting_ToggleIdeoJoinerWeight>
-	<RFGSetting_ToggleIdeoJoinerWeight_Tips>Higher value，joiners from rituals will be more likely to be the pawn race of player faction (if player chooses a mod faction, they are more likely to be the race of this mod)</RFGSetting_ToggleIdeoJoinerWeight_Tips>
+	<RFGSetting_ToggleIdeoJoinerWeight_Tips>Higher value，joiners from rituals will be more likely to be the pawn race of player faction (if player chooses a mod faction, they are more likely to be the race of this mod, however, some special races (for example, DragonionRace) which have special generation mechanic cannot be counted)</RFGSetting_ToggleIdeoJoinerWeight_Tips>
 
 	<RFGSetting_damageUntilDownedBypassShield>[DEBUG]DamageUntilDownedOrNotSpawnedBypassShield</RFGSetting_damageUntilDownedBypassShield>
 	<RFGSetting_damageUntilDownedBypassShield_Tips>Default: On. This is an option to avoid method DamageUntilDowned trigger damage absorption when pawn is not on the map (Some other mods didn't make a null check, result to pawn not spawn normally)</RFGSetting_damageUntilDownedBypassShield_Tips>
@@ -23,13 +23,13 @@
 	<RFGSetting_factionLeaderValidator_Tips>This is an option to avoid FactionLeader that requirs certain type of skill, but they are disabled by backstories/traits/genes from some other mods.</RFGSetting_factionLeaderValidator_Tips>
 
 	<RFGSetting_creepJoinerValidator>[DEBUG]CreepJoinerValidator</RFGSetting_creepJoinerValidator>
-	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner sometimes does't generate in correct incident, this may cause error, this option make them can correctly generate in these incidents.</RFGSetting_creepJoinerValidator_Tips>
+	<RFGSetting_creepJoinerValidator_Tips>CreepJoiner sometimes does't generate in correct incident, this may cause error, this option makes that they can correctly generate in these incidents.</RFGSetting_creepJoinerValidator_Tips>
 
 	<RFGSetting_creepJoinerGenerateNoLimit>[DEBUG/TEST]CreepJoinerGenerateNoLimit</RFGSetting_creepJoinerGenerateNoLimit>
 	<RFGSetting_creepJoinerGenerateNoLimit_Tips>CreepJoiner [may] generate in any incident(if it's in the generation list of this faction), this option is now on for default.</RFGSetting_creepJoinerGenerateNoLimit_Tips>
 
 	<RFGSetting_dontAdjustXenotypeForRabbie>[Biotech]DontChangeBodyTypeOfRabbie</RFGSetting_dontAdjustXenotypeForRabbie>
-	<RFGSetting_dontAdjustXenotypeForRabbie_Tips>Rabbie The Moonrabbit race is somehow not compatible with biotech DLC, when they generated with xenotype. Their body will missing texture.</RFGSetting_dontAdjustXenotypeForRabbie_Tips>
+	<RFGSetting_dontAdjustXenotypeForRabbie_Tips>Rabbie The Moonrabbit race is somehow not compatible with biotech DLC, when they generated with xenotype. Their body will be missing texture.</RFGSetting_dontAdjustXenotypeForRabbie_Tips>
 
 	<RFGSetting_debugOption>Debug/Advance options</RFGSetting_debugOption>
 </LanguageData>
