@@ -63,7 +63,7 @@ namespace EventController_rQP
                         {
                             noCandidateFactions = true;
                             ColorUtility.TryParseHtmlString("#FF6D0080", out var color);
-                            Log.Message("[RFG Warning]".Colorize(color) + "Trying to find pawn race's potential factions, but none. This means the race has special generation method.".Colorize(UnityEngine.Color.blue));
+                            Log.Message("[RFG Warning]".Colorize(color) + "Trying to find pawn race's potential factions, but none. This means the race has special generation method.".Colorize(UnityEngine.Color.cyan));
                         }
                     }
                     string factionmsg = candidates.Any() ? string.Join(", ", candidates.Select(x => x?.defName ?? "null")) : "None";
