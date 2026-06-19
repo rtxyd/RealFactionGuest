@@ -1,5 +1,7 @@
 # Changelog for RealFactionGuest
 
+Forked 1.6.2h Update modsetting descriptions
+
 Forked 1.6.2g Fix faction filter, add exception details
 
 Forked 1.6.2f Fix vanilla incident check (Exactly, fix mod incident like Mo'event)
