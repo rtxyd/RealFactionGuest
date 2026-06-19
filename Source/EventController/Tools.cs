@@ -78,6 +78,7 @@ namespace EventController_rQP
             var frames = stack.GetFrames();
             Log.Message(string.Join(Environment.NewLine,(IEnumerable<StackFrame>) frames));
         }
+#endif
         public static string GetShortExceptionString(Exception ex)
         {
             var messages = new List<string>();
@@ -109,6 +110,5 @@ namespace EventController_rQP
         {
             return "Real Faction Guest: " + EventController_Work.GetOngoingEvent() + " Failed.\n" + GetShortExceptionString(ex);
         }
-#endif
     }
 }
