@@ -2,6 +2,8 @@
 using System;
 using System.Reflection;
 using Verse;
+using System.Linq;
+
 #if DEBUG
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -76,11 +78,27 @@ namespace EventController_rQP
             var frames = stack.GetFrames();
             Log.Message(string.Join(Environment.NewLine,(IEnumerable<StackFrame>) frames));
         }
-        public static string GetTopExceptionLocation(Exception ex)
+        public static string GetShortExceptionString(Exception ex)
         {
+            var messages = new List<string>();
+            var current = ex;
+            while (current != null)
+            {
+                messages.Add($"{current.GetType().FullName}: {current.Message}");
+                current = current.InnerException;
+            }
+            string messageChain = string.Join(" ---> ", messages);
+
             var baseEx = ex.GetBaseException();
-            var lines = baseEx.StackTrace?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            return lines?.Length > 0 ? lines[0].Trim() : baseEx.Message;
+            var topStackLine = baseEx.StackTrace
+                ?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault()?.Trim();
+
+            if (string.IsNullOrEmpty(topStackLine))
+            {
+                return messageChain;
+            }
+            return $"{messageChain}{Environment.NewLine}{topStackLine}";
         }
         public static void HandleEventControllerError(Exception ex, OngoingEvent ongoingEvent)
         {
@@ -89,7 +107,7 @@ namespace EventController_rQP
         }
         public static string OrganizeErrorMsg(Exception ex)
         {
-            return "Real Faction Guest: " + EventController_Work.GetOngoingEvent() + " Failed.\n" + GetTopExceptionLocation(ex);
+            return "Real Faction Guest: " + EventController_Work.GetOngoingEvent() + " Failed.\n" + GetShortExceptionString(ex);
         }
 #endif
     }
