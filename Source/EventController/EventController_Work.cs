@@ -260,7 +260,7 @@ namespace EventController_rQP
                 ongoingEvents |= OngoingEvent.WandererJoin;
                 var slate = QuestGen.slate;
                 IncidentDef incident;
-                Log.Message(slate.ToString());
+                //Log.Message(slate.ToString());
                 if (!slate.TryGet("RFG_incident_cache", out incident))
                 {
                     return;
